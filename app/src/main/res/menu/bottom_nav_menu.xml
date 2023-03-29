@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashBoardFragment"
+        android:title="@string/dashboard"
+        android:icon="@drawable/data_report"/>
+    <item
+        android:id="@+id/budgetFragment"
+        android:title="@string/budgets"
+        android:icon="@drawable/budget"/>
+    <item
+        android:id="@+id/goalsFragment"
+        android:title="@string/goals"
+        android:icon="@drawable/save_money"/>
+
+</menu>

@@ -1,0 +1,32 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.SpendWise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+         Tertiary brand colour.
+        <item name="colorTertiary">@color/tertiary_dark</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container_dark</item>
+        <item name="colorOnTertiary">@color/on_tertiary_dark</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_dark</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <!--<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/tertiary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/tertiary_container</item>
+        <item name="colorOnPrimaryContainer">@color/on_tertiary_container</item>
+        <item name="colorPrimaryVariant">@color/on_tertiary_container</item>
+
+        &lt;!&ndash; Status bar color. &ndash;&gt;
+        <item name="android:statusBarColor">?attr/colorOnTertiaryContainer</item>
+    </style>-->
+</resources>
