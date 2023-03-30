@@ -17,10 +17,6 @@ object Helper {
         }
     }
 
-    fun validatePassword(password: String): Boolean {
-        return Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\\$%\\^&\\*])[a-zA-Z\\d!@#\\$%\\^&\\*]{6,15}$", password)
-    }
-
     fun validatePasswordText(password: String): String? {
         return if(password.isEmpty()) {
             "Password should not be empty!"

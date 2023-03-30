@@ -1,6 +1,7 @@
 package com.example.spendwise.activity
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.example.spendwise.R
 import com.example.spendwise.database.SpendWiseDatabase
 import com.example.spendwise.databinding.ActivityMainBinding
 import com.example.spendwise.domain.User
+import com.example.spendwise.enums.LogInStatus
 import com.example.spendwise.viewmodel.UserViewModel
 import com.google.android.material.navigation.NavigationView
 
@@ -26,37 +28,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var navGraph: NavGraph
-
-    companion object {
-        var isLoggedIn = false
-    }
+    private lateinit var editor: SharedPreferences.Editor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*val userViewModel = UserViewModel(application)
-        userViewModel.createUserAccount(User("sri@"))
-        userViewModel.createUserAccount(User("sri@"))
-        userViewModel.createUserAccount(User("bala"))
-        Log.e("User", "main oncreate 1")*/
-
-//        Log.e("User", userViewModel.user.value.toString() + " main")
-//        Log.e("User", userViewModel.user.toString() + " main")
-    //    val user = userViewModel.user
-      //  Log.e("User", user.value.toString())
-
-
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbarMain)
+        val sharedPref = getSharedPreferences("LoginStatus", MODE_PRIVATE)
+        editor = sharedPref.edit()
 
         drawer = binding.drawerLayout
         navHostFragment = supportFragmentManager.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
         navController = navHostFragment.navController
         navGraph = navController.navInflater.inflate(R.navigation.navigation).apply {
-            if(isLoggedIn) {
+            if(sharedPref.getString("status", "") == LogInStatus.LOGGED_IN.name) {
                 setStartDestination(R.id.homePageFragment)
             } else {
                 setStartDestination(R.id.loginFragment)
@@ -81,25 +68,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         }
-
-        Log.e("MainActivity", "on create")
         binding.navView.setNavigationItemSelectedListener(this)
-
-//        Log.e("User", userViewModel.user.toString() + " main")
     }
-
-
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
-
+        val currentFragment = navController.currentDestination?.label
+        Log.e("Main", currentFragment.toString())
+        Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label)} - ${navGraph.findNode(R.id.loginFragment)?.label}")
+        Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.homePageFragment)?.label)} - ${navGraph.findNode(R.id.dashBoardFragment)?.label}")
         if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label) == true) {
+            Log.e("Main", "current - login")
             navController.popBackStack(R.id.loginFragment, true)
             finish()
-        } else if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.homePageFragment)?.label) == true) {
+        } else if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.dashBoardFragment)?.label) == true) {
+            Log.e("Main", "current - home")
+            navController.popBackStack(0, true)
             finish()
         } else {
             super.onBackPressed()
@@ -131,6 +118,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.logout -> {
+                editor.apply {
+                    putString("status", LogInStatus.LOGGED_OUT.name)
+                    commit()
+                }
                 navController.navigate(R.id.action_global_loginFragment)
             }
         }

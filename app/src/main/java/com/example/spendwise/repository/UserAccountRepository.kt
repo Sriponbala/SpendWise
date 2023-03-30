@@ -12,7 +12,6 @@ class UserAccountRepository(private val userAccountDao: UserAccountDao) {
 
     suspend fun insertUser(user: User) {
         withContext(Dispatchers.IO) {
-            Log.e("User", user.toString() + "insertUser")
             userAccountDao.insertUser(user)
         }
     }
@@ -22,6 +21,12 @@ class UserAccountRepository(private val userAccountDao: UserAccountDao) {
             userAccountDao.insertUserPassword(userPassword)
         }
     }
+
+    fun getUser(email: String): User? = userAccountDao.getUser(email)
+
+    fun checkIfUserExists(email: String) = userAccountDao.checkIfUserExists(email)
+
+    fun verifyPassword(userId: Int, password: String) = userAccountDao.verifyPassword(userId, password)
 
     suspend fun deleteUser(userId: Int) {
         userAccountDao.deleteUser(userId)
@@ -40,24 +45,5 @@ class UserAccountRepository(private val userAccountDao: UserAccountDao) {
     suspend fun updatePassword(userId: Int, password: String) {
         userAccountDao.updateUserPassword(userId, password)
     }
-
-    suspend fun getUser(email: String): User? {
-        return withContext(Dispatchers.IO) {
-            val user = userAccountDao.getUser(email)
-            Log.e("User", user.toString() + "getUser")
-            Log.e("SignupFragment - dao", "${user.toString()}")
-            user
-        }
-    }
-
-    suspend fun checkUniqueUser(email: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            userAccountDao.checkIfUserExists(email)
-        }
-    }
-
-   /* suspend fun checkIfUserExists(userId: Int, email: String, password: String): Boolean {
-        return userAccountDao.checkIfUserExists(email) && userAccountDao.verifyPassword(userId, password)
-    }*/
 
 }

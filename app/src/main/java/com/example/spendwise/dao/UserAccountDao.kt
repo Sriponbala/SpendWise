@@ -1,5 +1,6 @@
 package com.example.spendwise.dao
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.spendwise.domain.User
@@ -30,9 +31,9 @@ interface UserAccountDao {
     fun getUser(email: String): User?
 
     @Query("select exists(select email from User where email like :email)")
-    fun checkIfUserExists(email: String): Boolean
+    fun checkIfUserExists(email: String): Boolean //LiveData<Boolean>
 
     @Query("select exists(select password from UserPassword where userId like :userId and password like :password)")
-    fun verifyPassword(userId: Int, password: String): Boolean
+    fun verifyPassword(userId: Int, password: String): Boolean // LiveData<Boolean>
 
 }
