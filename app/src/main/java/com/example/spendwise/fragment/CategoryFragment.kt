@@ -6,20 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.spendwise.R
-import com.example.spendwise.activity.MainActivity
 
-class GoalsFragment : Fragment() {
+class CategoryFragment : Fragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        (activity as MainActivity).supportActionBar?.apply {
-            title = "Goals"
-            setDisplayHomeAsUpEnabled(false)
-        }
-        return inflater.inflate(R.layout.fragment_goals, container, false)
+        return inflater.inflate(R.layout.fragment_category, container, false)
     }
 
 }

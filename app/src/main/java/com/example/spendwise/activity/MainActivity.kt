@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var navController: NavController
     private lateinit var navGraph: NavGraph
     private lateinit var editor: SharedPreferences.Editor
+    private lateinit var currentDestination : NavDestination
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,24 +56,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         NavigationUI.setupWithNavController(binding.navView, navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentDestination = destination
+            Log.e("Destination", destination.displayName)
             // Check if the current destination is the desired one to lock the drawer
-            val lockDrawerDestinations = setOf(R.id.homePageFragment, R.id.dashBoardFragment, R.id.budgetFragment, R.id.goalsFragment)
-            val shouldNotLockDrawer = lockDrawerDestinations.contains(destination.id)
+            val lockDrawerDestinations = setOf(R.id.homePageFragment)//setOf("Dashboard", "Budget", "Goals")
+            Log.e("Destination", destination.id.toString())
+            Log.e("Destination", R.id.homePageFragment.toString())
+            val shouldNotLockDrawer = lockDrawerDestinations.contains(destination.id)//supportActionBar?.title)
 
+            Log.e("Destination", supportActionBar?.title.toString())
+            Log.e("Destination", shouldNotLockDrawer.toString())
             // Lock or unlock the drawer based on the destination
             if (shouldNotLockDrawer) {
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                toggle = ActionBarDrawerToggle(this, drawer, binding.toolbarMain, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                /*toggle = ActionBarDrawerToggle(this, drawer, binding.toolbarMain, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
                 binding.root.addDrawerListener(toggle)
-                toggle.syncState()
+                toggle.syncState()*/
             } else {
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
             }
         }
         binding.navView.setNavigationItemSelectedListener(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        Log.e("NavigateUp", "")
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
@@ -80,11 +90,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.e("Main", currentFragment.toString())
         Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label)} - ${navGraph.findNode(R.id.loginFragment)?.label}")
         Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.homePageFragment)?.label)} - ${navGraph.findNode(R.id.dashBoardFragment)?.label}")
+        Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.userProfileFragment)?.label)} - ${navGraph.findNode(R.id.userProfileFragment)?.label}")
+        Log.e("Main", currentDestination.displayName)
         if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label) == true) {
             Log.e("Main", "current - login")
             navController.popBackStack(R.id.loginFragment, true)
             finish()
-        } else if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.dashBoardFragment)?.label) == true) {
+        } else if(currentDestination.id == R.id.homePageFragment) {
             Log.e("Main", "current - home")
             navController.popBackStack(0, true)
             finish()

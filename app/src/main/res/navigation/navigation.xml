@@ -15,7 +15,9 @@
             app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/action_loginFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment" />
+            app:destination="@id/homePageFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -29,7 +31,8 @@
         <action
             android:id="@+id/action_signUpFragment_to_homePageFragment"
             app:destination="@id/homePageFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -57,7 +60,13 @@
         android:id="@+id/addRecordFragment"
         android:name="com.example.spendwise.fragment.AddRecordFragment"
         android:label="Add record"
-        tools:layout="@layout/fragment_add_record" />
+        tools:layout="@layout/fragment_add_record">
+        <action
+            android:id="@+id/action_addRecordFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment"
+            app:popUpTo="@id/addRecordFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
     <fragment
         android:id="@+id/addBudgetFragment"
         android:name="com.example.spendwise.fragment.AddBudgetFragment"

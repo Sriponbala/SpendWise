@@ -17,6 +17,7 @@ class BudgetFragment : Fragment() {
         // Inflate the layout for this fragment
         (activity as MainActivity).supportActionBar?.apply {
             title = "Budgets"
+            setDisplayHomeAsUpEnabled(false)
         }
         return inflater.inflate(R.layout.fragment_budget, container, false)
     }

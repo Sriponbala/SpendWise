@@ -154,6 +154,7 @@ class SignUpFragment : Fragment() {
             if( it != null) {
                 userViewModel.insertPassword(binding.passwordTextInputEditText.text.toString(), binding.emailTextInputEditText.text.toString())
                 editor.apply {
+                    Log.e("Signup", userViewModel.user.value!!.userId.toString())
                     putInt("userId", userViewModel.user.value!!.userId)
                     putString("status", LogInStatus.LOGGED_IN.name)
                     apply()

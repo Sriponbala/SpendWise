@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.spendwise.R
+import com.example.spendwise.activity.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +36,9 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        (activity as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+        }
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 

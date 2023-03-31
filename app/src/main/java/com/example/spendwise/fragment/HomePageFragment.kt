@@ -3,6 +3,7 @@ package com.example.spendwise.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
@@ -33,7 +34,9 @@ class HomePageFragment : Fragment(), NavigationListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        ((activity) as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+        }
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,6 +46,10 @@ class HomePageFragment : Fragment(), NavigationListener {
         navController = nestedNavHostFragment.navController
         val navGraph = navController.graph
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            bottomNavigationHandler(it)
+        }
 
         binding.fabHomePage.setOnClickListener {
             when(navController.currentDestination?.label) {
@@ -57,8 +64,21 @@ class HomePageFragment : Fragment(), NavigationListener {
                 }
             }
         }
+    }
 
-
+    private fun bottomNavigationHandler(menuItem: MenuItem): Boolean {
+        when(menuItem.itemId) {
+            R.id.dashBoardFragment -> {
+                navController.navigate(R.id.action_homePageFragment_to_dashBoardFragment)
+            }
+            R.id.budgetFragment -> {
+                navController.navigate(R.id.action_homePageFragment_to_budgetFragment)
+            }
+            R.id.goalsFragment -> {
+                navController.navigate(R.id.action_homePageFragment_to_goalsFragment)
+            }
+        }
+        return true
     }
 
     override fun onActionReceived(destination: Fragment) {

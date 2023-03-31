@@ -8,37 +8,30 @@
     <fragment
         android:id="@+id/dashBoardFragment"
         android:name="com.example.spendwise.fragment.DashboardFragment"
-        android:label="fragment_home"
+        android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" >
-        <action
-            android:id="@+id/action_dashBoardFragment_to_recordsFragment2"
-            app:destination="@id/recordsFragment2" />
     </fragment>
     <fragment
         android:id="@+id/budgetFragment"
         android:name="com.example.spendwise.fragment.BudgetFragment"
-        android:label="fragment_budget"
-        tools:layout="@layout/fragment_budget" />
+        android:label="Budget"
+        tools:layout="@layout/fragment_budget" >
+    </fragment>
     <fragment
         android:id="@+id/goalsFragment"
         android:name="com.example.spendwise.fragment.GoalsFragment"
-        android:label="fragment_goals"
-        tools:layout="@layout/fragment_goals" />
-    <fragment
-        android:id="@+id/recordsFragment2"
-        android:name="com.example.spendwise.fragment.RecordsFragment"
-        android:label="fragment_records"
-        tools:layout="@layout/fragment_records" />
-    <!--    <fragment
-            android:id="@+id/addRecordFragment"
-            android:name="com.example.spendwise.fragment.AddRecordFragment"
-            android:label="fragment_add_record"
-            tools:layout="@layout/fragment_add_record" />
-        <fragment
-            android:id="@+id/addBudgetFragment"
-            android:name="com.example.spendwise.fragment.AddBudgetFragment"
-            android:label="fragment_add_budget"
-            tools:layout="@layout/fragment_add_budget" />-->
+        android:label="Goals"
+        tools:layout="@layout/fragment_goals">
+    </fragment>
+    <action
+        android:id="@+id/action_homePageFragment_to_budgetFragment"
+        app:destination="@id/budgetFragment"/>
+    <action
+        android:id="@+id/action_homePageFragment_to_goalsFragment"
+        app:destination="@id/goalsFragment" />
+    <action
+        android:id="@+id/action_homePageFragment_to_dashBoardFragment"
+        app:destination="@id/dashBoardFragment" />
 
 </navigation>
 

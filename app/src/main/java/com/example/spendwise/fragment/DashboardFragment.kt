@@ -27,7 +27,7 @@ class DashboardFragment : Fragment() {
 
         (activity as MainActivity).supportActionBar?.apply {
             title = "Dashboard"
-            setDisplayHomeAsUpEnabled(true)
+            setDisplayHomeAsUpEnabled(false)
         }
         navigationListener = parentFragment?.parentFragment as HomePageFragment
         binding = FragmentDashboardBinding.inflate(inflater, container, false)

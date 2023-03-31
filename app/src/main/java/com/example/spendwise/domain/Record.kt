@@ -3,13 +3,16 @@ package com.example.spendwise.domain
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "record_table")
+@Entity
 data class Record(
+    var userId: Int,
+    var category: String,
+    var amount: Float,
+    var type: String,
+    var date: String
+) {
     @PrimaryKey(autoGenerate = true)
-    val recordId: Int,
-    val userId: Int,
-    val category: String,
-    val amount: Float,
-    val type: String,
-    val date: String
-)
+    var recordId: Int = 0
+    var note: String = ""
+    var description = ""
+}

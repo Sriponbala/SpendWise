@@ -10,7 +10,7 @@ import com.example.spendwise.domain.Record
 import com.example.spendwise.domain.User
 import com.example.spendwise.domain.UserPassword
 
-@Database(entities = [User::class, UserPassword::class, Record::class], version = 2, exportSchema = true)
+@Database(entities = [User::class, UserPassword::class, Record::class], version = 1, exportSchema = false)
 abstract class SpendWiseDatabase: RoomDatabase() {
 
     abstract val userAccountDao: UserAccountDao

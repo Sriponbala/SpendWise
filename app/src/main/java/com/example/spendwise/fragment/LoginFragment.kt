@@ -127,6 +127,7 @@ class LoginFragment : Fragment() {
             if(it != null) {
                 if(it) {
                     editor.apply {
+                        Log.e("Login", userViewModel.user.value!!.userId.toString())
                         putInt("userId", userViewModel.user.value!!.userId)
                         putString("status", LogInStatus.LOGGED_IN.name)
                         apply()
