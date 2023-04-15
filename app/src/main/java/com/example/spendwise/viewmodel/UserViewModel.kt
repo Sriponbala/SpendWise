@@ -11,37 +11,39 @@ import com.example.spendwise.domain.User
 import com.example.spendwise.domain.UserPassword
 import com.example.spendwise.repository.UserAccountRepository
 import kotlinx.coroutines.*
+import java.lang.ref.WeakReference
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: UserAccountRepository = UserAccountRepository(SpendWiseDatabase.getInstance(application).userAccountDao)
-    private val viewModelJob = Job()
 
-    private var _user = MutableLiveData<User?>()
-    val user: LiveData<User?>
+    var user: User? = null
+    /*var user = MutableLiveData<User?>().also {
+        Log.e("User", "getter " + it.value.toString())
+    }*/
+    /*val user: LiveData<User?>
         get() = _user.also {
             Log.e("User", "getter" + it.value.toString())
-        }
+        }*/
 
     val isEmailExists = MutableLiveData<Boolean?>()
     val isLoggedIn = MutableLiveData<Boolean>()
     val isNewUserInserted = MutableLiveData<Boolean?>()
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
+    val isUserFetchedFinally = MutableLiveData<Boolean>()
 
     fun createUserAccount(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var userData: User? = null
             val fetchJob = launch {
-                repository.insertUser(User(email))
+                val user = User(email)
+                repository.insertUser(user)
                 userData = repository.getUser(email)
             }
             fetchJob.join()
             withContext(Dispatchers.Main){
-                _user.value = userData
+             //   user.value = userData
+                user = userData
+//                _user.value = userData
 //                Log.e("User", "create - ${_user.value.toString()}")
                 isNewUserInserted.value = true
             }
@@ -63,6 +65,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     val isUserFetched = MutableLiveData<Boolean>()
 
     fun fetchUser(email: String) {
+        Log.e("Email", email)
         viewModelScope.launch(Dispatchers.IO) {
             var userData: User? = null
             val fetchJob = launch {
@@ -70,8 +73,29 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
             }
             fetchJob.join()
             withContext(Dispatchers.Main){
-                _user.value = userData
+//                _user.value = userData
+                Log.e("User fetch", user.toString())
+                user = userData
                 isUserFetched.value = true
+            }
+        }
+    }
+
+    fun fetchUser(userId: Int) {
+        Log.e("userId from home", userId.toString())
+        viewModelScope.launch(Dispatchers.IO) {
+            var userData: User? = null
+            val fetchJob = launch {
+                userData = repository.getUser(userId)
+            }
+            fetchJob.join()
+            withContext(Dispatchers.Main){
+//                _user.value = userData
+                Log.e("User fetch userID 1", user.toString())
+//                user = userData
+//                Log.e("User fetch userID 2", user.toString())
+//                isUserFetched.value = true
+//                Log.e("User fetch userID 3", user.toString())
             }
         }
     }
@@ -80,6 +104,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             var result: Boolean? = null
             val job = launch {
+                Log.e("Email", email)
                 result = repository.checkIfUserExists(email)
                 Log.e("User", "result1 - $result")
             }
@@ -96,7 +121,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             var result = false
             val job = launch {
-                result = repository.verifyPassword(_user.value!!.userId, password)
+                result = repository.verifyPassword(user!!.userId, password)
             }
             job.join()
             withContext(Dispatchers.Main){
@@ -120,10 +145,18 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     fun insertPassword(password: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                repository.insertUserPassword(UserPassword(_user.value!!.userId, password))
+                repository.insertUserPassword(UserPassword(user!!.userId, password))
             }
         }
     }
+
+    /*fun deleteAllRecords() {
+        viewModelScope.launch {
+            val job = launch {
+                repository.deleteAllRecords()
+            }
+        }
+    }*/
 
 
 }

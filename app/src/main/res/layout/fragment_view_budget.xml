@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.ViewBudgetFragment">
+
+    <LinearLayout
+        android:id="@+id/linearAddBudgetView"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutBudgetView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:paddingVertical="20dp"
+                android:text="Name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/budgetAmountTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/constraintLayoutBudgetView"
+                app:layout_constraintEnd_toStartOf="@id/budgetGuidelineView"/>
+
+            <EditText
+                android:id="@+id/budgetNameView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:maxLength="35"
+                android:maxLines="1"
+                android:textSize="16sp"
+                android:enabled="false"
+                app:layout_constraintBaseline_toBaselineOf="@+id/nameTextView"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayoutBudgetView"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/budgetGuidelineView" />
+
+            <TextView
+                android:id="@+id/budgetAmountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingVertical="20dp"
+                android:text="Amount"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/nameTextView"
+                app:layout_constraintTop_toBottomOf="@id/nameTextView" />
+
+            <EditText
+                android:id="@+id/budgetAmountView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:enabled="false"
+                android:hint=""
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/budgetAmountTextView"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayoutBudgetView"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/budgetGuidelineView" />
+
+            <TextView
+                android:id="@+id/budgetPeriodTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingVertical="20dp"
+                android:text="Period"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@id/nameTextView"
+                app:layout_constraintTop_toBottomOf="@id/budgetAmountTextView" />
+
+            <EditText
+                android:id="@+id/budgetPeriodView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:text="Monthly"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="date"
+                android:maxLines="1"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/budgetPeriodTextView"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayoutBudgetView"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/budgetGuidelineView" />
+
+            <TextView
+                android:id="@+id/budgetCategoryTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:text="Category"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/nameTextView"
+                app:layout_constraintTop_toBottomOf="@id/budgetPeriodTextView" />
+
+            <EditText
+                android:id="@+id/budgetCategoryView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:inputType="text"
+                android:cursorVisible="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/budgetCategoryTextView"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayoutBudgetView"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@id/budgetGuidelineView" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/budgetGuidelineView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.29927006" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</ScrollView>

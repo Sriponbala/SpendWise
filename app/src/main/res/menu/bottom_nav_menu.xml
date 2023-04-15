@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/dashBoardFragment"
         android:title="@string/dashboard"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/data_report"/>
     <item
         android:id="@+id/budgetFragment"
         android:title="@string/budgets"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/budget"/>
     <item
         android:id="@+id/goalsFragment"
         android:title="@string/goals"
-        android:icon="@drawable/save_money"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/piggy_bank_coin_svgrepo_com__1_"/>
+
+    <item android:id="@+id/settingsFragment"
+        android:title="More"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_more_horiz_24"/>
 
 </menu>

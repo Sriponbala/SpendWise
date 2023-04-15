@@ -69,11 +69,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"/>-->
 
+    <!--<FrameLayout
+     android:elevation="16dp"
+     android:id="@+id/bottomSheetContainer"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     app:behavior_hideable="true"
+     android:layout_gravity="bottom"
+     android:background="@drawable/bottom_sheet_bg"
+     android:backgroundTint="@color/tertiary_container"
+     />-->
+
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:background="#D2704147"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_nav_menu"/>-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        app:labelVisibilityMode="labeled"
         android:layout_gravity="bottom"
+        app:itemRippleColor="#e3f3ff"
         app:menu="@menu/bottom_nav_menu"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -81,7 +101,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_add_24"
-        android:backgroundTint="@color/purple_500"
         app:layout_anchor="@id/bottomNavigationView"
         app:layout_anchorGravity="top|end"
         android:layout_gravity="clip_horizontal"

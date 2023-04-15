@@ -24,6 +24,8 @@ class UserAccountRepository(private val userAccountDao: UserAccountDao) {
 
     fun getUser(email: String): User? = userAccountDao.getUser(email)
 
+    fun getUser(userId: Int): User? = userAccountDao.getUser(userId)
+
     fun checkIfUserExists(email: String) = userAccountDao.checkIfUserExists(email)
 
     fun verifyPassword(userId: Int, password: String) = userAccountDao.verifyPassword(userId, password)
@@ -45,5 +47,12 @@ class UserAccountRepository(private val userAccountDao: UserAccountDao) {
     suspend fun updatePassword(userId: Int, password: String) {
         userAccountDao.updateUserPassword(userId, password)
     }
+
+    /*suspend fun deleteAllRecords() {
+        withContext(Dispatchers.IO) {
+            userAccountDao.deleteAllRecords()
+            userAccountDao.deleteAllUserPasswordsRecords()
+        }
+    }*/
 
 }

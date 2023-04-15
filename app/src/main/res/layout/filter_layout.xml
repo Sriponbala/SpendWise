@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/filter_layout_linear"
+    android:background="#e3f3ff"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/filter"
+        app:tint="#515050"
+        android:layout_margin="16dp"/>
+<!--
+    <View
+        android:layout_width="1dp"
+        android:background="#515050"
+        android:layout_height="match_parent"/>
+-->
+    <TextView
+        android:id="@+id/monthAndYearTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:textColor="#1B1A1A"
+        android:clickable="true"
+        android:text="Apr 2023"
+        android:textSize="16dp"
+        android:focusable="true"
+        android:drawableTint="#515050"
+        android:drawableEnd="@drawable/arrow_drop_down"
+        android:layout_margin="16dp"/>
+<!--
+    <View
+        android:layout_width="1dp"
+        android:background="#515050"
+        android:layout_height="match_parent"/>
+-->
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:entries="@array/recordTypes"
+        android:layout_margin="16dp"/>
+    <TextView
+        android:id="@+id/recordTypeTv"
+        android:textColor="@color/black"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="16dp"
+        android:textSize="16dp"
+        android:textAlignment="center"
+        android:visibility="gone"/>
+</LinearLayout>

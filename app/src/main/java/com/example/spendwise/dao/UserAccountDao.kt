@@ -30,10 +30,18 @@ interface UserAccountDao {
     @Query("select * from User where email like :email")
     fun getUser(email: String): User?
 
+    @Query("select * from User where userId like :userId")
+    fun getUser(userId: Int): User?
+
     @Query("select exists(select email from User where email like :email)")
     fun checkIfUserExists(email: String): Boolean //LiveData<Boolean>
 
     @Query("select exists(select password from UserPassword where userId like :userId and password like :password)")
     fun verifyPassword(userId: Int, password: String): Boolean // LiveData<Boolean>
 
+ /*   @Query("DELETE from User")
+    fun deleteAllRecords()
+
+    @Query("DELETE from UserPassword")
+    fun deleteAllUserPasswordsRecords()*/
 }

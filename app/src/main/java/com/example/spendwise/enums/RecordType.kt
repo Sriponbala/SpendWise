@@ -1,6 +1,7 @@
 package com.example.spendwise.enums
 
-enum class RecordType {
-    INCOME,
-    EXPENSE
+enum class RecordType(val value: String) {
+    INCOME("Income"),
+    EXPENSE("Expense"),
+    ALL("All")
 }

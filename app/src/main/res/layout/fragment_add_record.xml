@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AddRecordFragment">
 
     <LinearLayout
         android:id="@+id/linearAddRecord"
         android:orientation="vertical"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,24 +17,29 @@
             android:id="@+id/toggleGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
-            <Button
+            app:selectionRequired="true"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            app:singleSelection="true">
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/incomeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Income"
+                app:strokeColor="#e3f3ff"
+                app:strokeWidth="1.5dp"
                 android:padding="10dp"
                 android:layout_weight="1"
-                android:textColor="@color/black"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/expenseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Expense"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="#e3f3ff"
                 android:padding="10dp"
                 android:layout_weight="1"
-                android:textColor="@color/black"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -47,159 +53,179 @@
                 android:id="@+id/amountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:padding="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:paddingVertical="16dp"
                 android:text="Amount"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                style="@style/HeadingTextStyle"
+                app:layout_constraintEnd_toStartOf="@id/amountTextMandatory"
                 app:layout_constraintBottom_toTopOf="@id/categoryTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/constraintLayout"
-                app:layout_constraintEnd_toStartOf="@id/guideline"/>
+                app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+
+            <TextView
+                android:id="@+id/amountTextMandatory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="2dp"
+                android:paddingVertical="16dp"
+                android:text="*"
+                android:textColor="@color/error_colour"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/amountTextView"
+                app:layout_constraintStart_toEndOf="@id/amountTextView"
+                app:layout_constraintTop_toTopOf="@id/constraintLayout" />
 
             <EditText
                 android:id="@+id/amountEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:padding="11dp"
-                android:inputType="number"
+                android:layout_marginHorizontal="16dp"
+                android:inputType="numberDecimal"
+                android:maxLength="6"
                 android:maxLines="1"
                 android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/amountTextView"
                 app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/guideline"
-                app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+                app:layout_constraintStart_toEndOf="@id/guideline" />
 
             <TextView
                 android:id="@+id/categoryTextView"
                 android:layout_width="wrap_content"
-                app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:padding="20dp"
+                android:layout_marginTop="16dp"
+                android:paddingVertical="16dp"
                 android:text="Category"
-                android:paddingTop="10dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="10dp"
-                android:textColor="@color/black"
+                style="@style/HeadingTextStyle"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/amountTextView"
+                app:layout_constraintTop_toBottomOf="@id/amountTextView" />
+
+            <TextView
+                android:id="@+id/categoryTextMandatory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="2dp"
+                android:paddingVertical="16dp"
+                android:text="*"
+                android:textColor="@color/error_colour"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/amountTextView"
-                app:layout_constraintEnd_toStartOf="@id/guideline"/>
+                app:layout_constraintStart_toEndOf="@id/categoryTextView"
+                app:layout_constraintBottom_toBottomOf="@+id/categoryTextView"
+                app:layout_constraintTop_toBottomOf="@+id/amountTextMandatory" />
+
 
             <EditText
                 android:id="@+id/categoryEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:padding="14dp"
-                android:maxLines="1"
-                android:inputType="text"
-                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
                 android:cursorVisible="false"
+                android:focusable="false"
+                android:hint="Select category"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/categoryTextView"
                 app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@id/amountEditText" />
+                app:layout_constraintStart_toEndOf="@id/guideline" />
 
             <TextView
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
-                app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="16dp"
+                android:paddingVertical="16dp"
                 android:text="Date"
-                android:paddingTop="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp"
-                android:textColor="@color/black"
+                style="@style/HeadingTextStyle"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@id/amountTextView"
+                app:layout_constraintTop_toBottomOf="@id/categoryTextView" />
+
+            <TextView
+                android:id="@+id/dateTextMandatory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="2dp"
+                android:paddingVertical="16dp"
+                android:text="*"
+                android:textColor="@color/error_colour"
                 android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/categoryTextView"
-                app:layout_constraintEnd_toStartOf="@id/guideline"/>
+                app:layout_constraintBottom_toBottomOf="@+id/dateTextView"
+                app:layout_constraintStart_toEndOf="@+id/dateTextView"
+                app:layout_constraintTop_toBottomOf="@+id/categoryTextMandatory" />
+
 
             <EditText
                 android:id="@+id/dateEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:padding="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:inputType="date"
                 android:maxLines="1"
                 android:textSize="16sp"
-                android:cursorVisible="false"
-                android:clickable="false"
-                android:focusableInTouchMode="false"
-                android:focusable="false"
+                app:layout_constraintBaseline_toBaselineOf="@+id/dateTextView"
                 app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@id/categoryEditText" />
+                app:layout_constraintStart_toEndOf="@id/guideline" />
 
             <TextView
                 android:id="@+id/noteTextView"
                 android:layout_width="wrap_content"
-                app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="Note"
-                android:paddingTop="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dateTextView"
-                app:layout_constraintEnd_toStartOf="@id/guideline"/>
+                android:layout_marginTop="16dp"
+                android:paddingVertical="16dp"
+                android:text="Title"
+                style="@style/HeadingTextStyle"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="@+id/amountTextView"
+                app:layout_constraintTop_toBottomOf="@id/dateTextView" />
 
             <EditText
                 android:id="@+id/noteEditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:padding="16dp"
+                android:layout_marginHorizontal="16dp"
                 android:inputType="text"
                 android:maxLines="1"
+                android:maxLength="35"
                 android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/noteTextView"
                 app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@id/dateEditText" />
+                app:layout_constraintStart_toEndOf="@id/guideline" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionTextInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp"
+                android:layout_marginTop="16dp"
                 android:hint="Description"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
                 app:hintTextColor="@color/black"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:layout_constraintEnd_toEndOf="@+id/noteEditText"
+                app:layout_constraintStart_toStartOf="@+id/noteTextView"
                 app:layout_constraintTop_toBottomOf="@id/noteTextView">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionTextField"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:nestedScrollingEnabled="true"
+                    android:scrollbars="vertical" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.Guideline
@@ -222,4 +248,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

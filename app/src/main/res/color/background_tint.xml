@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:name="food_color" android:color="#F5FF5620" />
+    <item android:name="shopping_color" android:color="#03A9F4" />
+    <item android:name="household_color" android:color="#FAA323" />
+    <item android:name="transport_color" android:color="#F5656160" />
+    <item android:name="vehicle_color" android:color="#B431CA" />
+    <item android:name="entertainment_color" android:color="#29E831" />
+    <item android:name="pets_color" android:color="#FF3378" />
+    <item android:name="tourism_color" android:color="#32FAE7" />
+    <item android:name="education_color" android:color="#2040F4" />
+    <item android:name="health_color" android:color="#FD2212" />
+    <item android:name="other_color" android:color="#F59F9C9B" />
+    <item android:name="salary_color" android:color="#FFEB3B" />
+    <item android:name="rental_color" android:color="#F549261B" />
+    <item android:name="sale_color" android:color="#F520D2FF" />
+    <item android:name="gifts_color" android:color="#F5FF08FB" />
+    <item android:name="coupons_color" android:color="#F5C87AFF" />
+</selector>

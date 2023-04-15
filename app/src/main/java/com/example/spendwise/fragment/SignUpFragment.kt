@@ -28,7 +28,7 @@ class SignUpFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val userViewModelFactory = UserViewModelFactory((activity as MainActivity).application)
-        userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
+        userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -38,7 +38,7 @@ class SignUpFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
         ((activity) as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
+            setDisplayHomeAsUpEnabled(false)
         }
         return binding.root
     }
@@ -61,6 +61,7 @@ class SignUpFragment : Fragment() {
         binding.LoginTextView.setOnClickListener {
             it.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
         }
+
     }
 
     private fun emailFocusListener() {
@@ -154,8 +155,8 @@ class SignUpFragment : Fragment() {
             if( it != null) {
                 userViewModel.insertPassword(binding.passwordTextInputEditText.text.toString(), binding.emailTextInputEditText.text.toString())
                 editor.apply {
-                    Log.e("Signup", userViewModel.user.value!!.userId.toString())
-                    putInt("userId", userViewModel.user.value!!.userId)
+                    Log.e("Signup", userViewModel.user!!.userId.toString())
+                    putInt("userId", userViewModel.user!!.userId)
                     putString("status", LogInStatus.LOGGED_IN.name)
                     apply()
                 }
@@ -170,3 +171,19 @@ class SignUpFragment : Fragment() {
     }
 
 }
+
+//1	1	A@asbvw  1	abi@nkdk.com	1
+// Bala@123 2	uma@gmail.com	2
+
+/*2	1	Shopping	80.0	Expense	5/3/2023	2
+3	1	Rental	500.0	Expense	29/3/2023	3
+4	1	Transport	800.0	Expense	5/3/2023	4
+5	1	Shopping	50.0	Expense	6/4/2023	5
+6	1	Transport	60.0	Expense	6/4/2023	6
+7	1	Coupons	50.0	Income	7/4/2023	7
+8	2	Gifts	80.0	Income	8/4/2023	8
+9	2	Shopping	500000.0	Expense	27/4/2023	9
+10	2	Vehicle	588888.0	Expense	9/4/2023	10	kehuyewcuvwecbiejcioh8cgeycgieniejiocjihyg	khdy7eg7cuhewihciewhciuewh ubuiew 9we ineiniwh9eh8ey87eg8ehc9h9cecjec9ejoej0e0
+11	2	Entertainment	9000.0	Expense	10/4/2023	11		*/
+
+// #76a8ab

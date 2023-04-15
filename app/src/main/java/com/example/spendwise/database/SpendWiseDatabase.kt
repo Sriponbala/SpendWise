@@ -4,17 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.spendwise.dao.BudgetDao
+import com.example.spendwise.dao.GoalDao
 import com.example.spendwise.dao.RecordDao
 import com.example.spendwise.dao.UserAccountDao
-import com.example.spendwise.domain.Record
-import com.example.spendwise.domain.User
-import com.example.spendwise.domain.UserPassword
+import com.example.spendwise.domain.*
 
-@Database(entities = [User::class, UserPassword::class, Record::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, UserPassword::class, Record::class, Budget::class, Goal::class], version = 1, exportSchema = false)
 abstract class SpendWiseDatabase: RoomDatabase() {
 
     abstract val userAccountDao: UserAccountDao
     abstract val recordDao: RecordDao
+    abstract val budgetDao: BudgetDao
+    abstract val goalDao: GoalDao
 
     companion object {
         @Volatile

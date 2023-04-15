@@ -1,34 +1,39 @@
 package com.example.spendwise.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spendwise.DataBinderMapperImpl
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
+import com.example.spendwise.adapter.SettingsRecyclerViewAdapter
+import com.example.spendwise.databinding.FragmentDashboardBinding
+import com.example.spendwise.databinding.FragmentSettingsBinding
+import com.example.spendwise.enums.Period
+import com.example.spendwise.enums.RecordType
+import com.example.spendwise.enums.SettingsOption
+import com.example.spendwise.listeners.NavigationListener
+import com.example.spendwise.viewmodel.RecordViewModel
+import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentSettingsBinding
+    private lateinit var adapter: SettingsRecyclerViewAdapter
+    private lateinit var navigationListener: NavigationListener
+    private lateinit var recordViewModel: RecordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        val factory = RecordViewModelFactory(requireActivity().application)
+        recordViewModel = ViewModelProvider(requireActivity(), factory)[RecordViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -37,28 +42,68 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         (activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
+            setDisplayHomeAsUpEnabled(false)
+            title = "Settings"
         }
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        navigationListener = parentFragment?.parentFragment as HomePageFragment
+        adapter = SettingsRecyclerViewAdapter()
+        binding.settingsRecyclerView.adapter = adapter
+        adapter.onItemClick = { doSelectedOption(it) }
+        binding.settingsRecyclerView.layoutManager = GridLayoutManager(this.context, 3)//LinearLayoutManager(this.context)//
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.settings_overflow_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.e("Settings", "menu " + item.title + " id "+ item.itemId.toString() + " R.id.logout - "+ R.id.logout.toString())
+        when(item.itemId) {
+            R.id.logOut -> {
+                navigationListener.onActionReceived(LoginFragment())
+                Log.e("Settings", "menu")
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun doSelectedOption(option: SettingsOption) {
+        when(option) {
+            SettingsOption.INCOME -> {
+                recordViewModel.period = Period.ALL
+                recordViewModel.recordType.value = RecordType.INCOME.value
+                navigationListener.onActionReceived(CategoryFragment(), RecordType.INCOME)
+            }
+            SettingsOption.EXPENSE -> {
+                recordViewModel.period = Period.ALL
+                recordViewModel.recordType.value = RecordType.EXPENSE.value
+                navigationListener.onActionReceived(CategoryFragment(), RecordType.EXPENSE)
+            }
+            SettingsOption.FEEDBACK -> {
+                try{
+                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:sriponbala.kb@zohocorp.com")
+                        putExtra(Intent.EXTRA_SUBJECT, "App Usage Feedback")
+                    }
+                    startActivity(intent)
+                }catch (error: Exception){
+                    Toast.makeText(
+                        requireContext(),
+                        "Issues with providing feedback. We'll check and update soon.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
+            SettingsOption.CALL_SUPPORT -> {
+                val callIntent = Intent(Intent.ACTION_DIAL)
+                callIntent.data = Uri.parse("tel:9080440195")
+                startActivity(callIntent)
+            }
+        }
     }
+
 }

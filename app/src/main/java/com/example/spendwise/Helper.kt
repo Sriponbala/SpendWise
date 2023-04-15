@@ -2,8 +2,9 @@ package com.example.spendwise
 
 import android.util.Log
 import android.util.Patterns
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
-import java.util.regex.Pattern
 
 object Helper {
 
@@ -40,6 +41,11 @@ object Helper {
         } else {
             "Password not matching!"
         }
+    }
+
+    fun formatNumberToIndianStyle(number: Float): String {
+        val format = DecimalFormat("#,##,##0.00", DecimalFormatSymbols(Locale("en", "IN")))
+        return format.format(number)
     }
 
 /*    fun <E : Enum<E>> showMenu(title: String, enumArray: Array<E>) {

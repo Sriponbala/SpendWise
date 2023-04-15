@@ -9,14 +9,49 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="tertiary">#7D5260</color>
-    <color name="tertiary_container">#FFD8E4</color>
+<!--    <color name="tertiary_container">#FFD8E4</color>-->
+
+    <color name="tertiary_container">#ffe0d8</color>
     <color name="on_tertiary_container">#370B1E</color>
 
     <color name="tertiary_dark">#EFB8C8</color>
+    <color name="tertiary_middle">#f0cac0</color>
     <color name="tertiary_container_dark">#633B48</color>
     <color name="on_tertiary_dark">#492532</color>
     <color name="on_tertiary_container_dark">#FFD8E4</color>
 
-    <color name="error_colour">@android:color/holo_red_dark</color>
+    <color name="colorSecondary">#FEEAE6</color>
+    <color name="colorPrimary">#1E90FF</color>
+    <color name="gray">#93918f</color>
+
+    <color name="error_colour">@android:color/holo_red_light</color>
+    <color name="food_color">#F5FF5620</color>
+    <color name="shopping_color">#03A9F4</color>
+    <color name="household_color">#FAA323</color>
+    <color name="transport_color">#F5656160</color>
+    <color name="vehicle_color">#B431CA</color>
+    <color name="entertainment_color">#29E831</color>
+    <color name="pets_color">#FF3378</color>
+    <color name="tourism_color">#32FAE7</color>
+    <color name="education_color">#2040F4</color>
+    <color name="health_color">#FD2212</color>
+    <color name="other_color">#F59F9C9B</color>
+    <color name="salary_color">#FFEB3B</color>
+    <color name="rental_color">#F549261B</color>
+    <color name="sale_color">#F520D2FF</color>
+    <color name="gifts_color">#F5FF08FB</color>
+    <color name="coupons_color">#F5C87AFF</color>
+
+    <color name="primaryBlue">#76a8ab</color>
+    <color name="incomeColour">#017501</color>
+    <color name="expenseColour">#FF0000</color>
+    <color name="linkColour">#f87f1c</color>
+
+    <color name="progressBarAtFirst">#e3f3ff</color>
+    <color name="progressBarLeisure">#B9F6CA</color>
+    <color name="progressBarNearingToBudget">#ffe1b5</color>
+    <color name="progressIndicatorDanger">#ff8f1e</color>
+    <color name="progressIndicatorExceeded">#D50000</color>
+    <color name="progressIndicatorLeisure">#00C853</color>
 
 </resources>

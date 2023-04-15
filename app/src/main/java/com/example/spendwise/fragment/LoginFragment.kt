@@ -29,7 +29,8 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val userViewModelFactory = UserViewModelFactory((activity as MainActivity).application)
-        userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
+        userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
+//        Log.e("UserViewModel  Login", userViewModel.toString())
     }
 
     override fun onCreateView(
@@ -62,6 +63,21 @@ class LoginFragment : Fragment() {
         binding.SignUpTextView.setOnClickListener {
             it.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
+
+        userViewModel.isUserFetchedFinally.observe(viewLifecycleOwner, Observer {
+            if(it != null) {
+                if(it) {
+                    editor.apply{
+                        Log.e("UserId Login userObs", userViewModel.user?.userId.toString())
+                        putInt("userId", userViewModel.user?.userId!!)
+                        putString("status", LogInStatus.LOGGED_IN.name)
+                        apply()
+                    }
+                    moveToNextFragment()
+                }
+                userViewModel.isUserFetchedFinally.value = null
+            }
+        })
     }
 
     private fun emailFocusListener() {
@@ -115,33 +131,47 @@ class LoginFragment : Fragment() {
     private fun loginUser() {
         userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
         userViewModel.isUserFetched.observe(viewLifecycleOwner, Observer {
+            Log.e("isFetched", it.toString())
             if(it != null) {
                 if(it) {
                     userViewModel.verifyPassword(binding.passwordTextInputEditText.text.toString())
+                    userViewModel.isCorrectPassword.observe(viewLifecycleOwner, Observer { password ->
+                        Log.e("isCorrect0", it.toString())
+                        if(password != null) {
+                            Log.e("isCorrect1", password.toString())
+                            if(it) {
+                                Log.e("isCorrect2", password.toString())
+                                userViewModel.isUserFetchedFinally.value = true
+                                /*editor.apply {
+                                    Log.e("isCorrect3", it.toString())
+                                    Log.e("Login", userViewModel.user.value!!.userId.toString())
+                                    Log.e("isCorrect4", it.toString())
+                                    Log.e("Login userId", userViewModel.user.value!!.userId.toString())
+                                    Log.e("isCorrect5", it.toString())
+                                    Log.e("UserId moveNext", userViewModel.user.value!!.userId.toString())
+                                   // userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
+                                   // putInt("userId", userViewModel.user.value!!.userId)
+                                    putString("status", LogInStatus.LOGGED_IN.name)
+                                    apply()
+                                }*/
+                                Log.e("userId login", userViewModel.user!!.userId.toString())
+                                //moveToNextFragment()
+                            } else {
+                                /* editor.apply {
+                                     putInt("userId", 0)
+                                 }*/
+                                binding.passwordTextInputLayout.helperText = "Incorrect password"
+                            }
+                            userViewModel.isCorrectPassword.value = null
+                        }
+                    })
                 }
                 userViewModel.isLoggedIn.value = null
-            }
-        })
-
-        userViewModel.isCorrectPassword.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
-                if(it) {
-                    editor.apply {
-                        Log.e("Login", userViewModel.user.value!!.userId.toString())
-                        putInt("userId", userViewModel.user.value!!.userId)
-                        putString("status", LogInStatus.LOGGED_IN.name)
-                        apply()
-                    }
-                    moveToNextFragment()
-                } else {
-                    binding.passwordTextInputLayout.helperText = "Incorrect password"
-                }
-                userViewModel.isCorrectPassword.value = null
             }
         })
     }
 
     private fun moveToNextFragment() {
-        this.findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)
     }
 }

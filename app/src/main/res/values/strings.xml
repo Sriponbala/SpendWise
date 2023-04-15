@@ -12,4 +12,11 @@
     <string name="dashboard">Dashboard</string>
     <string name="budgets">Budgets</string>
     <string name="goals">Goals</string>
+    <!--    <string name="rupee_symbol">\u20B9</string>-->
+    <string name="rupee_symbol">₹</string>
+    <string-array name="recordTypes">
+        <item>All</item>
+        <item>Income</item>
+        <item>Expense</item>
+    </string-array>
 </resources>

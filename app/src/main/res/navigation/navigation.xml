@@ -54,24 +54,35 @@
         <action
             android:id="@+id/action_homePageFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+<!--
+        <action
+            android:id="@+id/action_homePageFragment_to_budgetsFragment"
+            app:destination="@id/budgetsFragment" />
+-->
+        <action
+            android:id="@+id/action_homePageFragment_to_monthlyBudgetsFragment"
+            app:destination="@id/monthlyBudgetsFragment" />
+        <!--<action
+            android:id="@+id/action_homePageFragment_to_bottomSheetFragment"
+            app:destination="@id/bottomSheetFragment" />-->
     </fragment>
 
-    <fragment
-        android:id="@+id/addRecordFragment"
-        android:name="com.example.spendwise.fragment.AddRecordFragment"
-        android:label="Add record"
-        tools:layout="@layout/fragment_add_record">
-        <action
-            android:id="@+id/action_addRecordFragment_to_homePageFragment"
-            app:destination="@id/homePageFragment"
-            app:popUpTo="@id/addRecordFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
     <fragment
         android:id="@+id/addBudgetFragment"
         android:name="com.example.spendwise.fragment.AddBudgetFragment"
         android:label="Add budget"
-        tools:layout="@layout/fragment_add_budget" />
+        tools:layout="@layout/fragment_add_budget" >
+        <action
+            android:id="@+id/action_addBudgetFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <argument
+            android:name="isEditBudget"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/addGoalFragment"
         android:name="com.example.spendwise.fragment.AddGoalFragment"
@@ -81,23 +92,51 @@
         android:id="@+id/recordsFragment"
         android:name="com.example.spendwise.fragment.RecordsFragment"
         android:label="Records"
-        tools:layout="@layout/fragment_records" />
+        tools:layout="@layout/fragment_records" >
+        <argument
+            android:name="hideFilterView"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="hideAmountView"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="hideDescriptionText"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="selectedCategory"
+            app:argType="com.example.spendwise.domain.Category"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_recordsFragment_to_viewRecordFragment"
+            app:destination="@id/viewRecordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.example.spendwise.fragment.StatisticsFragment"
         android:label="Statistics"
-        tools:layout="@layout/fragment_statistics" />
+        tools:layout="@layout/fragment_statistics" >
+        <argument
+            android:name="recordType"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_statisticsFragment_to_recordsFragment"
+            app:destination="@id/recordsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/expensesFragment"
         android:name="com.example.spendwise.fragment.ExpensesFragment"
         android:label="Expenses"
         tools:layout="@layout/fragment_expenses" />
 
-    <fragment
+    <!--<fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.spendwise.fragment.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" />-->
 
     <fragment
         android:id="@+id/userProfileFragment"
@@ -105,9 +144,81 @@
         android:label="Profile"
         tools:layout="@layout/fragment_user_profile" />
 
+    <fragment
+        android:id="@+id/addRecordFragment"
+        android:name="com.example.spendwise.fragment.AddRecordFragment"
+        android:label="Add record"
+        app:launchSingleTop="true"
+        tools:layout="@layout/fragment_add_record">
+        <action
+            android:id="@+id/action_addRecordFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment"
+            app:popUpTo="@id/addRecordFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_addRecordFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment"/>
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="isEditRecord"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.spendwise.fragment.CategoryFragment"
+        android:label="Select a category"
+        tools:layout="@layout/fragment_category">
+        <argument
+            android:name="recordType"
+            app:argType="string" />
+        <argument
+            android:name="previousFragment"
+            app:argType="integer"/>
+        <action
+            android:id="@+id/action_categoryFragment_to_recordsFragment"
+            app:destination="@id/recordsFragment" />
+    </fragment>
+
     <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment"/>
     <action android:id="@+id/action_global_expensesFragment" app:destination="@id/expensesFragment"/>
-    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>
+<!--    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>-->
     <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
+    <fragment
+        android:id="@+id/viewRecordFragment"
+        android:name="com.example.spendwise.fragment.ViewRecordFragment"
+        android:label="Record"
+        tools:layout="@layout/fragment_view_record">
+        <action
+            android:id="@+id/action_viewRecordFragment_to_addRecordFragment"
+            app:destination="@id/addRecordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewBudgetFragment"
+        android:name="com.example.spendwise.fragment.ViewBudgetFragment"
+        android:label="Budget"
+        tools:layout="@layout/fragment_view_budget" >
+        <action
+            android:id="@+id/action_viewBudgetFragment_to_addBudgetFragment"
+            app:destination="@id/addBudgetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/monthlyBudgetsFragment"
+        android:name="com.example.spendwise.fragment.MonthlyBudgetsFragment"
+        android:label="Monthly Budgets"
+        tools:layout="@layout/fragment_monthly_budgets" >
+        <action
+            android:id="@+id/action_monthlyBudgetsFragment_to_viewBudgetFragment"
+            app:destination="@id/viewBudgetFragment" />
+        <argument
+            android:name="period"
+            app:argType="string"
+            android:defaultValue="Monthly" />
+    </fragment>
+
 
 </navigation>

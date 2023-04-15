@@ -23,15 +23,27 @@
         android:label="Goals"
         tools:layout="@layout/fragment_goals">
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.spendwise.fragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
     <action
         android:id="@+id/action_homePageFragment_to_budgetFragment"
+        app:launchSingleTop="true"
         app:destination="@id/budgetFragment"/>
     <action
         android:id="@+id/action_homePageFragment_to_goalsFragment"
+        app:launchSingleTop="true"
         app:destination="@id/goalsFragment" />
     <action
         android:id="@+id/action_homePageFragment_to_dashBoardFragment"
+        app:launchSingleTop="true"
         app:destination="@id/dashBoardFragment" />
+    <action
+        android:id="@+id/action_homePageFragment_to_settingsFragment"
+        app:launchSingleTop="true"
+        app:destination="@id/settingsFragment" />
 
 </navigation>
 

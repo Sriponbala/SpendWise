@@ -19,6 +19,12 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom_sheet</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom_sheet</item>
+    </style>
+
     <!--<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/tertiary</item>
         <item name="colorOnPrimary">@color/white</item>

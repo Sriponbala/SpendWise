@@ -8,17 +8,22 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.room.RoomDatabase
 import com.example.spendwise.R
 import com.example.spendwise.database.SpendWiseDatabase
 import com.example.spendwise.databinding.ActivityMainBinding
 import com.example.spendwise.domain.User
 import com.example.spendwise.enums.LogInStatus
+import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodel.UserViewModel
+import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.example.spendwise.viewmodelfactory.UserViewModelFactory
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController = navHostFragment.navController
         navGraph = navController.navInflater.inflate(R.navigation.navigation).apply {
             if(sharedPref.getString("status", "") == LogInStatus.LOGGED_IN.name) {
+                Log.e("userId Main create", sharedPref.getInt("userId", 0).toString())
                 setStartDestination(R.id.homePageFragment)
             } else {
                 setStartDestination(R.id.loginFragment)
@@ -116,10 +122,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.action_global_userProfileFragment)
             }
             R.id.expenses -> {
+//                navController.navigate(R.id.action_global_categoryFragment, )
                 navController.navigate(R.id.action_global_expensesFragment)
             }
             R.id.settings -> {
-                navController.navigate(R.id.action_global_settingsFragment)
+               // navController.navigate(R.id.action_global_settingsFragment)
             }
             R.id.recommend -> {
                 val intent = Intent().apply {
@@ -130,15 +137,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.logout -> {
+                /*val userViewModelFactory = UserViewModelFactory(application)
+                val userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
+                userViewModel.user.value = null
+                val sharedPref = getSharedPreferences("LoginStatus", MODE_PRIVATE)
+                editor = sharedPref.edit()*/
+                /*val userViewModelFactory = UserViewModelFactory(application)
+                val userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
+                userViewModel.user = null*/
                 editor.apply {
+//                    putInt("userId", 0)
                     putString("status", LogInStatus.LOGGED_OUT.name)
                     commit()
                 }
+//                Log.e("UserID Main", sharedPref.getInt("userId", 0).toString())
                 navController.navigate(R.id.action_global_loginFragment)
             }
         }
 
         return true
     }
+
+    /*override fun onStop() {
+        super.onStop()
+        *//*val s = SpendWiseDatabase.getInstance(application)
+        s.userAccountDao.deleteAllUserPasswordsRecords()
+        s.userAccountDao.deleteAllRecords()
+        s.recordDao.deleteAllRecords()*//*
+        val u = ViewModelProvider(this, UserViewModelFactory(application))[UserViewModel::class.java]
+        val r = ViewModelProvider(this, RecordViewModelFactory(application))[RecordViewModel::class.java]
+        *//*u.deleteAllRecords()
+        r.deleteAllRecords()*//*
+
+    }*/
 
 }
