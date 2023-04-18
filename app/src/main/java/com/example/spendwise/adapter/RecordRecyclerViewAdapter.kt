@@ -29,6 +29,9 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
     private lateinit var colorStateList: ColorStateList
     var onItemClick: ((Record) -> Unit)? = null
 
+    init {
+        Log.e("UserID", "record adapter " + records.toString())
+    }
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val categoryLogo: ImageView = itemView.findViewById(R.id.categoryLogo)
         val title: TextView = itemView.findViewById(R.id.noteTextView)

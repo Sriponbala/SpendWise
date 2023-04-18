@@ -10,7 +10,7 @@ data class Goal(
     val goalName: String,
     val targetAmount: Float,
 ) {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var goalId: Int = 0
     var savedAmount: Float = 0f
     var goalColor: Int = 0

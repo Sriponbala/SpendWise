@@ -283,6 +283,16 @@
             android:textAppearance="?android:textAppearanceMedium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="*"
+            android:textSize="16sp"
+            android:layout_marginStart="2dp"
+            app:layout_constraintStart_toEndOf="@id/tvGoalNameLabel"
+            app:layout_constraintTop_toTopOf="@id/tvGoalNameLabel"
+            app:layout_constraintBottom_toBottomOf="@id/tvGoalNameLabel"
+            android:textColor="@color/expenseColour"/>
 
         <!-- Goal Name Field -->
         <com.google.android.material.textfield.TextInputLayout
@@ -291,7 +301,6 @@
             android:layout_height="wrap_content"
             android:hint="Enter Goal Name"
             android:layout_marginTop="8dp"
-            app:helperText="Required*"
             app:helperTextTextColor="@color/progressIndicatorExceeded"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@+id/tvGoalNameLabel"
@@ -300,6 +309,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etGoalName"
+                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -317,6 +327,16 @@
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/tilGoalName"
             app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="*"
+            android:textSize="16sp"
+            android:layout_marginStart="2dp"
+            app:layout_constraintStart_toEndOf="@id/tvGoalAmountLabel"
+            app:layout_constraintTop_toTopOf="@id/tvGoalAmountLabel"
+            app:layout_constraintBottom_toBottomOf="@id/tvGoalAmountLabel"
+            android:textColor="@color/expenseColour"/>
 
         <!-- Estimated Goal Amount Field -->
         <com.google.android.material.textfield.TextInputLayout
@@ -325,8 +345,6 @@
             android:layout_height="wrap_content"
             android:hint="Enter Target Amount"
             android:layout_marginTop="8dp"
-            app:helperText="Required*"
-            app:helperTextTextColor="@color/progressIndicatorExceeded"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@+id/tvGoalAmountLabel"
             app:layout_constraintStart_toStartOf="parent"
@@ -398,6 +416,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:hint="Enter Goal Color"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintEnd_toStartOf="@id/tilGoalIcon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvGoalColorLabel">
@@ -429,6 +450,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:hint="Enter Goal Icon"
             android:layout_marginTop="8dp"
             android:textAlignment="viewStart"
@@ -471,8 +495,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDesiredDate"
-                android:focusable="false"
                 android:cursorVisible="false"
+                android:clickable="true"
+                android:focusable="false"
+                android:foreground="?attr/selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -483,6 +509,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="save"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintTop_toBottomOf="@id/tilDesiredDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -15,28 +15,28 @@ interface UserAccountDao {
     @Insert
     fun insertUserPassword(userPassword: UserPassword)
 
-    @Query("delete from User where userId like :userId")
+    @Query("delete from User where userId = :userId")
     fun deleteUser(userId: Int)
 
-    @Query("delete from UserPassword where userId like :userId")
+    @Query("delete from UserPassword where userId = :userId")
     fun deleteUserPassword(userId: Int)
 
-    @Query("update User set firstName=:firstName, lastName=:lastName, mobile=:mobile, gender=:gender where userId like :userId")
+    @Query("update User set firstName=:firstName, lastName=:lastName, mobile=:mobile, gender=:gender where userId = :userId")
     fun updateUserAccount(userId: Int, firstName: String, lastName: String, mobile: String, gender: String)
 
     @Query("update UserPassword set password=:password where userId=:userId")
     fun updateUserPassword(userId: Int, password: String)
 
-    @Query("select * from User where email like :email")
+    @Query("select * from User where email = :email")
     fun getUser(email: String): User?
 
-    @Query("select * from User where userId like :userId")
+    @Query("select * from User where userId = :userId")
     fun getUser(userId: Int): User?
 
-    @Query("select exists(select email from User where email like :email)")
+    @Query("select exists(select email from User where email = :email)")
     fun checkIfUserExists(email: String): Boolean //LiveData<Boolean>
 
-    @Query("select exists(select password from UserPassword where userId like :userId and password like :password)")
+    @Query("select exists(select password from UserPassword where userId = :userId and password = :password)")
     fun verifyPassword(userId: Int, password: String): Boolean // LiveData<Boolean>
 
  /*   @Query("DELETE from User")

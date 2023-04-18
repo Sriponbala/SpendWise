@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import android.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spendwise.Categories
+import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.RecordRecyclerViewAdapter
@@ -51,19 +53,28 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
             recordViewModel.userId = it
         }*/
         args = RecordsFragmentArgs.fromBundle(requireArguments())
-        if((args.hideDescriptionText) && args.selectedCategory == null) {
-            val month = Calendar.getInstance().get(Calendar.MONTH)+1
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            recordViewModel.month.value = month
-            recordViewModel.year.value = year
-            recordViewModel.recordType.value = RecordType.ALL.value
+        if(savedInstanceState == null) {
+            if((args.hideDescriptionText) && args.selectedCategory == null) {
+                val month = Calendar.getInstance().get(Calendar.MONTH)+1
+                val year = Calendar.getInstance().get(Calendar.YEAR)
+                recordViewModel.month.value = month
+                recordViewModel.year.value = year
+                recordViewModel.recordType.value = RecordType.ALL.value
+            }
+            Log.e("Landscape", "recordsfrag onCreate")
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.back_arrow)
+        }
+        Log.e("Landscape", "recordsfrag onCreateView")
         binding = FragmentRecordsBinding.inflate(inflater, container, false)
         filterView = FilterView(recordViewModel, binding.filterLayoutRecordsFragment, this)
         if(args.hideAmountView) binding.recordsConstraint.visibility = View.GONE else binding.recordsConstraint.visibility = View.VISIBLE
@@ -74,6 +85,8 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.e("Landscape", "recordsfrag onViewCreate")
+
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId records", userId.toString())
         Log.e("Record", "args.card outside if ${args.hideAmountView}")
@@ -81,6 +94,15 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
         Log.e("Record", "args.category outside if ${args.selectedCategory}")
         Log.e("Record", "args.desc outside if ${args.hideDescriptionText}")
 
+//        recordViewModel.fetchAllRecords(userId)
+        /*recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
+            Log.e("Record", "allRecords")
+            recordViewModel.fetchRecords()
+            args.selectedCategory?.let {
+                Log.e("Record", "arg cat in let ${args.selectedCategory}")
+                recordViewModel.fetchRecordsOfTheCategory(it)
+            }
+        })*/
         if(!(args.hideDescriptionText) && args.selectedCategory != null) {
             Log.e("Record", "arg cat ${args.selectedCategory}")
 //            recordViewModel.fetchAllRecords(userId)
@@ -185,6 +207,9 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
                     binding.emptyRecordsList.visibility = View.VISIBLE
 //                    binding.cardView.visibility = View.GONE
                     binding.recordsRecyclerView.visibility = View.GONE
+                    recordViewModel.getIncomeOfTheMonth()
+                    recordViewModel.getExpenseOfTheMonth()
+                    recordViewModel.getTotalBalanceOfTheMonth()
                 } else {
                     Log.e("Record", "not empty")
                     binding.emptyRecordsList.visibility = View.GONE
@@ -208,17 +233,17 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
 
         recordViewModel.incomeOfTheMonth.observe(viewLifecycleOwner, Observer {
             if(it != null) {
-                binding.incomeAmountTV.text = "${resources.getString(R.string.rupee_symbol)} $it"
+                binding.incomeAmountTV.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(it)}"
             }
         })
         recordViewModel.expenseOfTheMonth.observe(viewLifecycleOwner, Observer {
             if(it != null) {
-                binding.expenseAmountTV.text = "${resources.getString(R.string.rupee_symbol)} $it"
+                binding.expenseAmountTV.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(it)}"
             }
         })
         recordViewModel.totalBalanceOfTheMonth.observe(viewLifecycleOwner, Observer {
             if(it != null) {
-                binding.totalAmountTV.text = "${resources.getString(R.string.rupee_symbol)} $it"
+                binding.totalAmountTV.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(it)}"
             }
         })
 
@@ -280,6 +305,7 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.e("Landscape", "recordsfrag onDestroy")
         filterView?.clear()
         filterView = null
     }

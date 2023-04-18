@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.BudgetRecyclerViewAdapter
 import com.example.spendwise.databinding.FragmentMonthlyBudgetsBinding
@@ -38,11 +39,25 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
 
-        val month = Calendar.getInstance().get(Calendar.MONTH) + 1
-        val year = Calendar.getInstance().get(Calendar.YEAR)
-        recordViewModel.month.value = month
-        recordViewModel.year.value = year
-        recordViewModel.recordType.value = RecordType.EXPENSE.value
+        if(savedInstanceState == null) {
+            val month = Calendar.getInstance().get(Calendar.MONTH) + 1
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            recordViewModel.month.value = month
+            recordViewModel.year.value = year
+            recordViewModel.recordType.value = RecordType.EXPENSE.value
+            Log.e("Landscape", "monthly budgtes frag onCreate")
+        } else {
+            Log.e("Landscape", "monthly budget in onCreate - month - ${recordViewModel.month.value}")
+            Log.e("Landscape", "monthly budget in onCreate - year - ${recordViewModel.year.value}")
+            Log.e("Landscape", "monthly budget in onCreate - type - ${recordViewModel.recordType.value}")
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("Landscape", "monthly budgets frag onDestroy")
+        /*filterView?.clear()
+        filterView = null*/
     }
 
     override fun onCreateView(
@@ -52,14 +67,28 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         // Inflate the layout for this fragment
         (activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.back_arrow)
         }
+        Log.e("Landscape", "monthly budgtes frag onCreateView")
+        Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.month.value}")
+        Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.year.value}")
+        Log.e("Landscape", "monthly budgtes frag oncreateView${recordViewModel.recordType.value}")
         binding = FragmentMonthlyBudgetsBinding.inflate(inflater, container, false)
-        filterView = FilterView(recordViewModel, binding.budgetFragmentFilter, this)
+        filterView = FilterView(recordViewModel.also { Log.e("Landscape", "blah blah ${it.month.value}") }, binding.budgetFragmentFilter, this)
         filterView?.setMonthYearValue()
+        Log.e("Landscape", "monthly budgtes frag onCreateView")
+        Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.month.value}")
+        Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.year.value}")
+        Log.e("Landscape", "monthly budgtes frag oncreateView${recordViewModel.recordType.value}")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        Log.e("Landscape", "monthly budgtes frag onViewCreate")
+        Log.e("Landscape", "monthly budgtes frag ${recordViewModel.month.value}")
+        Log.e("Landscape", "monthly budgtes frag ${recordViewModel.year.value}")
+        Log.e("Landscape", "monthly budgtes frag ${recordViewModel.recordType.value}")
 
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId monthly budgets", userId.toString())
@@ -141,12 +170,14 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
 
         recordViewModel.month.observe(viewLifecycleOwner, Observer {
             Log.e("month", it.toString())
+            Log.e("Landscape", "monthly budget in obs - month - $it")
             budgetViewModel.fetchBudgetsOfThePeriod(userId, Period.MONTH.value)
             recordViewModel.fetchRecords()
         })
 
         recordViewModel.year.observe(viewLifecycleOwner, Observer {
             Log.e("year", it.toString())
+            Log.e("Landscape", "monthly budget in obs - year - $it")
             budgetViewModel.fetchBudgetsOfThePeriod(userId, Period.MONTH.value)
             recordViewModel.fetchRecords()
         })
@@ -166,8 +197,12 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
     }
 
     override fun intimateSelectedDate(month: Int, year: Int) {
-        recordViewModel.month.value = month
-        recordViewModel.year.value = year
+        recordViewModel.month.value = month.also {
+            Log.e("Landscape", "monthly budget in intimateSelectedDate - month - $it")
+        }
+        recordViewModel.year.value = year.also {
+            Log.e("Landscape", "monthly budget in intimateSelectedDate - year - $it")
+        }
     }
 
     override fun intimateSelectedRecordType(recordType: String) {

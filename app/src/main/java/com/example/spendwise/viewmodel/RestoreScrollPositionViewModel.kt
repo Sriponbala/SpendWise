@@ -9,14 +9,18 @@ import androidx.lifecycle.ViewModel
 
 class RestoreScrollPositionViewModel(application: Application): AndroidViewModel(application) {
 
-    private val _dashboardScrollPosition = MutableLiveData<Int>()
-    val dashboardScrollPosition: LiveData<Int>
+    private val _dashboardScrollPosition = MutableLiveData<Int?>()
+    val dashboardScrollPosition: LiveData<Int?>
     get() = _dashboardScrollPosition
 
     fun updateDashboardScrollPosition(position: Int) {
         Log.e("Scroll", position.toString())
         _dashboardScrollPosition.value = position
         Log.e("Scroll", _dashboardScrollPosition.value.toString())
+    }
+
+    fun clear() {
+        _dashboardScrollPosition.value = null
     }
 
 }

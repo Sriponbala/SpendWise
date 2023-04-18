@@ -13,6 +13,7 @@ import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddBudgetBinding
@@ -138,16 +139,26 @@ class AddBudgetFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
-        return if(binding.budgetNameEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Budget name should not be empty", Toast.LENGTH_SHORT).show()
+        return if(binding.budgetNameEditText.text?.isEmpty() == true) {
+            binding.budgetNameEditText.error = "Budget name should not be empty"
+//            Toast.makeText(this.requireContext(), "Budget name should not be empty", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.budgetAmountEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
+        } else if(binding.budgetAmountEditText.text?.isEmpty() == true) {
+            binding.budgetAmountEditText.error = "Amount should not be empty"
+//            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.budgetCategoryEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
+        } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
+            binding.budgetAmountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
-        } else true
+        } else if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
+            binding.budgetCategoryEditText.error = "Category should not be empty"
+//            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
+            false
+        } else {
+            binding.budgetAmountEditText.error = null
+            true
+        }
     }
 
     private fun moveToPreviousPage() {

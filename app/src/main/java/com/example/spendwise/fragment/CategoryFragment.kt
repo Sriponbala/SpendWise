@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spendwise.Categories
 import com.example.spendwise.R
+import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.CategoryRecyclerViewAdapter
 import com.example.spendwise.databinding.FragmentCategoryBinding
 import com.example.spendwise.domain.Category
@@ -32,6 +33,10 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (activity as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.back_arrow)
+        }
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val args = CategoryFragmentArgs.fromBundle(requireArguments())
         recordType = args.recordType
@@ -51,6 +56,7 @@ class CategoryFragment : Fragment() {
             when(prevFragment) {
                 R.id.homePageFragment -> {
                     moveToNextFragment()
+                    categoryViewModel.category.value = null
                 }
                 R.id.addRecordFragment -> {
                     moveToPreviousFragment()

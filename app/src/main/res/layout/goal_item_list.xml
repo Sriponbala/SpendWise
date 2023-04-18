@@ -2,6 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -12,13 +15,13 @@
         android:src="@drawable/piggy_bank"
         android:background="@drawable/rounded_background"
         android:padding="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/goalProgressLinear"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
-        android:id="@+id/categoryTextView"
+        android:id="@+id/goalNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="16dp"
@@ -27,40 +30,99 @@
         android:ellipsize="end"
         android:maxEms="7"
         android:maxLines="1"
-        android:text="Theriyama spend paniten"
+        android:text="New Home"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/noteTextView"
+        app:layout_constraintBottom_toTopOf="@id/desiredDateTextView"
         app:layout_constraintStart_toEndOf="@id/goalIcon"
         app:layout_constraintTop_toTopOf="@id/goalIcon" />
 
     <TextView
-        android:id="@+id/amountTextView"
+        android:id="@+id/goalLabelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxEms="7"
         android:maxLines="1"
-        android:text="5000000000000000"
+        android:text="Goal"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/categoryTextView" />
+        app:layout_constraintTop_toTopOf="@+id/goalNameTextView" />
 
     <TextView
-        android:id="@+id/noteTextView"
+        android:id="@+id/targetAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxEms="10"
+        android:maxLines="1"
+        android:text="5,00,00,00,00,00,00,000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/desiredDateTextView" />
+
+    <TextView
+        android:id="@+id/desiredDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxEms="7"
         android:maxLines="1"
-        android:text="Theriyama spend paniten"
+        android:text="26/11/2023"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf=""
         app:layout_constraintBottom_toBottomOf="@id/goalIcon"
-        app:layout_constraintStart_toStartOf="@id/categoryTextView" />
+        app:layout_constraintStart_toStartOf="@id/goalNameTextView" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/goalProgressLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        app:indicatorColor="@color/progressIndicatorLeisure"
+        app:trackCornerRadius="4dp"
+        app:trackColor="#D9DCD9"
+        app:layout_constraintEnd_toEndOf="@id/goalLabelTextView"
+        app:layout_constraintStart_toStartOf="@id/goalIcon"
+        app:layout_constraintTop_toBottomOf="@id/goalIcon"
+        app:trackThickness="15dp" />
+
+    <TextView
+        android:id="@+id/savedLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/goalProgressLinear"
+        android:text="Saved:"
+        android:textStyle="bold"
+        android:textColor="@color/progressIndicatorLeisure"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/savedGoalAmtTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/goalProgressLinear"
+        android:text="$ 5,00,000000000000000000000000000000000000"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:maxEms="17"
+        android:textStyle="bold"
+        android:textColor="@color/progressIndicatorLeisure"
+        android:textSize="16sp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@id/savedLabelTextView"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

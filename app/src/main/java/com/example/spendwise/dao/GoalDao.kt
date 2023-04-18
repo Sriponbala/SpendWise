@@ -16,7 +16,7 @@ interface GoalDao {
     @Delete
     fun deleteGoal(goal: Goal)
 
-    @Query("select * from Goal where userId like :userId")
+    @Query("select * from Goal where userId = :userId")
     fun getAllGoals(userId: Int): List<Goal>
 
 }

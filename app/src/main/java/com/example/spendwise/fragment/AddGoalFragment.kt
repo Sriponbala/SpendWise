@@ -11,12 +11,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.spendwise.ColorsForSpinner
+import com.example.spendwise.Helper
 import com.example.spendwise.IconsForSpinner
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
@@ -40,26 +42,31 @@ class AddGoalFragment : Fragment() {
 
     private lateinit var binding: FragmentAddGoalBinding
     private lateinit var goalViewModel: GoalViewModel
-//    private lateinit var args: AddGoalFragmentArgs
+    private lateinit var args: AddGoalFragmentArgs
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val factory = GoalViewModelFactory(requireActivity().application)
         goalViewModel = ViewModelProvider(requireActivity(), factory)[GoalViewModel::class.java]
+        args = AddGoalFragmentArgs.fromBundle(requireArguments())
+        (activity as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.baseline_close_24)
+            title = if(args.isEditGoal) {
+                "Edit Goal"
+            } else "Add Goal"
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        args = AddGoalFragmentArgs.fromBundle(requireArguments())
-        (activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.baseline_close_24)
-            /*title = if(args.isEditGoal) {
-                "Edit Goal"
-            } else "Add Goal"*/
-        }
+      //  args = AddGoalFragmentArgs.fromBundle(requireArguments())
+
         // Inflate the layout for this fragment
         binding = FragmentAddGoalBinding.inflate(inflater, container, false)
         return binding.root
@@ -78,11 +85,12 @@ class AddGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         createAndSetAdapter()
 
-        /*if(args.isEditGoal) {
+        if(args.isEditGoal) {
             goalViewModel.goal.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     binding.etGoalName.setText(it.goalName)
                     binding.etGoalAmount.setText(it.targetAmount.toString())
+                    binding.etSavedGoalAmount.setText(it.savedAmount.toString())
                     val selectedIcon = IconsForSpinner.goalIcons.find { icon -> icon.goalIcon == it.goalIcon }
                     val iconIndex = IconsForSpinner.goalIcons.indexOf(selectedIcon)
                     binding.tilGoalColor.setSelection(iconIndex)
@@ -90,17 +98,15 @@ class AddGoalFragment : Fragment() {
                     val selectedColor = ColorsForSpinner.colorsList.find { color -> color.color == it.goalColor}
                     val indexColor = ColorsForSpinner.colorsList.indexOf(selectedColor)
                     binding.tilGoalColor.setSelection(indexColor)
-
                     binding.etDesiredDate.setText(it.desiredDate)
                 }
             })
-        }*/
+        }
 
         binding.saveGoalButton.setOnClickListener {
-            addGoal()
-            /*if(args.isEditGoal) {
+            if(args.isEditGoal) {
                 updateGoal()
-            } else addGoal()*/
+            } else addGoal()
         }
 
         binding.tilGoalColor.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -137,10 +143,12 @@ class AddGoalFragment : Fragment() {
                 userId = userId,
                 goalName = binding.etGoalName.text.toString(),
                 targetAmount = binding.etGoalAmount.text.toString().toFloat(),
-                savedAmount = binding.etSavedGoalAmount.text.toString().toFloat(),
+                savedAmount = if(binding.etSavedGoalAmount.text.toString() == "") {
+                    0f
+                } else { binding.etSavedGoalAmount.text.toString().toFloat() },
                 goalColor = goalViewModel.goalColor,
                 goalIcon = goalViewModel.goalIcon,
-                desiredDate = binding.etDesiredDate.toString()
+                desiredDate = binding.etDesiredDate.text.toString()
             )
             moveToPreviousPage()
         }
@@ -154,10 +162,12 @@ class AddGoalFragment : Fragment() {
                 userId = userId,
                 goalName = binding.etGoalName.text.toString(),
                 targetAmount = binding.etGoalAmount.text.toString().toFloat(),
-                savedAmount = binding.etSavedGoalAmount.text.toString().toFloat(),
+                savedAmount = if(binding.etSavedGoalAmount.text.toString() == "") {
+                    0f
+                } else { binding.etSavedGoalAmount.text.toString().toFloat() },
                 goalColor = goalViewModel.goalColor,
                 goalIcon = goalViewModel.goalIcon,
-                desiredDate = binding.etDesiredDate.toString()
+                desiredDate = binding.etDesiredDate.text.toString()
             )
             moveToPreviousPage()
         }
@@ -165,18 +175,28 @@ class AddGoalFragment : Fragment() {
 
     private fun validateAllFields(): Boolean {
         return if(binding.etGoalName.text?.isEmpty() == true) {
-            Toast.makeText(
+            binding.etGoalName.error = "Goal name should not be empty"
+            /*Toast.makeText(
                 this.requireContext(),
                 "Goal name should not be empty",
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
             false
         } else if(binding.etGoalAmount.text?.isEmpty() == true) {
-            Toast.makeText(
+            binding.etGoalAmount.error = "Target amount should not be empty"
+            /*Toast.makeText(
                 this.requireContext(),
                 "Target amount should not be empty",
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
+            false
+        } else if(!Helper.validateAmount(binding.etGoalAmount.text.toString())) {
+            binding.etGoalAmount.error = "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            Toast.makeText(this.requireContext(), "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
+            false
+        } else if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateAmount(binding.etSavedGoalAmount.text.toString())) {
+            binding.etSavedGoalAmount.error = "Saved amount can be empty or should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            Toast.makeText(this.requireContext(), "Saved amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else true
     }
@@ -199,4 +219,11 @@ class AddGoalFragment : Fragment() {
     private fun moveToPreviousPage() {
         this.findNavController().popBackStack()
     }
+
+    override fun onPause() {
+        super.onPause()
+        val actionBar = (activity as? MainActivity)?.supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
 }

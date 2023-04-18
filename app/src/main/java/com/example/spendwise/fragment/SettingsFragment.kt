@@ -51,7 +51,6 @@ class SettingsFragment : Fragment() {
         binding.settingsRecyclerView.adapter = adapter
         adapter.onItemClick = { doSelectedOption(it) }
         binding.settingsRecyclerView.layoutManager = GridLayoutManager(this.context, 3)//LinearLayoutManager(this.context)//
-
         setHasOptionsMenu(true)
         return binding.root
     }

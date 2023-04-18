@@ -21,8 +21,7 @@
         android:id="@+id/budgetNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        style="@style/HeadingTextStyle"
         android:text="BudgetName???????????????"
         android:maxLines="1"
         android:ellipsize="end"
@@ -136,17 +135,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/budgetProgressBarRecycler"
         app:layout_constraintEnd_toEndOf="@+id/budgetProgressBarRecycler"
         app:layout_constraintTop_toTopOf="@+id/budgetProgressBarRecycler" />
-
-    <!--<com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spentText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>-->
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

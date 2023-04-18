@@ -47,8 +47,10 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("Scroll", "onCreate")
+        Log.e("Landscape", "dashboard onCreate")
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
+        Log.e("Landscape", "dashboard onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         val factory = RestoreScrollPositionViewModelFactory(requireActivity().application)
         restoreScrollPositionViewModel = ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
     }
@@ -62,6 +64,8 @@ class DashboardFragment : Fragment() {
             title = "Dashboard"
             setDisplayHomeAsUpEnabled(false)
         }
+
+        Log.e("Landscape", "dashboard onCreateView - ${recordViewModel.month.value} - ${recordViewModel.year.value}")
 
         navigationListener = parentFragment?.parentFragment as HomePageFragment
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
@@ -99,7 +103,9 @@ class DashboardFragment : Fragment() {
 
         restoreScrollPositionViewModel.dashboardScrollPosition.observe(viewLifecycleOwner, Observer {
             Log.e("Scroll", it.toString() + "observe")
-            binding.rootScrollView.scrollTo(0, it)
+            if (it != null) {
+                binding.rootScrollView.scrollTo(0, it)
+            }
         })
 
         recordViewModel.filteredRecords.observe(viewLifecycleOwner, Observer {
@@ -274,6 +280,7 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onPause() {
+
         super.onPause()
         Log.e("Scroll", "onPause")
         restoreScrollPositionViewModel.updateDashboardScrollPosition(binding.rootScrollView.scrollY)

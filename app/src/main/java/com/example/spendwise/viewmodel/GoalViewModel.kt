@@ -2,6 +2,7 @@ package com.example.spendwise.viewmodel
 
 import android.app.Application
 import android.util.Log
+import android.view.Menu
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,6 +20,8 @@ import kotlinx.coroutines.withContext
 
 class GoalViewModel(application: Application): AndroidViewModel(application) {
 
+    var menu: Menu? = null
+
     private val repository = GoalRepository(SpendWiseDatabase.getInstance(application).goalDao)
 
     private val _goal = MutableLiveData<Goal?>()
@@ -32,12 +35,13 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
     fun insertGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
         viewModelScope.launch {
             val job = launch {
-                repository.insertGoal(Goal(userId, goalName, targetAmount).apply {
+                val goal = Goal(userId, goalName, targetAmount).apply {
                     this.savedAmount = savedAmount
                     this.goalColor = goalColor
                     this.goalIcon = goalIcon
                     this.desiredDate = desiredDate
-                })
+                }.also { Log.e("Goal", it.goalId.toString()) }
+                repository.insertGoal(goal)
             }
         }
     }
@@ -47,7 +51,7 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         _goal.value = goal
     }
 
-    fun deleteBudget(userId: Int) {
+    fun deleteGoal(userId: Int) {
         viewModelScope.launch {
             val job = launch {
                 _goal.value?.let {
@@ -61,7 +65,7 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun updateGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
+    fun updateGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "", goalStatus: String = GoalStatus.ACTIVE.value) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedGoal: Goal? = null
             val job = launch {
@@ -72,6 +76,7 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
                         this.goalIcon = goalIcon
                         this.desiredDate = desiredDate
                         this.goalId = it.goalId
+                        this.goalStatus = goalStatus
                     }
                     repository.updateGoal(updatedGoal!!)
                     fetchAllGoals(userId)
@@ -100,6 +105,17 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
             withContext(Dispatchers.Main) {
                 _goals.value = allGoalsFetched
             }
+        }
+    }
+
+    fun clear() {
+        _goal.value = null
+        _goals.value = null
+    }
+
+    fun updateGoalStatus(goalStatus: String) {
+        _goal.value?.let {
+            updateGoal(it.userId, it.goalName, it.targetAmount, it.savedAmount, it.goalColor, it.goalIcon, it.desiredDate, GoalStatus.COMPLETED.value)
         }
     }
 

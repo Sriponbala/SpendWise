@@ -65,6 +65,9 @@
         <action
             android:id="@+id/action_homePageFragment_to_monthlyBudgetsFragment"
             app:destination="@id/monthlyBudgetsFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_viewGoalFragment"
+            app:destination="@id/viewGoalFragment" />
         <!--<action
             android:id="@+id/action_homePageFragment_to_bottomSheetFragment"
             app:destination="@id/bottomSheetFragment" />-->
@@ -87,7 +90,12 @@
         android:id="@+id/addGoalFragment"
         android:name="com.example.spendwise.fragment.AddGoalFragment"
         android:label="Add goal"
-        tools:layout="@layout/fragment_add_goal" />
+        tools:layout="@layout/fragment_add_goal">
+        <argument
+            android:name="isEditGoal"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/recordsFragment"
         android:name="com.example.spendwise.fragment.RecordsFragment"
@@ -126,11 +134,11 @@
             android:id="@+id/action_statisticsFragment_to_recordsFragment"
             app:destination="@id/recordsFragment" />
     </fragment>
-    <fragment
+    <!--<fragment
         android:id="@+id/expensesFragment"
         android:name="com.example.spendwise.fragment.ExpensesFragment"
         android:label="Expenses"
-        tools:layout="@layout/fragment_expenses" />
+        tools:layout="@layout/fragment_expenses" />-->
 
     <!--<fragment
         android:id="@+id/settingsFragment"
@@ -138,11 +146,11 @@
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />-->
 
-    <fragment
+   <!-- <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.spendwise.fragment.UserProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" />-->
 
     <fragment
         android:id="@+id/addRecordFragment"
@@ -184,8 +192,8 @@
             app:destination="@id/recordsFragment" />
     </fragment>
 
-    <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment"/>
-    <action android:id="@+id/action_global_expensesFragment" app:destination="@id/expensesFragment"/>
+<!--    <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment"/>-->
+<!--    <action android:id="@+id/action_global_expensesFragment" app:destination="@id/expensesFragment"/>-->
 <!--    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>-->
     <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment"/>
     <fragment
@@ -218,6 +226,15 @@
             android:name="period"
             app:argType="string"
             android:defaultValue="Monthly" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewGoalFragment"
+        android:name="com.example.spendwise.fragment.ViewGoalFragment"
+        android:label="Goal"
+        tools:layout="@layout/fragment_view_goal" >
+        <action
+            android:id="@+id/action_viewGoalFragment_to_addGoalFragment"
+            app:destination="@id/addGoalFragment" />
     </fragment>
 
 

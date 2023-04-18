@@ -59,11 +59,14 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         }*/
         val args = StatisticsFragmentArgs.fromBundle(requireArguments())
         recordType = args.recordType
-        val month = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.MONTH) + 1
-        val year = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.YEAR)
-        recordViewModel.month.value = month
-        recordViewModel.year.value = year
-        recordViewModel.recordType.value = recordType
+        if(savedInstanceState == null) {
+            val month = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.MONTH) + 1
+            val year = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.YEAR)
+            recordViewModel.month.value = month
+            recordViewModel.year.value = year
+            recordViewModel.recordType.value = recordType
+        }
+
     }
 
     override fun onCreateView(
@@ -73,6 +76,8 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         (activity as MainActivity).supportActionBar?.apply {
             title = "$recordType Stats"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.back_arrow)
         }
         filterView = FilterView(recordViewModel, binding.filterLayoutRecordsFragment, this)
         filterView?.setMonthYearValue()
@@ -244,6 +249,13 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
 
     override fun onNothingSelected() {
         binding.pieChart.centerText = recordType
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("Landscape", "statsfrag onDestroy")
+        /*filterView?.clear()
+        filterView = null*/
     }
 
 }

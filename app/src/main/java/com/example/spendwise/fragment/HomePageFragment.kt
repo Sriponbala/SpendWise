@@ -22,9 +22,8 @@ import com.example.spendwise.enums.LogInStatus
 import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.listeners.NavigationListener
-import com.example.spendwise.viewmodel.NavigationViewModel
-import com.example.spendwise.viewmodel.UserViewModel
-import com.example.spendwise.viewmodelfactory.UserViewModelFactory
+import com.example.spendwise.viewmodel.*
+import com.example.spendwise.viewmodelfactory.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
@@ -37,6 +36,12 @@ class HomePageFragment : Fragment(), NavigationListener {
     private lateinit var editor: Editor
     private val navigationViewModel: NavigationViewModel by activityViewModels()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        ((activity) as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val userViewModelFactory = UserViewModelFactory((activity as MainActivity).application)
@@ -44,9 +49,10 @@ class HomePageFragment : Fragment(), NavigationListener {
         val sharedPreferences = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getInt("userId", 0)
         editor = sharedPreferences.edit()
-        Log.e("UserId home", userId.toString())
+        Log.e("UserID", "home oncreate 1 "+ userId.toString())
         userViewModel.fetchUser(userId)
-        Log.e("UserViewModel  Home", userViewModel.toString())
+        Log.e("UserId", userViewModel.toString())
+        Log.e("UserID", "home oncreate 2 "+ userViewModel.user?.userId.toString())
         val nestedNavHostFragment2 = (activity as MainActivity).supportFragmentManager.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
         parentNavController = nestedNavHostFragment2.navController
     }
@@ -56,9 +62,6 @@ class HomePageFragment : Fragment(), NavigationListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        ((activity) as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(false)
-        }
 //        setHasOptionsMenu(true)
         binding = FragmentHomePageBinding.inflate(inflater, container, false)
         return binding.root
@@ -74,6 +77,10 @@ class HomePageFragment : Fragment(), NavigationListener {
       //  navController.navigate(R.id.action_homePageFragment_to_dashBoardFragment)
         binding.bottomNavigationView.setOnItemSelectedListener {
             bottomNavigationHandler(it)
+        }
+
+        if(navController.currentDestination?.id == R.id.settingsFragment) {
+            binding.fabHomePage.visibility = View.GONE
         }
 
         binding.fabHomePage.setOnClickListener {
@@ -92,6 +99,14 @@ class HomePageFragment : Fragment(), NavigationListener {
             }
         }
     }
+
+    /*override fun onStop() {
+        super.onStop()
+        (activity as MainActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+           // setHomeAsUpIndicator(R.drawable.baseline_close_24)
+        }
+    }*/
 
     private fun bottomNavigationHandler(menuItem: MenuItem): Boolean {
         var flag = false
@@ -147,6 +162,7 @@ class HomePageFragment : Fragment(), NavigationListener {
         }
     }
 
+/*
     private fun showBottomSheet() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -163,6 +179,8 @@ class HomePageFragment : Fragment(), NavigationListener {
             println("more 2")
         }
     }
+*/
+/*
     private fun showBottomSheet1() {
 
         binding.bottomNavigationView.selectedItemId = getCurrentDestinationId().also {
@@ -182,7 +200,9 @@ class HomePageFragment : Fragment(), NavigationListener {
         binding.bottomNavigationView.selectedItemId = navigationViewModel.previouslySelectedMenuItemId.also(::println)
         navigateFromBottomSheet(bottomSheetView, bottomSheetDialog)
     }
+*/
 
+/*
     private fun navigateFromBottomSheet(view: View, bottomSheetDialog: BottomSheetDialog) {
         // Set click listeners for the clickable layouts in the bottom sheet
         view.findViewById<View>(R.id.layoutIncome).setOnClickListener {
@@ -224,6 +244,7 @@ class HomePageFragment : Fragment(), NavigationListener {
         }
 
     }
+*/
 
     override fun onActionReceived(destination: Fragment, title: RecordType, period: Period) {
         when(destination) {
@@ -238,7 +259,15 @@ class HomePageFragment : Fragment(), NavigationListener {
                // parentNavController.navigate(R.id.action_homePageFragment_to_statisticsFragment)
             }
             is LoginFragment -> {
+                Log.e("UserID", "Logout")
                 Log.e("Settings", "home when login")
+                userViewModel.user = null
+                userViewModel.isUserFetched.value = null
+                ViewModelProvider(requireActivity(), RecordViewModelFactory(requireActivity().application))[RecordViewModel::class.java].clear()
+                ViewModelProvider(requireActivity(), GoalViewModelFactory(requireActivity().application))[GoalViewModel::class.java].clear()
+                ViewModelProvider(requireActivity(), BudgetViewModelFactory(requireActivity().application))[BudgetViewModel::class.java].clear()
+                ViewModelProvider(requireActivity(), RestoreScrollPositionViewModelFactory(requireActivity().application))[RestoreScrollPositionViewModel::class.java].clear()
+
                 editor.apply {
 //                    putInt("userId", 0)
                     putString("status", LogInStatus.LOGGED_OUT.name)
@@ -256,6 +285,10 @@ class HomePageFragment : Fragment(), NavigationListener {
             is MonthlyBudgetsFragment ->  {
                 val action = HomePageFragmentDirections.actionHomePageFragmentToMonthlyBudgetsFragment(period.value)
                 parentNavController.navigate(action)
+            }
+            is ViewGoalFragment -> {
+                Log.e("Goal", "Homepage")
+                parentNavController.navigate(R.id.action_homePageFragment_to_viewGoalFragment)
             }
         }
     }

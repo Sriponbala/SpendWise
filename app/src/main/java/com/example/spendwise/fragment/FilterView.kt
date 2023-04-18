@@ -2,6 +2,7 @@ package com.example.spendwise.fragment
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
@@ -21,8 +22,12 @@ class FilterView(
 ): AdapterView.OnItemSelectedListener {
 
     fun setMonthYearValue() {
-        val month = recordViewModel.month.value
-        val year = recordViewModel.year.value
+        val month = recordViewModel.month.value.also {
+            Log.e("Landscape", "filterview - month - $it")
+        }
+        val year = recordViewModel.year.value.also {
+            Log.e("Landscape", "filterview - year - $it")
+        }
         if(month != null && year != null) {
             val monthName = Month.values()[month-1].value
             binding?.monthAndYearTv?.text = "$monthName $year"

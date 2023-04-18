@@ -33,16 +33,16 @@ class RecordViewModel(
         Log.e("Records", it.value?.size.toString())
     }*/
 
-    private var _filteredRecords = MutableLiveData<List<Record>>()
+    private var _filteredRecords = MutableLiveData<List<Record>?>()
     val filteredRecords: LiveData<List<Record>?>
     get() = _filteredRecords
 
     val month = MutableLiveData<Int>()
     val year = MutableLiveData<Int>()
     val recordType = MutableLiveData<String>()
-    val incomeOfTheMonth = MutableLiveData<Float>()
-    val expenseOfTheMonth = MutableLiveData<Float>()
-    val totalBalanceOfTheMonth = MutableLiveData<Float>()
+    val incomeOfTheMonth = MutableLiveData<Float?>()
+    val expenseOfTheMonth = MutableLiveData<Float?>()
+    val totalBalanceOfTheMonth = MutableLiveData<Float?>()
 
     fun insertRecord(userId: Int, category: String, amount: String, type: String, date: String, _note: String, desc: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -115,6 +115,7 @@ class RecordViewModel(
         viewModelScope.launch/*(Dispatchers.IO)*/ {
             var fetchedRecords: List<Record>? = null
             val job = launch {
+                Log.e("UserID", "record fetch all records " + userId.toString())
                 fetchedRecords = repository.getAllUserRecords(userId)
                 Log.e("Record", userId.toString() + " viewmodel getusers below fetchedrecords ${fetchedRecords?.size}")
                 Log.e("Record", _record.value.toString() + " inside job " +_record.value?.recordId.toString())
@@ -123,7 +124,9 @@ class RecordViewModel(
             withContext(Dispatchers.Main) {
                 Log.e("rec ", "")
                 Log.e("Record", userId.toString() + " viewmodel getusers above ${_records.value?.size}")
-                _records.value = fetchedRecords
+                _records.value = fetchedRecords.also {
+                    Log.e("UserID", "record fetch all _records.value " + it.toString())
+                }
                  user = userId
                 Log.e("Record", userId.toString() + " viewmodel getusers below ${_records.value?.size}")
             }
@@ -135,8 +138,8 @@ class RecordViewModel(
         Log.e("Record", _record.value.toString() + " fetchAll " +_record.value?.recordId.toString())
     }
 
-    private var _dataForPieChart = MutableLiveData<List<Pair<Category, Float>>>()
-    val dataForPieChart: LiveData<List<Pair<Category, Float>>>
+    private var _dataForPieChart = MutableLiveData<List<Pair<Category, Float>>?>()
+    val dataForPieChart: LiveData<List<Pair<Category, Float>>?>
         get() = _dataForPieChart
     val isDataForPieChartUpdated = MutableLiveData<Boolean>()
 
@@ -181,11 +184,11 @@ class RecordViewModel(
 
     val isIncomeDataUpdated = MutableLiveData<Boolean>()
     val isExpenseDataUpdated = MutableLiveData<Boolean>()
-    private var _dataForIncomePieChart = MutableLiveData<List<Pair<Category, Float>>>()
-    val dataForIncomePieChart: LiveData<List<Pair<Category, Float>>>
+    private var _dataForIncomePieChart = MutableLiveData<List<Pair<Category, Float>>?>()
+    val dataForIncomePieChart: LiveData<List<Pair<Category, Float>>?>
     get() = _dataForIncomePieChart
-    private var _dataForExpensePieChart = MutableLiveData<List<Pair<Category, Float>>>()
-    val dataForExpensePieChart: LiveData<List<Pair<Category, Float>>>
+    private var _dataForExpensePieChart = MutableLiveData<List<Pair<Category, Float>>?>()
+    val dataForExpensePieChart: LiveData<List<Pair<Category, Float>>?>
     get() = _dataForExpensePieChart
 
     fun getDataTransformed(list: List<Record>, type: RecordType) {
@@ -327,4 +330,35 @@ class RecordViewModel(
 
     val category = MutableLiveData<Category?>()
     var period = Period.MONTH
+
+    fun clear() {
+        _records.value = null
+        _filteredRecords.value = null
+        _recordsOfTheCategory.value = null
+        _record.value = null
+        incomeOfTheMonth.value = null
+        expenseOfTheMonth.value = null
+        totalBalanceOfTheMonth.value = null
+        _dataForPieChart.value = null
+        _dataForIncomePieChart.value = null
+        _dataForExpensePieChart.value = null
+        /*_dataForExpensePieChart.value = null
+        _dataForIncomePieChart.value = null
+        _dataForPieChart.value = null*/
+    }
+
+   /* val month = MutableLiveData<Int>()
+    val year = MutableLiveData<Int>()
+    val recordType = MutableLiveData<String>()
+    val incomeOfTheMonth = MutableLiveData<Float>()
+    val expenseOfTheMonth = MutableLiveData<Float>()
+    val totalBalanceOfTheMonth = MutableLiveData<Float>()
+    val isIncomeDataUpdated = MutableLiveData<Boolean>()
+    val isExpenseDataUpdated = MutableLiveData<Boolean>()
+    private var _dataForIncomePieChart = MutableLiveData<List<Pair<Category, Float>>>()
+    val dataForIncomePieChart: LiveData<List<Pair<Category, Float>>>
+        get() = _dataForIncomePieChart
+    private var _dataForExpensePieChart = MutableLiveData<List<Pair<Category, Float>>>()
+    val dataForExpensePieChart: LiveData<List<Pair<Category, Float>>>
+        get() = _dataForExpensePieChart*/
 }

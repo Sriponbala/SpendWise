@@ -18,6 +18,7 @@ import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddRecordBinding
 import androidx.lifecycle.Observer
 import com.example.spendwise.Categories
+import com.example.spendwise.Helper
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
@@ -58,7 +59,8 @@ class AddRecordFragment : Fragment() {
             } else "Add record"
         }
         binding = FragmentAddRecordBinding.inflate(inflater, container, false)
-
+//        Helper.validateAmountField(binding.amountEditText)
+        Helper.setupEditTextValidation(binding.amountEditText)
         /*userViewModel.user.value?.userId?.let {
             Log.e("UserId AddRecord", it.toString())
             recordViewModel.userId = it
@@ -77,6 +79,7 @@ class AddRecordFragment : Fragment() {
                     } else if(it.type == RecordType.EXPENSE.value) {
                         binding.toggleGroup.check(R.id.expenseButton)
                     }
+                    Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
                     binding.amountEditText.setText(it.amount.toString())
                     binding.dateEditText.setText(it.date)
                     binding.categoryEditText.setText(it.category)
@@ -194,13 +197,20 @@ class AddRecordFragment : Fragment() {
 
     private fun validateAllFields(): Boolean {
         return if(binding.amountEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
+            binding.amountEditText.error = "Amount should not be empty"
+//            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
+            false
+        } else if(!Helper.validateAmount(binding.amountEditText.text.toString())) {
+            binding.amountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.categoryEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
+            binding.categoryEditText.error = "Category should not be empty"
+//            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.dateEditText.text.isEmpty()) {
-            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
+            binding.dateEditText.error = "Date should not be empty"
+//            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else true
     }

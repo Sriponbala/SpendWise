@@ -2,10 +2,10 @@
     <!-- Base application theme. -->
     <style name="Theme.SpendWise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <!--<item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
+        &lt;!&ndash; Secondary brand color. &ndash;&gt;
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
@@ -13,10 +13,31 @@
         <item name="colorTertiary">@color/tertiary_dark</item>
         <item name="colorTertiaryContainer">@color/tertiary_container_dark</item>
         <item name="colorOnTertiary">@color/on_tertiary_dark</item>
-        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_dark</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_dark</item>-->
+
+        <!-- Dark mode primary color -->
+        <!--<item name="colorPrimary">#1E90FF</item>
+        <item name="colorPrimaryVariant">#206ad9</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        &lt;!&ndash; Dark mode secondary color &ndash;&gt;
+        <item name="colorSecondary">#1E90FF</item>
+        <item name="colorSecondaryVariant">#206ad9</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        &lt;!&ndash; Dark mode status bar color &ndash;&gt;
+        <item name="android:statusBarColor">#206ad9</item>-->
+
+        <item name="colorPrimary">#1E90FF</item>
+        <item name="colorPrimaryVariant">#206ad9</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <item name="colorSecondary">#1E90FF</item>
+        <item name="colorSecondaryVariant">#206ad9</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 

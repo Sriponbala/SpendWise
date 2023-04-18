@@ -52,6 +52,7 @@ class ViewRecordFragment : Fragment() {
 
         (activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.back_arrow)
         }
         return binding.root
     }
@@ -65,10 +66,18 @@ class ViewRecordFragment : Fragment() {
                 binding.viewCategoryEditText.setText(it.category)
                 binding.viewDateEditText.setText(it.date)
                 binding.viewNoteEditText.setText(it.note)
-                binding.descriptionTextField.setText(it.description)
+                binding.descriptionTextField.text = it.description
                 if(it.type == RecordType.INCOME.value) {
+                    binding.incomeButtonView.setTextColor(resources.getColor(R.color.white))
+                    binding.expenseButtonView.setTextColor(resources.getColor(R.color.gray))
+                    binding.incomeButtonView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                    binding.expenseButtonView.setBackgroundColor(resources.getColor(R.color.white))
                     binding.toggleGroupView.check(R.id.incomeButtonView)
                 } else if (it.type == RecordType.EXPENSE.value) {
+                    binding.incomeButtonView.setTextColor(resources.getColor(R.color.gray))
+                    binding.expenseButtonView.setTextColor(resources.getColor(R.color.white))
+                    binding.incomeButtonView.setBackgroundColor(resources.getColor(R.color.white))
+                    binding.expenseButtonView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                     binding.toggleGroupView.check(R.id.expenseButtonView)
                 }
             }

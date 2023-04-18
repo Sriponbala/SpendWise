@@ -25,10 +25,11 @@
         android:layout_weight="1"
         android:textAlignment="center"
         android:textColor="#1B1A1A"
-        android:clickable="true"
         android:text="Apr 2023"
-        android:textSize="16dp"
+        android:clickable="true"
         android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        android:textSize="16dp"
         android:drawableTint="#515050"
         android:drawableEnd="@drawable/arrow_drop_down"
         android:layout_margin="16dp"/>

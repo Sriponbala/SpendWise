@@ -31,7 +31,7 @@
         <item name="colorSecondary">#1E90FF</item>
         <item name="colorSecondaryVariant">#206ad9</item>
         <item name="colorOnSecondary">#FFFFFF</item>
-
+        <item name="android:statusBarColor">#206ad9</item>
 
         <!-- Tertiary brand colour. -->
         <!--<item name="colorTertiary">@color/tertiary</item>
@@ -41,7 +41,6 @@
 
         <!-- Status bar color. -->
         <!--<item name="android:statusBarColor">@color/tertiary_middle</item>-->
-        <item name="android:statusBarColor">#206ad9</item>
         <!-- Customize your theme here. -->
     </style>
 

@@ -41,6 +41,7 @@
                 android:id="@+id/email_textInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 android:layout_gravity="center_horizontal" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,19 +72,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_marginTop="25dp"
             android:layout_gravity="center_horizontal"/>
-
-        <TextView
-            android:id="@+id/forgotPasswordTextview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forgot Password?"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:textColor="@color/linkColour" />
 
         <TextView
             android:id="@+id/SignUpTextView"
@@ -93,8 +86,10 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="35dp"
             android:layout_marginBottom="40dp"
-            android:textSize="16sp"
             android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:textSize="16sp"
             android:textColor="@color/linkColour"/>
 
     </LinearLayout>

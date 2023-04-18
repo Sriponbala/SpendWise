@@ -74,8 +74,9 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
             fetchJob.join()
             withContext(Dispatchers.Main){
 //                _user.value = userData
-                Log.e("User fetch", user.toString())
+                Log.e("User fetch using email 1", user.toString())
                 user = userData
+                Log.e("User fetch using email 2", ""+user.toString())
                 isUserFetched.value = true
             }
         }
@@ -92,9 +93,9 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
             withContext(Dispatchers.Main){
 //                _user.value = userData
                 Log.e("User fetch userID 1", user.toString())
-//                user = userData
+                user = userData
 //                Log.e("User fetch userID 2", user.toString())
-//                isUserFetched.value = true
+                isUserFetched.value = true
 //                Log.e("User fetch userID 3", user.toString())
             }
         }
@@ -121,7 +122,12 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             var result = false
             val job = launch {
-                result = repository.verifyPassword(user!!.userId, password)
+                Log.e("UserID", "inside verify password ${user?.userId.toString()}")
+                user?.userId?.let {
+                    result = repository.verifyPassword(it, password).also {f ->
+                        Log.e("Password", "$f - $it - $password")
+                    }
+                }
             }
             job.join()
             withContext(Dispatchers.Main){

@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
             if(it != null) {
                 if(it) {
                     editor.apply{
-                        Log.e("UserId Login userObs", userViewModel.user?.userId.toString())
+                        Log.e("UserId", "login before entering in editor " + userViewModel.user?.userId.toString())
                         putInt("userId", userViewModel.user?.userId!!)
                         putString("status", LogInStatus.LOGGED_IN.name)
                         apply()
@@ -131,15 +131,19 @@ class LoginFragment : Fragment() {
     private fun loginUser() {
         userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
         userViewModel.isUserFetched.observe(viewLifecycleOwner, Observer {
-            Log.e("isFetched", it.toString())
+            Log.e("UserID","isFetched - " + it?.toString())
             if(it != null) {
                 if(it) {
+                    Log.e("UserID", "before verify password ${userViewModel.user.toString()}")
                     userViewModel.verifyPassword(binding.passwordTextInputEditText.text.toString())
                     userViewModel.isCorrectPassword.observe(viewLifecycleOwner, Observer { password ->
+                        Log.e("Password", password.toString())
                         Log.e("isCorrect0", it.toString())
                         if(password != null) {
+                            Log.e("Password", password.toString())
                             Log.e("isCorrect1", password.toString())
-                            if(it) {
+                            if(password) {
+                                Log.e("Password", password.toString())
                                 Log.e("isCorrect2", password.toString())
                                 userViewModel.isUserFetchedFinally.value = true
                                 /*editor.apply {
@@ -154,7 +158,7 @@ class LoginFragment : Fragment() {
                                     putString("status", LogInStatus.LOGGED_IN.name)
                                     apply()
                                 }*/
-                                Log.e("userId login", userViewModel.user!!.userId.toString())
+                                Log.e("UserID", "login() "+ userViewModel.user?.userId.toString())
                                 //moveToNextFragment()
                             } else {
                                 /* editor.apply {
@@ -166,6 +170,7 @@ class LoginFragment : Fragment() {
                         }
                     })
                 }
+                userViewModel.isUserFetched.value = null
                 userViewModel.isLoggedIn.value = null
             }
         })

@@ -112,16 +112,28 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
             }
             job.join()
             withContext(Dispatchers.Main) {
-                _budget.value = updatedBudget.also {
-                    Log.e("Budget","updated budget " + updatedBudget.toString())
-                }
                 _budgetItem.value?.let {
                     Log.e("Budget", "updated budget " + updatedBudget.toString())
                     if(updatedBudget != null) {
                         _budgetItem.value = Pair(updatedBudget!!, it.second)
                     }
                 }
+                _budget.value = updatedBudget.also {
+                    Log.e("Budget","updated budget " + updatedBudget.toString())
+                }
+                /*_budgetItem.value?.let {
+                    Log.e("Budget", "updated budget " + updatedBudget.toString())
+                    if(updatedBudget != null) {
+                        _budgetItem.value = Pair(updatedBudget!!, it.second)
+                    }
+                }*/
             }
         }
+    }
+
+    fun clear() {
+        _budget.value = null
+        _budgetItem.value = null
+        _monthlyBudgets.value = null
     }
 }

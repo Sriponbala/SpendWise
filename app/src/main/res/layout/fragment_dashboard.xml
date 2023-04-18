@@ -5,14 +5,14 @@
     tools:context=".fragment.DashboardFragment"
     android:layout_width="match_parent"
     android:fadeScrollbars="true"
+    android:background="#F0F0F0"
     android:id="@+id/rootScrollView"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F0F0F0"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
@@ -54,7 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:text="Total"
+                    android:text="@string/netBalance"
                     app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
                     app:layout_constraintEnd_toEndOf="@+id/currentMonthTotalText"
                     app:layout_constraintStart_toStartOf="@+id/currentMonthTotalText"
@@ -171,6 +171,8 @@
                     android:layout_height="wrap_content"
                     android:text="ALL RECORDS"
                     android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     style="@style/TextStyle"
                     android:textColor="?attr/colorPrimary"/>
             </LinearLayout>
@@ -235,6 +237,8 @@
                     style="@style/TextStyle"
                     android:layout_marginTop="16dp"
                     android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:textColor="?attr/colorPrimary"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -297,6 +301,8 @@
                     android:layout_height="wrap_content"
                     android:text="ALL EXPENSE STATS"
                     android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:layout_marginTop="16dp"
                     style="@style/TextStyle"
                     android:textColor="?attr/colorPrimary"/>
