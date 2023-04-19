@@ -40,7 +40,8 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
                     this.goalColor = goalColor
                     this.goalIcon = goalIcon
                     this.desiredDate = desiredDate
-                }
+                }.also { Log.e("Goal", it.goalId.toString()) }
+                repository.insertGoal(goal)
             }
         }
     }
