@@ -15,12 +15,17 @@ import com.example.spendwise.fragment.CategoryFragment
 import com.example.spendwise.fragment.CategoryFragmentArgs
 import com.example.spendwise.fragment.CategoryFragmentDirections
 
-class CategoryRecyclerViewAdapter(private val categories: List<Category>): RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
+class CategoryRecyclerViewAdapter(private var categories: List<Category>): RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
 
     var onItemClick: ((Category) -> Unit)? = null
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val categoryImage: ImageView = itemView.findViewById(R.id.categoryImage)
         val categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
+    }
+
+    fun filterList(filteredList: List<Category>) {
+        categories = filteredList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

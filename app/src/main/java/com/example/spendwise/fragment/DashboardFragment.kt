@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -24,6 +25,7 @@ import com.example.spendwise.databinding.FragmentDashboardBinding
 import com.example.spendwise.domain.Category
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.listeners.NavigationListener
+import com.example.spendwise.viewmodel.QuoteViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
@@ -35,6 +37,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.android.material.color.MaterialColors
 
 class DashboardFragment : Fragment() {
 
@@ -43,13 +46,13 @@ class DashboardFragment : Fragment() {
     private lateinit var recordViewModel: RecordViewModel
     private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
     private lateinit var adapter: RecordRecyclerViewAdapter
-
+    private val quoteViewModel: QuoteViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.e("Scroll", "onCreate")
         Log.e("Landscape", "dashboard onCreate")
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
-        recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
+        recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
         Log.e("Landscape", "dashboard onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         val factory = RestoreScrollPositionViewModelFactory(requireActivity().application)
         restoreScrollPositionViewModel = ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
@@ -73,6 +76,26 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        if(savedInstanceState == null) {
+            quoteViewModel.getRandomQuote()
+        }
+
+        quoteViewModel.quote.observe(viewLifecycleOwner, Observer {
+            if(it != null) {
+                val quoteText = """|${resources.getString(R.string.openingDoubleQuotes)} ${it.text} ${resources.getString(R.string.closingDoubleQuotes)}
+                    """.trimMargin()
+                binding.quoteLayout.quote.text = quoteText
+                binding.quoteLayout.quoteAuthor.text = "- ${it.author}"
+                binding.quoteLayout.quoteAuthor.visibility = View.VISIBLE
+                Log.e("Quote", it.toString())
+            } else {
+                binding.quoteLayout.quote.text = "Check your network connectivity"
+                binding.quoteLayout.quoteAuthor.visibility = View.GONE
+
+                Log.e("Quote", "Quote is null")
+            }
+        })
 
         binding.showRecords.setOnClickListener {
             navigationListener.onActionReceived(RecordsFragment())
@@ -265,6 +288,10 @@ class DashboardFragment : Fragment() {
         pieChart.centerText = """${recordType.value}
             |₹ ${Helper.formatNumberToIndianStyle(total)}
         """.trimMargin()
+        val centerOfChartColor = view?.let { MaterialColors.getColor(it, com.google.android.material.R.attr.colorTertiaryContainer) }
+        if (centerOfChartColor != null) {
+            pieChart.setHoleColor(centerOfChartColor)
+        }
         pieChart.setCenterTextColor(resources.getColor(R.color.black))
 //        pieChart.setOnChartValueSelectedListener(null)
 //        binding.pieChart.description.textAlign = Paint.Align.RIGHT

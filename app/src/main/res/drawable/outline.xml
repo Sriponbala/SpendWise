@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/white"/> <!-- Set the solid color of the TextView -->
+    <solid android:color="?attr/colorOnTertiary"/> <!-- Set the solid color of the TextView -->
      <!-- Set the corner radius of the TextView -->
     <stroke
         android:color="#bce1ff"

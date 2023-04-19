@@ -85,7 +85,7 @@ class AddGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         createAndSetAdapter()
 
-        if(args.isEditGoal) {
+        if(args.isEditGoal && savedInstanceState == null) {
             goalViewModel.goal.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     binding.etGoalName.setText(it.goalName)

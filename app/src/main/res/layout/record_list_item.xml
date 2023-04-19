@@ -36,7 +36,6 @@
         android:text="Theriyama spend paniten"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/noteTextView"
         app:layout_constraintStart_toEndOf="@id/categoryLogo"
         app:layout_constraintTop_toTopOf="parent" />

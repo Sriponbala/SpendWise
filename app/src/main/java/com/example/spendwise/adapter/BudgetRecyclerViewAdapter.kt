@@ -72,11 +72,11 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
         } else {
             holder.budgetPercentText.text = "$percentage % "
             holder.budgetPercentText.setTextColor(res.getColor(R.color.black))
-            holder.remainingAmount.setTextColor(res.getColor(R.color.black))
+//            holder.remainingAmount.setTextColor(res.getColor(R.color.black))
             holder.remainingAmount.text = Helper.formatNumberToIndianStyle(item.first.maxAmount.minus(item.second))
-            holder.remainsText.setTextColor(res.getColor(R.color.black))
+//            holder.remainsText.setTextColor(res.getColor(R.color.black))
             holder.remainsText.text = "Remains"
-            holder.remainingAmountCurrency.setTextColor(res.getColor(R.color.black))
+//            holder.remainingAmountCurrency.setTextColor(res.getColor(R.color.black))
         }
         holder.spentAmount.text = Helper.formatNumberToIndianStyle(item.second)
         holder.itemView.setOnClickListener {

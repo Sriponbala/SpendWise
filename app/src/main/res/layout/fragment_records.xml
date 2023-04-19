@@ -42,7 +42,6 @@
                 android:text="Income"
                 android:textSize="16dp"
                 android:layout_margin="16dp"
-                android:textColor="@color/black"
                 />
             <TextView
                 android:id="@+id/incomeAmountTV"
@@ -69,7 +68,6 @@
                 android:text="Expense"
                 android:textSize="16dp"
                 android:layout_margin="16dp"
-                android:textColor="@color/black"
                 />
             <TextView
                 android:id="@+id/expenseAmountTV"
@@ -96,7 +94,6 @@
                 android:text="@string/netBalance"
                 android:textSize="16dp"
                 android:layout_margin="16dp"
-                android:textColor="@color/black"
                 />
             <TextView
                 android:id="@+id/totalAmountTV"
@@ -217,7 +214,6 @@
         android:textAlignment="center"
         android:layout_gravity="center"
         android:visibility="gone"
-        android:textColor="@color/black"
         android:textSize="25sp"
         android:text="No records found"/>
 

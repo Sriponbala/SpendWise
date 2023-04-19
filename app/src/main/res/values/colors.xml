@@ -54,4 +54,11 @@
     <color name="progressIndicatorExceeded">#D50000</color>
     <color name="progressIndicatorLeisure">#00C853</color>
 
+    <color name="rippleLight">#e3f3ff</color>
+    <color name="rippleDark">#61BBFF</color>
+
+    <color name="cardBehindScreenDark">#202020</color>
+    <color name="cardBehindScreenLight">#F0F0F0</color>
+    <color name="pieChartCenter">#535151</color>
+
 </resources>

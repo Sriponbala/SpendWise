@@ -24,6 +24,7 @@ import com.example.spendwise.database.SpendWiseDatabase
 import com.example.spendwise.databinding.ActivityMainBinding
 import com.example.spendwise.domain.User
 import com.example.spendwise.enums.LogInStatus
+import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodel.UserViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
@@ -118,6 +119,13 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             true
         }*/
         Log.e("NavigateUp", "")
+        if(navController.currentDestination?.id == R.id.categoryFragment){
+            Log.e("Search", "empty querytext from main activity")
+            val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
+                Log.e("Search", it.toString())
+            }
+            categoryViewModel.queryText = ""
+        }
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
@@ -128,6 +136,11 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.homePageFragment)?.label)} - ${navGraph.findNode(R.id.dashBoardFragment)?.label}")
 //        Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.userProfileFragment)?.label)} - ${navGraph.findNode(R.id.userProfileFragment)?.label}")
 //        Log.e("Main", currentDestination.displayName)
+       /* if(navController.currentDestination?.id == R.id.categoryFragment) {
+            Log.e("Quote", "empty querytext from main activity")
+            val categoryViewModel = CategoryViewModel()
+            categoryViewModel.queryText = ""
+        }*/
         if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label) == true) {
             Log.e("Main", "current - login")
             navController.popBackStack(R.id.loginFragment, true)
@@ -136,9 +149,17 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             Log.e("Main", "current - home")
             navController.popBackStack(0, true)
             finish()
+        } else if(navController.currentDestination?.id == R.id.categoryFragment){
+            Log.e("Search", "empty querytext from main activity")
+            val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
+                Log.e("Search", it.toString())
+            }
+            categoryViewModel.queryText = ""
+            super.onBackPressed()
         } else {
             super.onBackPressed()
         }
+
     }
 
     override fun onDestroy() {

@@ -51,6 +51,8 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
             Log.e("Landscape", "monthly budget in onCreate - year - ${recordViewModel.year.value}")
             Log.e("Landscape", "monthly budget in onCreate - type - ${recordViewModel.recordType.value}")
         }
+        val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
+        recordViewModel.fetchAllRecords(userId)
     }
 
     override fun onDestroy() {
@@ -116,10 +118,10 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                         }
                     }
 
-                    /*recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
+                    recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
                         Log.e("Budget", userId.toString() + " monthly budgets allrecords obs ")
                         recordViewModel.fetchRecords()
-                    })*/
+                    })
 
                     /*restoreScrollPositionViewModel.dashboardScrollPosition.observe(viewLifecycleOwner, Observer {
                         Log.e("Scroll", it.toString() + "observe")

@@ -24,5 +24,9 @@ object Categories {
         Category("Gifts", R.drawable.baseline_card_giftcard_24, RecordType.INCOME, R.color.gifts_color),
         Category("Coupons", R.drawable.baseline_discount_24, RecordType.INCOME, R.color.coupons_color),
 //        Category("Other", R.drawable.baseline_density_medium_24, RecordType.INCOME, R.color.other_color)
-    )
+    ).also {
+        for(i in it) {
+            println(i)
+        }
+    }
 }

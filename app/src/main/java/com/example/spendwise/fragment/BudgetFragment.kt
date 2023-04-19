@@ -36,13 +36,15 @@ class BudgetFragment : Fragment() {
         val factory = BudgetViewModelFactory(requireActivity().application)
         budgetViewModel = ViewModelProvider(requireActivity(), factory)[BudgetViewModel::class.java]
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
-        recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
-
+        recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
         val month = Calendar.getInstance().get(Calendar.MONTH) + 1
         val year = Calendar.getInstance().get(Calendar.YEAR)
         recordViewModel.month.value = month
         recordViewModel.year.value = year
         recordViewModel.recordType.value = RecordType.EXPENSE.value
+        val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
+        recordViewModel.fetchAllRecords(userId)
+        Log.e("Landscape", "budget home onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         Log.e("Budget", "onCreate ")
     }
     override fun onCreateView(
@@ -54,6 +56,7 @@ class BudgetFragment : Fragment() {
             title = "Budgets"
             setDisplayHomeAsUpEnabled(false)
         }
+        Log.e("Landscape", "budget home onCreateView - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         binding = FragmentBudgetBinding.inflate(inflater, container, false)
         navigationListener = parentFragment?.parentFragment as HomePageFragment
         return binding.root
@@ -67,18 +70,27 @@ class BudgetFragment : Fragment() {
         binding.showMonthlyBudgets.setOnClickListener {
             moveToNextFragment(Period.MONTH)
         }
-        val month = Calendar.getInstance().get(Calendar.MONTH) + 1
+        /*val month = Calendar.getInstance().get(Calendar.MONTH) + 1
         val year = Calendar.getInstance().get(Calendar.YEAR)
         recordViewModel.month.value = month
         recordViewModel.year.value = year
-        recordViewModel.recordType.value = RecordType.EXPENSE.value
+        recordViewModel.recordType.value = RecordType.EXPENSE.value*/
         Log.e("Budget", "onCreate ")
-        recordViewModel.fetchRecords()
+//        recordViewModel.fetchAllRecords(userId)
+        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
+            Log.e("Budget", userId.toString() + " monthly budgets allrecords obs ")
+            Log.e("Landscape", "budget home onViewCreate in all records obs - ${recordViewModel.month.value} - ${recordViewModel.year.value}")
+            recordViewModel.fetchRecords()
+        })
+//        recordViewModel.fetchRecords()
 
         budgetViewModel.fetchBudgetsOfThePeriod(userId, Period.MONTH.value)
         budgetViewModel.monthlyBudgets.observe(viewLifecycleOwner, Observer { listOfBudgets ->
+            Log.e("Landscape", "budget home onViewCreate in mb obs- ${recordViewModel.month.value} - ${recordViewModel.year.value}")
+            Log.e("Landscape", "budget home onViewCreate in mb obs listof budgets- ${budgetViewModel.monthlyBudgets.value}")
             if(listOfBudgets != null) {
                 if(listOfBudgets.isNotEmpty()) {
+                    Log.e("Landscape", "budget home onViewCreate in mb obs bud not empty- ${recordViewModel.month.value} - ${recordViewModel.year.value}")
                     binding.thisMonthNoBudgetsTv.visibility = View.GONE
                     binding.thisMonthBudgetsList.visibility = View.VISIBLE
                     var adapterData = mutableListOf<Pair<Budget, Float>>()
@@ -94,7 +106,9 @@ class BudgetFragment : Fragment() {
                     })*/
 
                     recordViewModel.filteredRecords.observe(viewLifecycleOwner, Observer { listOfRecords ->
+                        Log.e("Landscape", "budget home onViewCreate in mb obs filteres rec - $listOfRecords ${recordViewModel.month.value} - ${recordViewModel.year.value}")
                         if(listOfRecords != null) {
+                            Log.e("Landscape", "budget home onViewCreate in mb obs filtered rec not null - ${recordViewModel.month.value} - ${recordViewModel.year.value}")
                             Log.e("Budget", "monthly budget - filtered rec obs " + listOfRecords.size.toString() )
                             for(i in listOfRecords) {
                                 Log.e("Budget", "monthly budget - filtered rec obs $i")

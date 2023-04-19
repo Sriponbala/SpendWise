@@ -12,6 +12,8 @@
     <string name="dashboard">Dashboard</string>
     <string name="budgets">Budgets</string>
     <string name="goals">Goals</string>
+    <string name="openingDoubleQuotes">\u201C</string>
+    <string name="closingDoubleQuotes">\u201D</string>
     <!--    <string name="rupee_symbol">\u20B9</string>-->
     <string name="rupee_symbol">₹</string>
     <string name="netBalance">Net Balance</string>

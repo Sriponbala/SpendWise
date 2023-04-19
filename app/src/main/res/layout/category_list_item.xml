@@ -19,6 +19,9 @@
     android:id="@+id/categoryLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal">
     <ImageView
         android:id="@+id/categoryImage"
@@ -41,7 +44,6 @@
         android:layout_gravity="center"
         android:text="Category"
         android:textSize="16dp"
-        android:textColor="@color/black"
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@id/categoryImage"
         app:layout_constraintStart_toEndOf="@id/categoryImage"

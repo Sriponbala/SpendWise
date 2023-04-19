@@ -60,7 +60,7 @@ class AddBudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(args.isEditBudget) {
+        if(args.isEditBudget && savedInstanceState == null) {
             budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     binding.budgetNameEditText.setText(it.budgetName)

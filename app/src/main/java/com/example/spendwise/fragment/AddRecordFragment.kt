@@ -71,7 +71,7 @@ class AddRecordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(args.isEditRecord) {
+        if(args.isEditRecord && savedInstanceState == null) {
             recordViewModel.record.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     if(it.type == RecordType.INCOME.value) {

@@ -16,6 +16,7 @@ import com.example.spendwise.viewmodel.BudgetViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.google.android.material.color.MaterialColors
 
 class ViewBudgetFragment : Fragment() {
 
@@ -109,11 +110,11 @@ class ViewBudgetFragment : Fragment() {
                 } else {
                     binding.viewBudgetPercentTextView.text = "$percentage % "
                     binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.black))
-                    binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.black))
+//                    binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.black))
                     binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(it.maxAmount.minus(spentAmt))
-                    binding.viewRemainsText.setTextColor(resources.getColor(R.color.black))
+//                    binding.viewRemainsText.setTextColor(resources.getColor(MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnTertiaryContainer)))
                     binding.viewRemainsText.text = "Remains"
-                    binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.black))
+//                    binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.black))
                 }
                 binding.viewSpentAmountText.text = Helper.formatNumberToIndianStyle(spentAmt)
             }

@@ -5,7 +5,7 @@
     tools:context=".fragment.DashboardFragment"
     android:layout_width="match_parent"
     android:fadeScrollbars="true"
-    android:background="#F0F0F0"
+    style="@style/ScreenBehindCardView"
     android:id="@+id/rootScrollView"
     android:layout_height="match_parent">
 
@@ -15,6 +15,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/quoteLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            layout="@layout/quote_view" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             style="@style/CardViewStyle"
@@ -22,7 +30,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <TextView
                     android:id="@+id/currentMonthIncomeTv"
                     style="@style/HeadingTextStyle"

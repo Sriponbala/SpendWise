@@ -103,17 +103,26 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
                 recordViewModel.fetchRecordsOfTheCategory(it)
             }
         })*/
+        recordViewModel.fetchAllRecords(userId)
+        recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
+            Log.e("Record", "allRecords")
+            recordViewModel.fetchRecords()
+            args.selectedCategory?.let {
+                Log.e("Record", "arg cat in let ${args.selectedCategory}")
+                recordViewModel.fetchRecordsOfTheCategory(it)
+            }
+        })
         if(!(args.hideDescriptionText) && args.selectedCategory != null) {
             Log.e("Record", "arg cat ${args.selectedCategory}")
 //            recordViewModel.fetchAllRecords(userId)
-            recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
+            /*recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
                 Log.e("Record", "allRecords")
                 recordViewModel.fetchRecords()
                 args.selectedCategory?.let {
                     Log.e("Record", "arg cat in let ${args.selectedCategory}")
                     recordViewModel.fetchRecordsOfTheCategory(it)
                 }
-            })
+            })*/
             recordViewModel.recordsOfTheCategory.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     recordViewModel.updateFilteredRecords(it)

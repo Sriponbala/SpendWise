@@ -33,7 +33,6 @@
         android:text="New Home"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/desiredDateTextView"
         app:layout_constraintStart_toEndOf="@id/goalIcon"
         app:layout_constraintTop_toTopOf="@id/goalIcon" />
@@ -46,7 +45,6 @@
         android:maxEms="7"
         android:maxLines="1"
         android:text="Goal"
-        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginHorizontal="16dp"

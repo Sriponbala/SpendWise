@@ -33,6 +33,17 @@
         <item name="colorOnSecondary">#FFFFFF</item>
         <item name="android:statusBarColor">#206ad9</item>
 
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/black</item>
+        <item name="itemRippleColor">@color/rippleLight</item>
+        <item name="colorTertiary">@color/cardBehindScreenLight</item>
+        <item name="colorTertiaryContainer">@color/white</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorOnTertiaryContainer">@color/black</item>
+        <!--<color name="pieChartCenter">@color/white</color>
+        <color name="screenBehindCardView">#F0F0F0</color>
+        <color name="cardViewColor">@color/white</color>-->
+
         <!-- Tertiary brand colour. -->
         <!--<item name="colorTertiary">@color/tertiary</item>
         <item name="colorTertiaryContainer">@color/tertiary_container</item>
@@ -41,7 +52,16 @@
 
         <!-- Status bar color. -->
         <!--<item name="android:statusBarColor">@color/tertiary_middle</item>-->
-        <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="CardViewStyle">
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+    <style name="ScreenBehindCardView">
+        <item name="android:background">@color/cardBehindScreenLight</item>
     </style>
 
     <style name="DialogAnimation">

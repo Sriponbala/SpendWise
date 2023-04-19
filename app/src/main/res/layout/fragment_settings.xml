@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/settingsRoot"
+    style="@style/ScreenBehindCardView"
     tools:context=".fragment.SettingsFragment">
 
     <androidx.recyclerview.widget.RecyclerView

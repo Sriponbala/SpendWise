@@ -57,6 +57,7 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
             Log.e("UserId Record", it.toString())
             recordViewModel.userId = it
         }*/
+        Log.e("Landscape", "stats onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         val args = StatisticsFragmentArgs.fromBundle(requireArguments())
         recordType = args.recordType
         if(savedInstanceState == null) {
@@ -80,6 +81,7 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
             setHomeAsUpIndicator(R.drawable.back_arrow)
         }
         filterView = FilterView(recordViewModel, binding.filterLayoutRecordsFragment, this)
+        Log.e("Landscape", "stats onCreateView - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         filterView?.setMonthYearValue()
         return binding.root
     }
@@ -110,7 +112,7 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
             }
         }
 
-      //  recordViewModel.fetchAllRecords(userId)
+        recordViewModel.fetchAllRecords(userId)
         recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
             recordViewModel.fetchRecords()
         })

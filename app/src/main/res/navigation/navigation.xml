@@ -56,7 +56,9 @@
             app:destination="@id/statisticsFragment" />
         <action
             android:id="@+id/action_homePageFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/categoryFragment"
+            app:popUpTo="@id/categoryFragment"
+            app:popUpToInclusive="true" />
 <!--
         <action
             android:id="@+id/action_homePageFragment_to_budgetsFragment"
@@ -80,7 +82,9 @@
         tools:layout="@layout/fragment_add_budget" >
         <action
             android:id="@+id/action_addBudgetFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            app:destination="@id/categoryFragment"
+            app:popUpTo="@id/categoryFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="isEditBudget"
             app:argType="boolean"
@@ -165,7 +169,9 @@
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_addRecordFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment"/>
+            app:destination="@id/categoryFragment"
+            app:popUpTo="@id/categoryFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="category"
             app:argType="string"
