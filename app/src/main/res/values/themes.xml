@@ -24,17 +24,19 @@
         <item name="colorOnSecondary">#000000</item>-->
         <!-- Secondary brand color. -->
 <!--        <item name="colorPrimary">@color/primaryBlue</item>-->
-        <item name="colorPrimary">#1E90FF</item>
-        <item name="colorPrimaryVariant">#206ad9</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="colorPrimaryVariant">@color/primaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
-        <item name="colorSecondary">#1E90FF</item>
-        <item name="colorSecondaryVariant">#206ad9</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="android:statusBarColor">#206ad9</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <item name="android:statusBarColor">@color/primaryVariant</item>
+        <item name="android:navigationBarColor">@color/white</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@color/black</item>
+<!--        <item name="android:textColor">@color/black</item>-->
         <item name="itemRippleColor">@color/rippleLight</item>
         <item name="colorTertiary">@color/cardBehindScreenLight</item>
         <item name="colorTertiaryContainer">@color/white</item>
@@ -60,7 +62,7 @@
         <item name="android:layout_marginHorizontal">16dp</item>
         <item name="android:layout_marginTop">16dp</item>
     </style>
-    <style name="ScreenBehindCardView">
+    <style name="ScreenBackground">
         <item name="android:background">@color/cardBehindScreenLight</item>
     </style>
 
@@ -81,4 +83,8 @@
         <item name="android:statusBarColor">?attr/colorOnTertiaryContainer</item>
     </style>
 -->
+    <style name="SpinnerTextStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+    </style>
 </resources>

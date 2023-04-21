@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.BudgetRecyclerViewAdapter
@@ -22,14 +23,17 @@ import com.example.spendwise.enums.RecordType
 import com.example.spendwise.interfaces.FilterViewDelegate
 import com.example.spendwise.viewmodel.BudgetViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
+import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
 
 class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
 
     private lateinit var binding: FragmentMonthlyBudgetsBinding
     private lateinit var budgetViewModel: BudgetViewModel
     private lateinit var recordViewModel: RecordViewModel
+    private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
     private var filterView: FilterView? = null  // FilterView(this, requireActivity().application)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +42,8 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         budgetViewModel = ViewModelProvider(requireActivity(), factory)[BudgetViewModel::class.java]
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
+        val restoreScrollPositionFactory = RestoreScrollPositionViewModelFactory(requireActivity().application)
+        restoreScrollPositionViewModel = ViewModelProvider(this, restoreScrollPositionFactory)[RestoreScrollPositionViewModel::class.java]
 
         if(savedInstanceState == null) {
             val month = Calendar.getInstance().get(Calendar.MONTH) + 1
@@ -92,6 +98,15 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         Log.e("Landscape", "monthly budgtes frag ${recordViewModel.year.value}")
         Log.e("Landscape", "monthly budgtes frag ${recordViewModel.recordType.value}")
 
+        binding.budgetsRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    restoreScrollPositionViewModel.scrollPositionMonthlyBudgets = (binding.budgetsRecycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                }
+            }
+        })
+
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId monthly budgets", userId.toString())
 
@@ -109,6 +124,7 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         budgetViewModel.monthlyBudgets.observe(viewLifecycleOwner, Observer { listOfBudgets ->
             if(listOfBudgets != null) {
                 if(listOfBudgets.isNotEmpty()) {
+                    binding.emptyBudgetsTextView.visibility = View.GONE
                     var adapterData = mutableListOf<Pair<Budget, Float>>()
                     binding.budgetFragmentFilter.apply {
                         spinner.visibility = View.GONE
@@ -165,9 +181,13 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                     })
                     setAdapter(adapterData)
                 } else {
+                    binding.emptyBudgetsTextView.visibility = View.VISIBLE
                     Log.e("Budget", "budgets empty")
                 }
-            } else Log.e("Budget", "budgets - Null")
+            } else {
+                binding.emptyBudgetsTextView.visibility = View.VISIBLE
+                Log.e("Budget", "budgets - Null")
+            }
         })
 
         recordViewModel.month.observe(viewLifecycleOwner, Observer {
@@ -189,6 +209,7 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
 
     private fun setAdapter(adapterData: List<Pair<Budget, Float>>) {
         val adapter = BudgetRecyclerViewAdapter(adapterData)
+        adapter.setTheFragment(this)
         adapter.onItemClick = {
             budgetViewModel.setSelectedBudgetItem(it)
             val action = MonthlyBudgetsFragmentDirections.actionMonthlyBudgetsFragmentToViewBudgetFragment()
@@ -196,6 +217,7 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         }
         binding.budgetsRecycler.adapter = adapter
         binding.budgetsRecycler.layoutManager = LinearLayoutManager(this.requireContext())
+        (binding.budgetsRecycler.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionMonthlyBudgets)
     }
 
     override fun intimateSelectedDate(month: Int, year: Int) {

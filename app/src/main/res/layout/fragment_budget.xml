@@ -2,16 +2,17 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootScrollViewBudget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ScreenBehindCardView"
+    style="@style/ScreenBackground"
     tools:context=".fragment.BudgetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        style="@style/ScreenBehindCardView"
+        style="@style/ScreenBackground"
         android:id="@+id/budgetsRoot">
 
         <androidx.cardview.widget.CardView
@@ -54,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ALL BUDGETS"
+                    android:textStyle="bold"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"

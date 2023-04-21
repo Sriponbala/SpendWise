@@ -1,11 +1,16 @@
 package com.example.spendwise.adapter
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.example.spendwise.R
 import com.example.spendwise.domain.ColorItem
 import com.example.spendwise.domain.IconItem
@@ -21,7 +26,6 @@ class GoalIconSpinnerAdapter(context: Context, private val goalIcons: List<IconI
         // Set the icon data
         iconData?.let {
             imageViewIcon.setImageResource(iconData.goalIcon)
-            imageViewIcon.setColorFilter(view.resources.getColor(R.color.black))
         }
         return view
     }
@@ -34,7 +38,6 @@ class GoalIconSpinnerAdapter(context: Context, private val goalIcons: List<IconI
         // Set the icon data
         iconData?.let {
             imageViewIcon.setImageResource(iconData.goalIcon)
-            imageViewIcon.setColorFilter(view.resources.getColor(R.color.black))
         }
         return view
     }

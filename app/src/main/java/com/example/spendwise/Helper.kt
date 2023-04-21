@@ -12,6 +12,13 @@ import java.util.regex.Pattern
 
 object Helper {
 
+    fun formatPercentage(percent: Int): String {
+        return if(percent > 100) {
+            "+100"
+        } else {
+            percent.toString()
+        }
+    }
 
     fun retrieveValueFromScientificNotation(scientificValue: Float): String {
         val format = DecimalFormat("0", DecimalFormatSymbols(Locale.getDefault()))

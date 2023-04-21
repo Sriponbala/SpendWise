@@ -361,4 +361,8 @@ class RecordViewModel(
     private var _dataForExpensePieChart = MutableLiveData<List<Pair<Category, Float>>>()
     val dataForExpensePieChart: LiveData<List<Pair<Category, Float>>>
         get() = _dataForExpensePieChart*/
+
+    var isTempDataSet = false
+    val tempData = MutableLiveData<Map<String, String>>()
+
 }

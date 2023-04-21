@@ -28,19 +28,19 @@
         &lt;!&ndash; Dark mode status bar color &ndash;&gt;
         <item name="android:statusBarColor">#206ad9</item>-->
 
-        <item name="colorPrimary">#1E90FF</item>
-        <item name="colorPrimaryVariant">#206ad9</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="colorPrimaryVariant">@color/primaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
-        <item name="colorSecondary">#1E90FF</item>
-        <item name="colorSecondaryVariant">#206ad9</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/primaryVariant</item>
+        <item name="android:navigationBarColor">@color/recordPage</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@color/white</item>
+<!--        <item name="android:textColor">@color/white</item>-->
         <item name="itemRippleColor">@color/rippleDark</item>
         <item name="colorTertiary">@color/cardBehindScreenDark</item>
         <item name="colorTertiaryContainer">@color/pieChartCenter</item>
@@ -57,7 +57,7 @@
         <item name="android:layout_marginHorizontal">16dp</item>
         <item name="android:layout_marginTop">16dp</item>
     </style>
-    <style name="ScreenBehindCardView">
+    <style name="ScreenBackground">
         <item name="android:background">@color/cardBehindScreenDark</item>
     </style>
 
@@ -76,4 +76,8 @@
         &lt;!&ndash; Status bar color. &ndash;&gt;
         <item name="android:statusBarColor">?attr/colorOnTertiaryContainer</item>
     </style>-->
+    <style name="SpinnerTextStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/black</item>
+    </style>
 </resources>

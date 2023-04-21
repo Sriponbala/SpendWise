@@ -17,6 +17,7 @@ import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddBudgetBinding
+import com.example.spendwise.domain.Budget
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.BudgetViewModel
 import com.example.spendwise.viewmodel.CategoryViewModel
@@ -61,18 +62,31 @@ class AddBudgetFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if(args.isEditBudget && savedInstanceState == null) {
-            budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
-                    binding.budgetNameEditText.setText(it.budgetName)
-                    binding.budgetAmountEditText.setText(it.maxAmount.toString())
-                    binding.budgetPeriodEditText.setText(it.period)
-                    binding.budgetCategoryEditText.setText(it.category)
-                }
-            })
+            if(recordViewModel.isTempDataSet) {
+                recordViewModel.tempData.observe(viewLifecycleOwner, Observer {
+                    Log.e("Edit", "isTempData true, inside temp data observe")
+                    if(it != null) {
+                        Log.e("Edit", "temp data not null ${it.toString()}")
+                        binding.budgetNameEditText.setText(it["BudgetName"])
+                        binding.budgetAmountEditText.setText(it["Amount"])
+                        recordViewModel.tempData.value = null
+                    }
+                })
+            } else {
+                budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
+                    if(it != null) {
+                        binding.budgetNameEditText.setText(it.budgetName)
+                        binding.budgetAmountEditText.setText(it.maxAmount.toString())
+                        binding.budgetPeriodEditText.setText(it.period)
+                        binding.budgetCategoryEditText.setText(it.category)
+                    }
+                })
+            }
         }
 
         binding.saveButton.setOnClickListener {
             if(args.isEditBudget) {
+                recordViewModel.isTempDataSet = false
                 updateBudget()
             } else addBudget()
         }
@@ -85,6 +99,8 @@ class AddBudgetFragment : Fragment() {
         })
 
         binding.budgetCategoryEditText.setOnClickListener {
+            recordViewModel.isTempDataSet = true
+            recordViewModel.tempData.value = mapOf("BudgetName" to binding.budgetNameEditText.text.toString(), "Amount" to binding.budgetAmountEditText.text.toString())
             val action = AddBudgetFragmentDirections.actionAddBudgetFragmentToCategoryFragment(RecordType.EXPENSE.value, R.id.addBudgetFragment)
             findNavController().navigate(action)
         }
@@ -123,18 +139,55 @@ class AddBudgetFragment : Fragment() {
         if(validateAllFields()) {
             val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
             Log.e("userId edit record", userId.toString())
-            budgetViewModel.updateBudget(
+            if(binding.budgetCategoryEditText.text.toString() == budgetViewModel.budget.value?.category) {
+                budgetViewModel.updateBudget(
+                    userId = userId,
+                    budgetName = binding.budgetNameEditText.text.toString(),
+                    budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
+                    period = binding.budgetPeriodEditText.text.toString(),
+                    category = binding.budgetCategoryEditText.text.toString())
+                /* userId,
+                 binding.budgetNameEditText.text.toString(),
+                 binding.budgetAmountEditText.text.toString().toFloat(),
+                 binding.budgetPeriodEditText.text.toString(),
+                 binding.budgetCategoryEditText.text.toString())*/
+                moveToPreviousPage()
+            } else {
+                budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), binding.budgetPeriodEditText.text.toString())
+                budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner, Observer {
+                    if(it != null) {
+                        if(it) {
+                            Toast.makeText(this.context, "Category ${binding.budgetCategoryEditText.text.toString().toLowerCase()} already exists", Toast.LENGTH_LONG).show()
+                        } else {
+                            budgetViewModel.updateBudget(
+                                userId = userId,
+                                budgetName = binding.budgetNameEditText.text.toString(),
+                                budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
+                                period = binding.budgetPeriodEditText.text.toString(),
+                                category = binding.budgetCategoryEditText.text.toString())
+                            /* userId,
+                             binding.budgetNameEditText.text.toString(),
+                             binding.budgetAmountEditText.text.toString().toFloat(),
+                             binding.budgetPeriodEditText.text.toString(),
+                             binding.budgetCategoryEditText.text.toString())*/
+                            moveToPreviousPage()
+                        }
+                        budgetViewModel.budgetCategoryAlreadyExists.value = null
+                    }
+                })
+            }
+            /*budgetViewModel.updateBudget(
                 userId = userId,
                 budgetName = binding.budgetNameEditText.text.toString(),
                 budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
                 period = binding.budgetPeriodEditText.text.toString(),
                 category = binding.budgetCategoryEditText.text.toString())
-               /* userId,
+               *//* userId,
                 binding.budgetNameEditText.text.toString(),
                 binding.budgetAmountEditText.text.toString().toFloat(),
                 binding.budgetPeriodEditText.text.toString(),
-                binding.budgetCategoryEditText.text.toString())*/
-            moveToPreviousPage()
+                binding.budgetCategoryEditText.text.toString())*//*
+            moveToPreviousPage()*/
         }
     }
 

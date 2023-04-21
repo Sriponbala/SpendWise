@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/budgetRoot"
+    android:background="@color/recordPage"
     tools:context=".fragment.MonthlyBudgetsFragment">
 
     <include layout="@layout/filter_layout"
@@ -18,5 +19,16 @@
         android:layout_marginHorizontal="16dp"
         android:id="@+id/budgetsRecycler"
         android:layout_marginVertical="8dp"/>
+
+    <TextView
+        android:id="@+id/emptyBudgetsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Budgets Found"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="64dp"
+        android:gravity="center"
+        android:textSize="32sp"
+        android:visibility="visible" />
 
 </LinearLayout>

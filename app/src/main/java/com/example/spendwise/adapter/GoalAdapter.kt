@@ -47,7 +47,7 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
             setImageResource(item.goalIcon)
             Log.e("Goal", "${item.goalName} - color - ${item.goalColor}")
             backgroundTintList = ColorStateList.valueOf(res.getColor(item.goalColor))
-            setColorFilter(res.getColor(R.color.white)) }
+            /*setColorFilter(res.getColor(R.color.white))*/ }
         holder.progressBar.apply {
             progress = ((item.savedAmount/item.targetAmount) * 100).toInt()
         }

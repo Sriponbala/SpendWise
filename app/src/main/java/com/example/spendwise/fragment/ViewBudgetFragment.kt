@@ -65,16 +65,175 @@ class ViewBudgetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
+            Log.e("OverSpent", "budget obs $it")
+            Log.e("ViewBudget", "budget obs in viewbudget")
+            if (it != null) {
+                if(budgetViewModel.isBudgetUpdated) {
+                    Log.e("OverSpent", "isBudgetUpdat true $it")
+                    recordViewModel.filteredRecords.observe(
+                        viewLifecycleOwner,
+                        Observer { listOfRecords ->
+                            if (listOfRecords != null) {
+                                Log.e("ViewBudget", "list rec not null")
+                                if (listOfRecords.isEmpty()) {
+                                    Log.e("ViewBudget", "list rec empty")
+                                    budgetViewModel.updateBudgetItemRecordsAmount(0f)
+                                } else {
+                                    Log.e("ViewBudget", "list rec not empty")
+                                    var total = 0f
+                                    listOfRecords.forEach { record ->
+                                        if (binding.budgetCategoryView.text.toString() == record.category) {
+                                            total += record.amount
+                                        }
+                                    }
+                                    Log.e(
+                                        "ViewBudget",
+                                        "before update budgetitem in add budget frag"
+                                    )
+                                    budgetViewModel.updateBudgetItemRecordsAmount(total)
+                                }
+                            } else {
+                                budgetViewModel.updateBudgetItemRecordsAmount(0f)
+                            }
+                        })
+                    budgetViewModel.budgetItem.observe(viewLifecycleOwner, Observer { item ->
+                        Log.e("OverSpent", "budgetitem obs $item")
+                        Log.e("ViewBudget", "${item} - budgetitem obs in viewbudget")
+                        if(item != null) {
+                            Log.e("ViewBudget", "${item.toString()} - updated budget")
+                            Log.e("ViewBudget", it.toString() + " view loaded " + it.budgetName.toString())
+                            binding.budgetNameView.text = item.first.budgetName
+                            binding.budgetAmountView.text = "₹ ${Helper.formatNumberToIndianStyle(item.first.maxAmount)}"
+                            binding.budgetPeriodView.text = item.first.period
+                            binding.budgetCategoryView.text = item.first.category
+                            binding.viewBudgetNameText.text = item.first.category
+                            binding.viewBudgetAmountText.text = Helper.formatNumberToIndianStyle(item.first.maxAmount)//.toString()
+                            val spentAmt = item.second
+                            Log.e("ViewBudget", "${item.toString()} - updated budget item")
+                            val percentage = (((item.second)/item.first.maxAmount) * 100).toInt()
+                            binding.viewBudgetProgressBarRecycler.progress = percentage.also { percent ->
+                                Log.e("Progress", percent.toString())
+                            }
+                            if(percentage in 70..99) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorDanger))
+                                    trackColor = resources.getColor(R.color.progressBarNearingToBudget)
+                                }
+                            } else if (percentage < 70) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorLeisure))
+                                    trackColor = resources.getColor(R.color.progressBarLeisure)
+                                }
+//            holder.progressBar.setIndicatorColor(res.getColor(R.color.colorPrimary))
+                            } else if(percentage >= 100) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                }
+//            holder.progressBar.setIndicatorColor(res.getColor(R.color.health_color))
+                            }
+
+                            if(percentage >= 100) {
+                                Log.e("OverSpent", "overspent colors $percentage")
+                                binding.viewBudgetPercentTextView.text = "${Helper.formatPercentage(percentage)} %"
+                                binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.white))
+                                binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(spentAmt.minus(it.maxAmount))
+                                binding.viewRemainsText.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                binding.viewRemainsText.text = "Overspent"
+                                binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                            } else {
+                                Log.e("OverSpent", "remains colors $percentage")
+                                binding.viewBudgetPercentTextView.text = "$percentage % "
+                                binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.black))
+//                    binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.black))
+                                binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(it.maxAmount.minus(spentAmt))
+//                    binding.viewRemainsText.setTextColor(resources.getColor(MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnTertiaryContainer)))
+                                binding.viewRemainsText.text = "Remains"
+//                    binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.black))
+                            }
+                            binding.viewSpentAmountText.text = Helper.formatNumberToIndianStyle(spentAmt)
+                        }
+
+                    })
+                    budgetViewModel.isBudgetUpdated = false
+                } else {
+                    budgetViewModel.budgetItem.observe(viewLifecycleOwner, Observer { item ->
+                        Log.e("ViewBudget", "${item} - budgetitem obs in viewbudget")
+                        if(item != null) {
+                            Log.e("ViewBudget", "${item.toString()} - updated budget")
+                            Log.e("ViewBudget", it.toString() + " view loaded " + it.budgetName.toString())
+                            binding.budgetNameView.text = item.first.budgetName
+                            binding.budgetAmountView.text = "₹ ${Helper.formatNumberToIndianStyle(item.first.maxAmount)}"
+                            binding.budgetPeriodView.text = item.first.period
+                            binding.budgetCategoryView.text = item.first.category
+                            binding.viewBudgetNameText.text = item.first.category
+                            binding.viewBudgetAmountText.text = Helper.formatNumberToIndianStyle(item.first.maxAmount)//.toString()
+
+                            val spentAmt = item.second
+                            Log.e("ViewBudget", "${item.toString()} - updated budget item")
+                            val percentage = (((item.second)/item.first.maxAmount) * 100).toInt()
+                            binding.viewBudgetProgressBarRecycler.progress = percentage.also { percent ->
+                                Log.e("Progress", percent.toString())
+                            }
+                            if(percentage in 70..99) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorDanger))
+                                    trackColor = resources.getColor(R.color.progressBarNearingToBudget)
+                                }
+                            } else if (percentage < 70) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorLeisure))
+                                    trackColor = resources.getColor(R.color.progressBarLeisure)
+                                }
+//            holder.progressBar.setIndicatorColor(res.getColor(R.color.colorPrimary))
+                            } else if(percentage >= 100) {
+                                binding.viewBudgetProgressBarRecycler.apply {
+                                    setIndicatorColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                }
+//            holder.progressBar.setIndicatorColor(res.getColor(R.color.health_color))
+                            }
+
+                            if(percentage >= 100) {
+                                Log.e("OverSpent", "overspent colors $percentage")
+                                binding.viewBudgetPercentTextView.text = "${Helper.formatPercentage(percentage)} %"
+                                binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.white))
+                                binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(spentAmt.minus(it.maxAmount))
+                                binding.viewRemainsText.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                                binding.viewRemainsText.text = "Overspent"
+                                binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
+                            } else {
+                                Log.e("OverSpent", "remains colors $percentage")
+                                binding.viewBudgetPercentTextView.text = "$percentage % "
+                                binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.black))
+//                    binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.black))
+                                binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(it.maxAmount.minus(spentAmt))
+                                binding.viewRemainsText.setTextColor(resources.getColor(R.color.textColor))
+                                binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.textColor))
+                                binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.textColor))
+//                    binding.viewRemainsText.setTextColor(resources.getColor(MaterialColors.getColor(view, com.google.android.material.R.attr.colorOnTertiaryContainer)))
+                                binding.viewRemainsText.text = "Remains"
+//                    binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.black))
+                            }
+                            binding.viewSpentAmountText.text = Helper.formatNumberToIndianStyle(spentAmt)
+                        }
+
+                    })
+                }
+
+            }
+        })
+                /*Log.e("ViewBudget", "${it.toString()} - updated budget")
                 Log.e("Budget", it.toString() + " view loaded" + it.budgetName.toString())
-                binding.budgetNameView.setText(it.budgetName)
-                binding.budgetAmountView.setText("₹ ${Helper.formatNumberToIndianStyle(it.maxAmount)}")
-                binding.budgetPeriodView.setText(it.period)
-                binding.budgetCategoryView.setText(it.category)
+                binding.budgetNameView.text = it.budgetName
+                binding.budgetAmountView.text = "₹ ${Helper.formatNumberToIndianStyle(it.maxAmount)}"
+                binding.budgetPeriodView.text = it.period
+                binding.budgetCategoryView.text = it.category
                 binding.viewBudgetNameText.text = it.category
                 binding.viewBudgetAmountText.text = Helper.formatNumberToIndianStyle(it.maxAmount)//.toString()
                 var spentAmt = 0f
                 val percentage = budgetViewModel.budgetItem.value?.let { item ->
+                    Log.e("ViewBudget", "${item.toString()} - updated budget item")
                     spentAmt = item.second
                     (((item.second)/item.first.maxAmount) * 100).toInt()
                 } ?: 0
@@ -100,7 +259,7 @@ class ViewBudgetFragment : Fragment() {
                 }
 
                 if(percentage >= 100) {
-                    binding.viewBudgetPercentTextView.text = "$percentage %"
+                    binding.viewBudgetPercentTextView.text = "${Helper.formatPercentage(percentage)} %"
                     binding.viewBudgetPercentTextView.setTextColor(resources.getColor(R.color.white))
                     binding.viewRemainingAmountText.setTextColor(resources.getColor(R.color.progressIndicatorExceeded))
                     binding.viewRemainingAmountText.text = Helper.formatNumberToIndianStyle(spentAmt.minus(it.maxAmount))
@@ -117,8 +276,8 @@ class ViewBudgetFragment : Fragment() {
 //                    binding.remainingCurrencySymbol.setTextColor(resources.getColor(R.color.black))
                 }
                 binding.viewSpentAmountText.text = Helper.formatNumberToIndianStyle(spentAmt)
-            }
-        })
+            }*/
+
     }
 
     private fun deleteBudget() {

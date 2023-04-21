@@ -1,6 +1,7 @@
 package com.example.spendwise.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -138,9 +139,9 @@ class DashboardFragment : Fragment() {
                     Log.e("Record", "filtered rec obs " + i.toString() )
                 }
                 if(it.isEmpty()) {
-                    binding.currentMonthIncomeText.text = 0f.toString()
-                    binding.incomeAmount.text = 0f.toString()
-                    binding.expenseAmount.text = 0f.toString()
+                    binding.currentMonthIncomeText.text = Helper.formatNumberToIndianStyle(0f)
+                    binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
+                    binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
                     binding.recordsOverviewNoRecords.visibility = View.VISIBLE
                     binding.noIncomeTv.visibility = View.VISIBLE
                     binding.noExpenseTv.visibility = View.VISIBLE
@@ -153,6 +154,7 @@ class DashboardFragment : Fragment() {
                     recordViewModel.getTotalBalanceOfTheMonth()
                     binding.recordsOverViewList.visibility = View.VISIBLE
                     adapter = RecordRecyclerViewAdapter(it.takeLast(4).reversed(), Categories.categoryList)
+                    adapter.setTheFragment(this)
                     binding.recordsOverViewList.adapter = adapter
                     val layoutManager = LinearLayoutManager(this.context)
                     binding.recordsOverViewList.layoutManager = layoutManager
@@ -240,8 +242,11 @@ class DashboardFragment : Fragment() {
 */
 
         recordViewModel.incomeOfTheMonth.observe(viewLifecycleOwner, Observer {
+            Log.e("Income", it.toString())
             if(it != null) {
+                Log.e("Income", it.toString())
                 val amt = Helper.formatNumberToIndianStyle(it)
+                Log.e("Income", amt.toString())
                 binding.currentMonthIncomeText.text = "$amt"
                 binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
             }
@@ -292,7 +297,7 @@ class DashboardFragment : Fragment() {
         if (centerOfChartColor != null) {
             pieChart.setHoleColor(centerOfChartColor)
         }
-        pieChart.setCenterTextColor(resources.getColor(R.color.black))
+        pieChart.setCenterTextColor(resources.getColor(R.color.textColor))
 //        pieChart.setOnChartValueSelectedListener(null)
 //        binding.pieChart.description.textAlign = Paint.Align.RIGHT
         pieChart.data = pieData

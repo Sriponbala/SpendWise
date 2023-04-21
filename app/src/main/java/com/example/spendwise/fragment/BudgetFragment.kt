@@ -3,6 +3,7 @@ package com.example.spendwise.fragment
 import android.content.Context
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.text.method.Touch.scrollTo
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,8 +22,10 @@ import com.example.spendwise.enums.RecordType
 import com.example.spendwise.listeners.NavigationListener
 import com.example.spendwise.viewmodel.BudgetViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
+import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
 
 class BudgetFragment : Fragment() {
 
@@ -30,6 +33,7 @@ class BudgetFragment : Fragment() {
     private lateinit var budgetViewModel: BudgetViewModel
     private lateinit var recordViewModel: RecordViewModel
     private lateinit var navigationListener: NavigationListener
+    private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,8 @@ class BudgetFragment : Fragment() {
         recordViewModel.fetchAllRecords(userId)
         Log.e("Landscape", "budget home onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         Log.e("Budget", "onCreate ")
+        val restoreScrollPositionFactory = RestoreScrollPositionViewModelFactory(requireActivity().application)
+        restoreScrollPositionViewModel = ViewModelProvider(this, restoreScrollPositionFactory)[RestoreScrollPositionViewModel::class.java]
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +69,13 @@ class BudgetFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        restoreScrollPositionViewModel.budgetScrollPosition.observe(viewLifecycleOwner, Observer {
+            Log.e("Scroll", it.toString() + "observe")
+            if (it != null) {
+                binding.rootScrollViewBudget.scrollTo(0, it)
+            }
+        })
 
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId budget", userId.toString())
@@ -157,8 +170,15 @@ class BudgetFragment : Fragment() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.e("Scroll", "onPause")
+        restoreScrollPositionViewModel.updateBudgetScrollPosition(binding.rootScrollViewBudget.scrollY)
+    }
+
     private fun setAdapter(adapterData: List<Pair<Budget, Float>>) {
         val adapter = BudgetRecyclerViewAdapter(adapterData)
+        adapter.setTheFragment(this)
         binding.thisMonthBudgetsList.adapter = adapter
         binding.thisMonthBudgetsList.layoutManager = LinearLayoutManager(this.requireContext())
     }

@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +21,7 @@ import com.example.spendwise.databinding.FragmentAddRecordBinding
 import androidx.lifecycle.Observer
 import com.example.spendwise.Categories
 import com.example.spendwise.Helper
+import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
@@ -72,21 +75,38 @@ class AddRecordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if(args.isEditRecord && savedInstanceState == null) {
-            recordViewModel.record.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
-                    if(it.type == RecordType.INCOME.value) {
-                        binding.toggleGroup.check(R.id.incomeButton)
-                    } else if(it.type == RecordType.EXPENSE.value) {
-                        binding.toggleGroup.check(R.id.expenseButton)
+            if(recordViewModel.isTempDataSet) {
+                recordViewModel.tempData.observe(viewLifecycleOwner, Observer {
+                    Log.e("Edit", "isTempData true, inside temp data observe")
+                    if(it != null) {
+                        Log.e("Edit", "temp data not null ${it.toString()}")
+                        binding.amountEditText.setText(it["Amount"])
+                        binding.dateEditText.setText(it["Date"])
+                        binding.noteEditText.setText(it["Title"])
+                        binding.descriptionTextField.setText(it["Description"])
+                        recordViewModel.tempData.value = null
                     }
-                    Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
-                    binding.amountEditText.setText(it.amount.toString())
-                    binding.dateEditText.setText(it.date)
-                    binding.categoryEditText.setText(it.category)
-                    binding.noteEditText.setText(it.note)
-                    binding.descriptionTextField.setText(it.description)
-                }
-            })
+                })
+            } else {
+                Log.e("Edit", "isTempData false")
+                recordViewModel.record.observe(viewLifecycleOwner, Observer {
+                    if(it != null) {
+                        Log.e("Edit", "record data not null")
+                        if(it.type == RecordType.INCOME.value) {
+                            binding.toggleGroup.check(R.id.incomeButton)
+                        } else if(it.type == RecordType.EXPENSE.value) {
+                            binding.toggleGroup.check(R.id.expenseButton)
+                        }
+                        Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
+                        binding.amountEditText.setText(it.amount.toString())
+                        binding.dateEditText.setText(it.date)
+                        binding.categoryEditText.setText(it.category)
+                        binding.noteEditText.setText(it.note)
+                        binding.descriptionTextField.setText(it.description)
+                    }
+                })
+            }
+
         }
 
         binding.toggleGroup.check(R.id.incomeButton)
@@ -115,16 +135,20 @@ class AddRecordFragment : Fragment() {
 
 
         binding.dateEditText.setOnClickListener {
+            hideInputMethod(it as EditText)
             getInputDate()
         }
 
         binding.saveButton.setOnClickListener {
             if(args.isEditRecord) {
+                recordViewModel.isTempDataSet = false
                 updateRecord()
             } else addRecord()
         }
         categoryViewModel.category.observe(viewLifecycleOwner, Observer { category ->
+            Log.e("Edit", "inside category observe")
             if(category != null) {
+                Log.e("Edit", "category not null")
                 binding.categoryEditText.setText(category.title)
                 if(args.isEditRecord) {
                     Log.e("Record", "${args.isEditRecord} - edit - $category")
@@ -141,6 +165,9 @@ class AddRecordFragment : Fragment() {
         })
 
         binding.categoryEditText.setOnClickListener {
+            Log.e("Edit", "category edit text onclick")
+            recordViewModel.isTempDataSet = true
+            recordViewModel.tempData.value = mapOf("Amount" to binding.amountEditText.text.toString(), "Date" to binding.dateEditText.text.toString(), "Title" to binding.noteEditText.text.toString(), "Description" to binding.descriptionTextField.text.toString())
             val action = AddRecordFragmentDirections.actionAddRecordFragmentToCategoryFragment(type.value, R.id.addRecordFragment)
             findNavController().navigate(action)
         }
@@ -213,6 +240,11 @@ class AddRecordFragment : Fragment() {
 //            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else true
+    }
+
+    private fun hideInputMethod(view: EditText) {
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(view.windowToken,0)
     }
 
     private fun moveToPreviousPage() {

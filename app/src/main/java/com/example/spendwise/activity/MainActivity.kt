@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         }
         navController.graph = navGraph
         // Define the top level destinations for the AppBarConfiguration
-        appBarConfiguration = AppBarConfiguration.Builder(R.id.homePageFragment, R.id.loginFragment, R.id.signUpFragment)
+        appBarConfiguration = AppBarConfiguration.Builder(R.id.homePageFragment, R.id.dashBoardFragment, R.id.loginFragment, R.id.signUpFragment)
             .build()
         NavigationUI.setupActionBarWithNavController(this, navController)//, appBarConfiguration)
 //        NavigationUI.setupWithNavController(binding.navView, navController)
@@ -119,6 +119,12 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             true
         }*/
         Log.e("NavigateUp", "")
+        if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
+            Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
+            val recordViewModelFactory = RecordViewModelFactory(application)
+            val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
+            recordViewModel.isTempDataSet = false
+        }
         if(navController.currentDestination?.id == R.id.categoryFragment){
             Log.e("Search", "empty querytext from main activity")
             val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
@@ -141,6 +147,12 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             val categoryViewModel = CategoryViewModel()
             categoryViewModel.queryText = ""
         }*/
+        if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
+            Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
+            val recordViewModelFactory = RecordViewModelFactory(application)
+            val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
+            recordViewModel.isTempDataSet = false
+        }
         if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label) == true) {
             Log.e("Main", "current - login")
             navController.popBackStack(R.id.loginFragment, true)

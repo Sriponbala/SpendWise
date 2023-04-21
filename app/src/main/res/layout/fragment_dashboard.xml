@@ -5,7 +5,7 @@
     tools:context=".fragment.DashboardFragment"
     android:layout_width="match_parent"
     android:fadeScrollbars="true"
-    style="@style/ScreenBehindCardView"
+    style="@style/ScreenBackground"
     android:id="@+id/rootScrollView"
     android:layout_height="match_parent">
 
@@ -177,6 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ALL RECORDS"
+                    android:textStyle="bold"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -241,6 +242,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ALL INCOME STATS"
+                    android:textStyle="bold"
                     style="@style/TextStyle"
                     android:layout_marginTop="16dp"
                     android:clickable="true"
@@ -307,6 +309,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ALL EXPENSE STATS"
+                    android:textStyle="bold"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"

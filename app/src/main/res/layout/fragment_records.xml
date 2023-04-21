@@ -16,6 +16,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.RecordsFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ScreenBackground"
     android:orientation="vertical"
     android:id="@+id/rootRecord">
 
@@ -25,6 +26,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/recordsConstraint"
+        android:paddingHorizontal="16dp"
         android:background="@drawable/outline"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -40,8 +42,8 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Income"
-                android:textSize="16dp"
-                android:layout_margin="16dp"
+                style="@style/TextStyle"
+                android:layout_margin="8dp"
                 />
             <TextView
                 android:id="@+id/incomeAmountTV"
@@ -51,7 +53,7 @@
                 android:text="\u20B9 0.0"
                 android:textAlignment="viewEnd"
                 android:textColor="#006400"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 />
         </LinearLayout>
         <LinearLayout
@@ -66,8 +68,8 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Expense"
-                android:textSize="16dp"
-                android:layout_margin="16dp"
+                style="@style/TextStyle"
+                android:layout_margin="8dp"
                 />
             <TextView
                 android:id="@+id/expenseAmountTV"
@@ -77,7 +79,7 @@
                 android:text="\u20B9 0.0"
                 android:textColor="#FF0000"
                 android:textAlignment="viewEnd"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 />
         </LinearLayout>
         <LinearLayout
@@ -92,8 +94,8 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/netBalance"
-                android:textSize="16dp"
-                android:layout_margin="16dp"
+                style="@style/TextStyle"
+                android:layout_margin="8dp"
                 />
             <TextView
                 android:id="@+id/totalAmountTV"
@@ -103,7 +105,7 @@
                 android:text="\u20B9 0.0"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/colorPrimary"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -220,8 +222,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recordsRecyclerView"
         android:splitMotionEvents="false"
-        android:layout_marginBottom="16dp"
-        android:layout_marginHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:background="@color/recordPage"
+        android:paddingBottom="16dp"
+        android:paddingHorizontal="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

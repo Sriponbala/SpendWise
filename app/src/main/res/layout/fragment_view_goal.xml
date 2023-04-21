@@ -132,14 +132,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Target date 17/4/2023"
-                android:textSize="14dp"
+                android:textSize="14sp"
+                android:textColor="@color/textColor"
                 android:maxLines="2"
                 android:layout_marginStart="16dp"
                 app:layout_constraintStart_toEndOf="@id/imageViewGoal"
                 app:layout_constraintTop_toBottomOf="@id/titleTextViewGoal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/imageViewGoal"
-                android:layout_marginTop="16dp"/>
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -197,6 +198,14 @@
             android:layout_height="wrap_content"
             android:text="Target Amount"
             style="@style/HeadingTextStyle"/>
+        <TextView
+            android:id="@+id/targetAmtTileT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:text="$ 5000000"
+            style="@style/TextStyle"/>
+<!--
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:enabled="false"
@@ -205,10 +214,12 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/targetAmtTileT"
                 android:layout_width="match_parent"
+                style="@style/TextStyle"
                 android:layout_height="wrap_content"
                 android:text="$ 5000000" />
 
         </com.google.android.material.textfield.TextInputLayout>
+-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -216,6 +227,14 @@
             android:layout_marginTop="16dp"
             android:text="Saved Amount"
             style="@style/HeadingTextStyle"/>
+        <TextView
+            android:id="@+id/savedAmtTileT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:text="$ 5000000"
+            style="@style/TextStyle"/>
+<!--
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:enabled="false"
@@ -225,8 +244,10 @@
                 android:id="@+id/savedAmtTileT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/TextStyle"
                 android:text="$ 5000000" />
         </com.google.android.material.textfield.TextInputLayout>
+-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addSavedAmtButton"

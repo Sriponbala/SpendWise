@@ -1,5 +1,7 @@
 package com.example.spendwise.fragment
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -60,6 +62,9 @@ class CategoryFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         val searchItem = menu.findItem(R.id.action_search)
+        searchItem.apply {
+            iconTintList = ColorStateList.valueOf(resources.getColor(R.color.white))
+        }
         searchView = searchItem.actionView as SearchView
 
         if(categoryViewModel.queryText.isNotEmpty()) {

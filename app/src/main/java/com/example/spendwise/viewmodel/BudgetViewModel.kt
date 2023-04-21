@@ -98,6 +98,8 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+//    val isBudgetUpdated = MutableLiveData<Boolean>()
+
     fun updateBudget(userId: Int, budgetName: String, budgetAmount: Float, period: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedBudget: Budget? = null
@@ -113,13 +115,16 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
             job.join()
             withContext(Dispatchers.Main) {
                 _budgetItem.value?.let {
+                    Log.e("ViewBudget", "${it.toString()} - budget item before updating budget 1 in viewmodel")
                     Log.e("Budget", "updated budget " + updatedBudget.toString())
                     if(updatedBudget != null) {
+                        Log.e("ViewBudget", "${it.toString()} - budget item before updating budget 2 in viewmodel")
                         _budgetItem.value = Pair(updatedBudget!!, it.second)
                     }
                 }
+                isBudgetUpdated = true
                 _budget.value = updatedBudget.also {
-                    Log.e("Budget","updated budget " + updatedBudget.toString())
+                    Log.e("ViewBudget", "${it.toString()} - budget while updating budget in viewmodel inside also")
                 }
                 /*_budgetItem.value?.let {
                     Log.e("Budget", "updated budget " + updatedBudget.toString())
@@ -128,6 +133,17 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
                     }
                 }*/
             }
+        }
+    }
+
+
+    var isBudgetUpdated = false
+    fun updateBudgetItemRecordsAmount(amount: Float) {
+        Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel" )
+        _budget.value?.let {
+            Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel inside let 1" )
+            _budgetItem.value = Pair(it, amount)
+            Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel inside let 2" )
         }
     }
 

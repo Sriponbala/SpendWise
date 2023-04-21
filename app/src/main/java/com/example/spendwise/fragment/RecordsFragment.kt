@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.Categories
 import com.example.spendwise.Helper
 import com.example.spendwise.R
@@ -24,7 +25,9 @@ import com.example.spendwise.enums.Month
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.interfaces.FilterViewDelegate
 import com.example.spendwise.viewmodel.RecordViewModel
+import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
 import java.util.Calendar
 
 class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemSelectedListener {
@@ -32,6 +35,7 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
     private lateinit var binding: FragmentRecordsBinding
     private lateinit var recordViewModel: RecordViewModel
     private lateinit var adapter: RecordRecyclerViewAdapter
+    private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
     private var filterView: FilterView? = null  // FilterView(this, requireActivity().application)
     private lateinit var args: RecordsFragmentArgs
 
@@ -48,6 +52,8 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
         Log.e("User Record", userViewModel.user.value?.userId.toString())*/
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
+        val restoreScrollPositionFactory = RestoreScrollPositionViewModelFactory(requireActivity().application)
+        restoreScrollPositionViewModel = ViewModelProvider(this, restoreScrollPositionFactory)[RestoreScrollPositionViewModel::class.java]
         /*userViewModel.user.value?.userId?.let {
             Log.e("UserId Record", it.toString())
             recordViewModel.userId = it
@@ -86,6 +92,15 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e("Landscape", "recordsfrag onViewCreate")
+
+        binding.recordsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    restoreScrollPositionViewModel.scrollPositionRecords = (binding.recordsRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                }
+            }
+        })
 
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId records", userId.toString())
@@ -228,9 +243,11 @@ class RecordsFragment : Fragment(), FilterViewDelegate { //, AdapterView.OnItemS
                     recordViewModel.getExpenseOfTheMonth()
                     recordViewModel.getTotalBalanceOfTheMonth()
                     adapter = RecordRecyclerViewAdapter(it, Categories.categoryList)
+                    adapter.setTheFragment(this)
                     binding.recordsRecyclerView.adapter = adapter
                     val layoutManager = LinearLayoutManager(this.context)
                     binding.recordsRecyclerView.layoutManager = layoutManager
+                    (binding.recordsRecyclerView.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionRecords)
                     adapter.onItemClick = { record ->
                         recordViewModel.setSelectedRecord(record)
                         moveToNextFragment()

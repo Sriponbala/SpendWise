@@ -2,14 +2,17 @@ package com.example.spendwise.fragment
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
@@ -130,6 +133,7 @@ class AddGoalFragment : Fragment() {
         }
 
         binding.etDesiredDate.setOnClickListener {
+            hideInputMethod(it as EditText)
             getInputDate()
         }
 
@@ -214,6 +218,11 @@ class AddGoalFragment : Fragment() {
             binding.etDesiredDate.setText(date)
         }, year, month, day)
         datePickerDialog.show()
+    }
+
+    private fun hideInputMethod(view: EditText) {
+        val imm = requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(view.windowToken,0)
     }
 
     private fun moveToPreviousPage() {

@@ -34,15 +34,15 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
 
     fun insertGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
         viewModelScope.launch {
-            val job = launch {
+
                 val goal = Goal(userId, goalName, targetAmount).apply {
                     this.savedAmount = savedAmount
                     this.goalColor = goalColor
                     this.goalIcon = goalIcon
                     this.desiredDate = desiredDate
-                }.also { Log.e("Goal", it.goalId.toString()) }
+                }
                 repository.insertGoal(goal)
-            }
+
         }
     }
 
@@ -97,7 +97,7 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
     fun fetchAllGoals(userId: Int) {
         viewModelScope.launch {
             var allGoalsFetched: List<Goal>? = null
-            val job = launch {
+            val job = viewModelScope.launch {
                 allGoalsFetched = repository.fetchGoals(userId)
                 Log.e("Goal", allGoalsFetched.toString())
             }

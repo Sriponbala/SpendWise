@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -9,7 +10,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="tertiary">#7D5260</color>
-<!--    <color name="tertiary_container">#FFD8E4</color>-->
+    <!--    <color name="tertiary_container">#FFD8E4</color>-->
 
     <color name="tertiary_container">#ffe0d8</color>
     <color name="on_tertiary_container">#370B1E</color>
@@ -25,21 +26,21 @@
     <color name="gray">#93918f</color>
 
     <color name="error_colour">@android:color/holo_red_light</color>
-    <color name="food_color">#FF5722</color>
+    <color name="food_color">#F5FF5620</color>
     <color name="shopping_color">#03A9F4</color>
-    <color name="household_color">#FAA323</color>
-    <color name="transport_color">#009688</color>
-    <color name="vehicle_color">#B431CA</color>
-    <color name="entertainment_color">#4CAF50</color>
+    <color name="household_color">#DF8D13</color>
+    <color name="transport_color">#00695C</color>
+    <color name="vehicle_color">#A31EBA</color>
+    <color name="entertainment_color">#2DD834</color>
     <color name="pets_color">#FF3378</color>
-    <color name="tourism_color">#05BCAA</color>
-    <color name="education_color">#1333E8</color>
-    <color name="health_color">#D33D32</color>
-    <color name="other_color">#F51E1D1D</color>
-    <color name="salary_color">#B3A639</color>
-    <color name="rental_color">#2B056E</color>
-    <color name="sale_color">#F5286C7E</color>
-    <color name="gifts_color">#DC288F</color>
+    <color name="tourism_color">#32FAE7</color>
+    <color name="education_color">#2040F4</color>
+    <color name="health_color">#FD2212</color>
+    <color name="other_color">#F59F9C9B</color>
+    <color name="salary_color">#DDCB28</color>
+    <color name="rental_color">#4527A0</color>
+    <color name="sale_color">#F520D2FF</color>
+    <color name="gifts_color">#F5EC28E8</color>
     <color name="coupons_color">#F5C87AFF</color>
 
     <color name="primaryBlue">#1E90FF</color>
@@ -49,6 +50,7 @@
     <color name="secondaryColor">#1E90FF</color>
     <color name="colorOnSecondary">@color/white</color>
     <color name="secondaryVariant">#206ad9</color>
+
 
     <color name="incomeColour">#017501</color>
     <color name="expenseColour">#FF0000</color>
@@ -68,11 +70,10 @@
     <color name="cardBehindScreenLight">#F0F0F0</color>
     <color name="pieChartCenter">#535151</color>
 
-<!--    <color name="sr">#202020</color>-->
-    <color name="settingsIconTint">@color/black</color>
+    <color name="settingsIconTint">@color/white</color>
 
-    <color name="textColor">@color/black</color>
-    <color name="recordPage">@color/white</color>
+    <color name="textColor">@color/white</color>
+    <color name="recordPage">@color/cardBehindScreenDark</color>
 
     <color name="bottomNavIconTint">#90ceff</color>
 

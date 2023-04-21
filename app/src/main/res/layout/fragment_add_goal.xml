@@ -264,6 +264,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/recordPage"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.AddGoalFragment">
 
@@ -412,9 +413,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:hint="Enter Goal Color"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintEnd_toStartOf="@id/tilGoalIcon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvGoalColorLabel">
@@ -445,9 +443,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintHorizontal_weight="1"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
             android:hint="Enter Goal Icon"
             android:layout_marginTop="8dp"
             android:textAlignment="viewStart"

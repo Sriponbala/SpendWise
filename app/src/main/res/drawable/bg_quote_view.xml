@@ -7,10 +7,10 @@
     <solid
         android:color="@color/white"/>
     <gradient
-        android:startColor="#e3f3ff"
-        android:endColor="#62bbff"
-        android:centerColor="#bce1ff"
-        android:angle="135"
+        android:centerColor="#90ceff"
+        android:startColor="#3cacff"
+        android:endColor="#bce1ff"
+        android:angle="120"
         />
 
 </shape>

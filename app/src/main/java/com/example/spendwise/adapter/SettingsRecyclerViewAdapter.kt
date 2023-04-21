@@ -37,7 +37,7 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
                 Log.e("Adapter", "ViewModel income $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.baseline_money_24)
-                    setColorFilter(resources.getColor(R.color.black))
+//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.INCOME.text
             }
@@ -45,7 +45,7 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
                 Log.e("Adapter", "ViewModel expense $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.expenses)
-                    setColorFilter(resources.getColor(R.color.black))
+//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.EXPENSE.text
             }
@@ -53,7 +53,7 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
                 Log.e("Adapter", "ViewModel feedback $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.baseline_feedback_24)
-                    setColorFilter(resources.getColor(R.color.black))
+//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.FEEDBACK.text
             }
@@ -61,7 +61,7 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
                 Log.e("Adapter", "ViewModel call support $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.phone)
-                    setColorFilter(resources.getColor(R.color.black))
+//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.CALL_SUPPORT.text
             }

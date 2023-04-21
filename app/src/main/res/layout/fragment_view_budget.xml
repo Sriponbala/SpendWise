@@ -201,6 +201,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="@string/rupee_symbol"
+                    android:textColor="@color/textColor"
                     android:maxLines="1"
                     app:layout_constraintEnd_toStartOf="@id/viewBudgetAmountText"
                     app:layout_constraintTop_toTopOf="@id/viewBudgetNameText" />
@@ -210,6 +211,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="100000000000000000000"
+                    android:textColor="@color/textColor"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:maxEms="8"
@@ -232,6 +234,7 @@
                     android:textSize="14sp"
                     android:text="@string/rupee_symbol"
                     android:maxLines="1"
+                    android:textColor="@color/textColor"
                     app:layout_constraintStart_toStartOf="@id/viewBudgetNameText"
                     app:layout_constraintTop_toBottomOf="@id/viewBudgetProgressBarRecycler" />
                 <TextView
@@ -240,6 +243,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:text="1000000000000000000000000"
+                    android:textColor="@color/textColor"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:maxEms="8"
@@ -272,6 +276,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:text="Spent"
+                    android:textColor="@color/textColor"
                     android:maxLines="1"
                     app:layout_constraintStart_toStartOf="@id/viewBudgetNameText"
                     app:layout_constraintTop_toBottomOf="@id/spentCurrencySymbol" />
@@ -317,16 +322,28 @@
                 style="@style/HeadingTextStyle"
                 android:paddingEnd="5dp"
                 android:text="Name"/>
-            <!--<TextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="*"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="28dp"
                 android:textSize="16sp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:textColor="@color/expenseColour"/>-->
-            <com.google.android.material.textfield.TextInputLayout
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/budgetNameView"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <!--<com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxBackgroundMode="filled"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:enabled="false"
@@ -337,7 +354,7 @@
                     android:id="@+id/budgetNameView"
                     style="@style/TextStyle"
                     android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>-->
         </LinearLayout>
 
         <LinearLayout
@@ -363,10 +380,30 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="13dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/budgetAmountView"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <!--<com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                app:boxBackgroundMode="filled"
                 android:enabled="false"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp">
@@ -375,7 +412,7 @@
                     style="@style/TextStyle"
                     android:id="@+id/budgetAmountView"
                     android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>-->
         </LinearLayout>
 
         <LinearLayout
@@ -401,11 +438,31 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="22dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/budgetPeriodView"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <!--<com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:enabled="false"
+                app:boxBackgroundMode="filled"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="29dp">
                 <com.google.android.material.textfield.TextInputEditText
@@ -414,7 +471,7 @@
                     android:id="@+id/budgetPeriodView"
                     android:text="Monthly"
                     android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>-->
         </LinearLayout>
 
         <LinearLayout
@@ -440,6 +497,27 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="5dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/budgetCategoryView"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+
+<!--
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -447,6 +525,7 @@
                 android:focusable="false"
                 android:enabled="false"
                 android:focusableInTouchMode="false"
+                app:boxBackgroundMode="filled"
                 android:clickable="true"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp">
@@ -460,6 +539,7 @@
                     android:clickable="true"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+-->
         </LinearLayout>
     </LinearLayout>
 

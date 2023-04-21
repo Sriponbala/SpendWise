@@ -91,10 +91,10 @@ class ViewGoalFragment : Fragment() {
                 binding.titleTextViewGoal.text = it.goalName
                 binding.subTextViewDate.text = if(it.desiredDate == "") "No Target Date" else "Target Date ${it.desiredDate}"
                 val percent = ((it.savedAmount)/(it.targetAmount) * 100).toInt()
-                binding.percentageCircularProgress.text = "$percent %"
+                binding.percentageCircularProgress.text = "${Helper.formatPercentage(percent)} %"
                 binding.circularProgressIndicator.progress = percent
-                binding.targetAmtTileT.setText("₹ ${Helper.formatNumberToIndianStyle(it.targetAmount)}")
-                binding.savedAmtTileT.setText("₹ ${Helper.formatNumberToIndianStyle(it.savedAmount)}")
+                binding.targetAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.targetAmount)}"
+                binding.savedAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.savedAmount)}"
                 if(it.goalStatus == GoalStatus.ACTIVE.value) {
                     binding.addSavedAmtButton.visibility = View.VISIBLE
                     binding.setGoalAsReachedBtn.visibility = View.VISIBLE

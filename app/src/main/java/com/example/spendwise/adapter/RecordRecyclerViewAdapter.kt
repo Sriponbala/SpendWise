@@ -1,6 +1,7 @@
 package com.example.spendwise.adapter
 
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.Helper
 import com.example.spendwise.R
@@ -18,6 +20,7 @@ import com.example.spendwise.domain.Category
 import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.Month
 import com.example.spendwise.enums.RecordType
+import com.example.spendwise.fragment.DashboardFragment
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -28,6 +31,7 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
 
     private lateinit var colorStateList: ColorStateList
     var onItemClick: ((Record) -> Unit)? = null
+    private lateinit var fragment: Fragment
 
     init {
         Log.e("UserID", "record adapter " + records.toString())
@@ -43,6 +47,11 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.record_list_item, parent, false)
+        if (fragment is DashboardFragment) {
+            view.isClickable = false
+            view.isFocusable = false
+            view.foreground = null
+        }
         return ViewHolder(view)
     }
 
@@ -96,6 +105,10 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
         } catch (e: DateTimeParseException) {
             null
         }
+    }
+
+    fun setTheFragment(fragment: Fragment) {
+        this.fragment = fragment
     }
 
 }

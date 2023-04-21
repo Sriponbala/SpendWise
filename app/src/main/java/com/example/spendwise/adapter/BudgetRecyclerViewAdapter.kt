@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.domain.Budget
+import com.example.spendwise.fragment.BudgetFragment
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>): Adapter<BudgetRecyclerViewAdapter.ViewHolder>() {
 
     var onItemClick: ((Pair<Budget,Float>) -> Unit)? = null
+    private lateinit var fragment: Fragment
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val budgetName: TextView = itemView.findViewById(R.id.budgetNameText)
@@ -29,6 +32,12 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = (LayoutInflater.from(parent.context)).inflate(R.layout.budget_recycler_item, parent, false)
+        if(fragment is BudgetFragment) {
+            Log.e("BudgetAdapter", (fragment is BudgetFragment).toString())
+            view.isClickable = false
+            view.isFocusable = false
+            view.background = null
+        }
         return ViewHolder(view)
     }
 
@@ -62,7 +71,7 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
         }
 
         if(percentage >= 100) {
-            holder.budgetPercentText.text = "$percentage %"
+            holder.budgetPercentText.text = "${Helper.formatPercentage(percentage)} %"
             holder.budgetPercentText.setTextColor(res.getColor(R.color.white))
             holder.remainingAmount.setTextColor(res.getColor(R.color.progressIndicatorExceeded))
             holder.remainingAmount.text = Helper.formatNumberToIndianStyle(item.second.minus(item.first.maxAmount))
@@ -82,6 +91,10 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(item)
         }
+    }
+
+    fun setTheFragment(fragment: Fragment) {
+        this.fragment = fragment
     }
 
 }

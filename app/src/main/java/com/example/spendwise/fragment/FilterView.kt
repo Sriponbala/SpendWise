@@ -2,17 +2,21 @@ package com.example.spendwise.fragment
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.NumberPicker
+import android.widget.TextView
+import androidx.core.widget.TextViewCompat
 import com.example.spendwise.R
 import com.example.spendwise.databinding.FilterLayoutBinding
 import com.example.spendwise.enums.Month
 import com.example.spendwise.interfaces.FilterViewDelegate
 import com.example.spendwise.viewmodel.RecordViewModel
+import kotlinx.coroutines.NonDisposableHandle.parent
 import java.util.*
 
 class FilterView(
@@ -67,16 +71,28 @@ class FilterView(
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding?.spinner?.adapter = adapter
         }
+
         binding?.spinner?.onItemSelectedListener = this //filterView//this
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedOption = parent?.getItemAtPosition(position) as String
+        if (view != null) {
+            (parent.getChildAt(0) as TextView).apply{
+                setTextColor(view.resources.getColor(R.color.black))
+                TextViewCompat.setCompoundDrawableTintList(this, ColorStateList.valueOf(view.resources.getColor(R.color.black)))
+            }
+        }
         delegateImpl?.intimateSelectedRecordType(selectedOption)
     }
 
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-
+    override fun onNothingSelected(view: AdapterView<*>?) {
+        if (view != null) {
+            (view.getChildAt(0) as TextView).apply{
+                setTextColor(view.resources.getColor(R.color.black))
+                TextViewCompat.setCompoundDrawableTintList(this, ColorStateList.valueOf(view.resources.getColor(R.color.black)))
+            }
+        }
     }
 
     fun clear() {

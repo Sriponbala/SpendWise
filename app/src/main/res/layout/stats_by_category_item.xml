@@ -26,6 +26,7 @@
             android:layout_width="23dp"
             android:textSize="12sp"
             android:text="100"
+            style="@style/TextStyle"
             android:textAlignment="viewEnd"
             android:maxLength="3"
             android:layout_marginTop="4dp"
@@ -38,6 +39,7 @@
             android:textSize="12sp"
             android:layout_margin="4dp"
             android:text="%"
+            style="@style/TextStyle"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
@@ -49,6 +51,7 @@
         android:maxEms="9"
         android:paddingTop="1.25dp"
         android:textSize="14dp"
+        style="@style/TextStyle"
         android:text="yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
         android:maxLines="1"
         app:layout_constraintTop_toTopOf="@id/percentLinear"
@@ -62,6 +65,7 @@
         android:textSize="14sp"
         android:layout_marginEnd="1.25dp"
         android:text="@string/rupee_symbol"
+        style="@style/TextStyle"
         android:paddingTop="1.25dp"
         app:layout_constraintEnd_toStartOf="@id/amountStats"
         app:layout_constraintTop_toTopOf="@id/categoryName"/>
@@ -72,6 +76,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:text="5049999999999999999999.00"
+        style="@style/TextStyle"
         android:ellipsize="end"
         android:maxLines="1"
         android:maxEms="10"

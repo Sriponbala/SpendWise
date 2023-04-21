@@ -281,6 +281,26 @@
             <!--            android:layout_marginEnd="16dp"-->
             <!--            android:gravity="center"-->
             <!--            android:textColor="@color/expenseColour"/>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="28dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/viewAmountEditText"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+<!--
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -295,6 +315,7 @@
                     style="@style/TextStyle"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+-->
         </LinearLayout>
 
         <LinearLayout
@@ -319,6 +340,26 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="19dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/viewCategoryEditText"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+<!--
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -333,6 +374,7 @@
                     style="@style/TextStyle"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+-->
         </LinearLayout>
 
         <LinearLayout
@@ -357,6 +399,26 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="52dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/viewDateEditText"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+<!--
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -371,6 +433,7 @@
                     style="@style/TextStyle"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+-->
         </LinearLayout>
 
         <LinearLayout
@@ -395,6 +458,26 @@
                         android:gravity="center"
                         android:textColor="@color/expenseColour"/>
             -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=":"
+                android:textStyle="bold"
+                android:layout_marginStart="52dp"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="entertainment"
+                android:id="@+id/viewNoteEditText"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:textColor="@color/textColor"/>
+<!--
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -409,6 +492,7 @@
                     style="@style/TextStyle"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
+-->
         </LinearLayout>
 
 
@@ -518,7 +602,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/HeadingTextStyle"
-            android:text="Description"/>
+            android:text="Description  :"/>
         <androidx.core.widget.NestedScrollView
             android:layout_marginBottom="16dp"
             android:layout_width="match_parent"

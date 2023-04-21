@@ -17,7 +17,7 @@
     android:layout_marginBottom="16dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
+    android:background="?attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/rupee_symbol"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@id/budgetAmountText"
         app:layout_constraintTop_toTopOf="@id/budgetNameText" />
@@ -45,6 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textColor="@color/textColor"
         android:text="100000000000000000000"
         android:maxLines="1"
         android:ellipsize="end"
@@ -66,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/textColor"
         android:text="@string/rupee_symbol"
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="@id/budgetNameText"
@@ -75,6 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/textColor"
         android:text="1000000000000000000000000"
         android:maxLines="1"
         android:ellipsize="end"
@@ -89,6 +93,7 @@
         android:textSize="14sp"
         android:text="@string/rupee_symbol"
         android:maxLines="1"
+        android:textColor="@color/textColor"
         app:layout_constraintEnd_toStartOf="@id/remainingAmountText"
         app:layout_constraintTop_toTopOf="@id/spentCurrencySymbol" />
     <TextView
@@ -96,6 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
+        android:textColor="@color/textColor"
         android:text="10000000000000000000000"
         android:maxLines="1"
         android:ellipsize="end"
@@ -108,6 +114,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:text="Spent"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="@id/budgetNameText"
         app:layout_constraintTop_toBottomOf="@id/spentCurrencySymbol" />
@@ -117,6 +124,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:text="Remains"
+        android:textColor="@color/textColor"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="@id/budgetAmountText"
         app:layout_constraintTop_toTopOf="@id/spentText" />

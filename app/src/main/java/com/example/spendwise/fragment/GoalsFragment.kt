@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.DataBinderMapperImpl
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
@@ -57,6 +58,15 @@ class GoalsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        binding.goalsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    restoreScrollPositionViewModel.scrollPositionGoals = (binding.goalsRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                }
+            }
+        })
+
         goalViewModel.goals.observe(viewLifecycleOwner, Observer {
             if(it != null) {
                 if(it.isNotEmpty()) {
@@ -80,6 +90,7 @@ class GoalsFragment : Fragment() {
         }
         binding.goalsRecyclerView.adapter = adapter
         binding.goalsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        (binding.goalsRecyclerView.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionGoals)
     }
 
     override fun onResume() {
