@@ -1,10 +1,13 @@
 package com.example.spendwise.fragment
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -32,8 +35,11 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+      /*  navigationListener = parentFragment?.parentFragment as HomePageFragment
+        navigationListener.changeVisibilityOfFab(false)*/
         val factory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(requireActivity(), factory)[RecordViewModel::class.java]
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -41,33 +47,56 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        (activity as MainActivity).supportActionBar?.apply {
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             title = "Settings"
-        }
+        }*/
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        binding.toolbarSettings.apply {
+            setOnMenuItemClickListener {
+                onOptionsItemSelected(it)
+            }
+        }
         navigationListener = parentFragment?.parentFragment as HomePageFragment
         adapter = SettingsRecyclerViewAdapter()
         binding.settingsRecyclerView.adapter = adapter
         adapter.onItemClick = { doSelectedOption(it) }
         binding.settingsRecyclerView.layoutManager = GridLayoutManager(this.context, 3)//LinearLayoutManager(this.context)//
-        setHasOptionsMenu(true)
+
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+   /* override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.settings_overflow_menu, menu)
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.e("Settings", "menu " + item.title + " id "+ item.itemId.toString() + " R.id.logout - "+ R.id.logout.toString())
         when(item.itemId) {
             R.id.logOut -> {
-                navigationListener.onActionReceived(LoginFragment())
+                val alertMessage = resources.getString(R.string.logOutAlert)
+                showAlertDialog(alertMessage)
+//                navigationListener.onActionReceived(LoginFragment())
                 Log.e("Settings", "menu")
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showAlertDialog(alertMessage: String) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_text_view, null)
+        val alertTextView = dialogView.findViewById<TextView>(R.id.alertTextView)
+        alertTextView.text = alertMessage
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("Log out") { _, _ ->
+                navigationListener.onActionReceived(LoginFragment())
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     private fun doSelectedOption(option: SettingsOption) {

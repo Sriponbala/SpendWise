@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.text.isDigitsOnly
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -39,21 +40,39 @@ class ViewGoalFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        (activity as MainActivity).supportActionBar?.apply {
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.back_arrow)
-        }
+        }*/
         binding = FragmentViewGoalBinding.inflate(inflater, container, false)
+        binding.toolbarViewGoal.apply {
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            goalViewModel.menu = menu
+            goalViewModel.goal.value?.let {
+                if(it.goalStatus == GoalStatus.ACTIVE.value) {
+                    val editItem = menu.findItem(R.id.edit)
+                    editItem.isVisible = true
+                } else if(it.goalStatus == GoalStatus.COMPLETED.value) {
+                    val editItem = menu.findItem(R.id.edit)
+                    editItem.isVisible = false
+                }
+            }
+            setOnMenuItemClickListener {
+                onOptionsItemSelected(it)
+            }
+        }
         return binding.root
     }
 
-    private fun deleteBudget() {
+    private fun deleteGoal() {
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         goalViewModel.deleteGoal(userId)
         findNavController().popBackStack()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    /*override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.alter_record_menu, menu)
         goalViewModel.menu = menu
         goalViewModel.goal.value?.let {
@@ -65,15 +84,16 @@ class ViewGoalFragment : Fragment() {
                 editItem.isVisible = false
             }
         }
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.edit -> {
-                editBudget()
+                editGoal()
             }
             R.id.delete -> {
-                deleteBudget()
+                val alertMessage = resources.getString(R.string.deleteGoalAlert)
+                showAlertDialog(alertMessage)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -129,12 +149,63 @@ class ViewGoalFragment : Fragment() {
         val addSavedAmtEt = dialogView.findViewById<TextInputEditText>(R.id.savedAmtTileTInput)
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
-            .setPositiveButton("INSERT") { _, _ ->
-                goalViewModel.goal.value?.let {
-                    if(!addSavedAmtEt.text.isNullOrEmpty()) {
+            .setPositiveButton("Add", null) // set positive button to null initially
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
+
+        // Get a reference to the positive button
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+        // Set a click listener on the positive button
+        positiveButton.setOnClickListener {
+            goalViewModel.goal.value?.let {
+                if (!addSavedAmtEt.text.isNullOrEmpty()) {
+                    if (!Helper.validateAmount(addSavedAmtEt.text.toString())) {
+                        addSavedAmtEt.error =
+                            "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"
+                    } else {
+                        addSavedAmtEt.error = null
                         val amt = addSavedAmtEt.text.toString().toFloat()
                         val savedAmt = it.savedAmount + amt
-                        goalViewModel.updateGoal(userId = it.userId, goalName = it.goalName, targetAmount = it.targetAmount, savedAmount = savedAmt, goalColor = it.goalColor, goalIcon = it.goalIcon, desiredDate = it.desiredDate)
+                        goalViewModel.updateGoal(
+                            userId = it.userId,
+                            goalName = it.goalName,
+                            targetAmount = it.targetAmount,
+                            savedAmount = savedAmt,
+                            goalColor = it.goalColor,
+                            goalIcon = it.goalIcon,
+                            desiredDate = it.desiredDate
+                        )
+                        dialog.dismiss() // dismiss dialog on success
+                    }
+                }
+            }
+        }
+    }
+
+
+/*
+    @SuppressLint("MissingInflatedId")
+    private fun showAddSavedAmountDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.add_saved_amount_dialog, null)
+        val addSavedAmtEt = dialogView.findViewById<TextInputEditText>(R.id.savedAmtTileTInput)
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("Add") { _, _ ->
+                goalViewModel.goal.value?.let {
+                    if(!addSavedAmtEt.text.isNullOrEmpty()) {
+                        if(!Helper.validateAmount(addSavedAmtEt.text.toString())) {
+                            addSavedAmtEt.error = "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                            setCancelable(false)
+                            return@setPositiveButton
+                        } else {
+                            addSavedAmtEt.error = null
+                            val amt = addSavedAmtEt.text.toString().toFloat()
+                            val savedAmt = it.savedAmount + amt
+                            goalViewModel.updateGoal(userId = it.userId, goalName = it.goalName, targetAmount = it.targetAmount, savedAmount = savedAmt, goalColor = it.goalColor, goalIcon = it.goalIcon, desiredDate = it.desiredDate)
+                        }
                     }
                 }
             }
@@ -143,8 +214,25 @@ class ViewGoalFragment : Fragment() {
 
         dialog.show()
     }
+*/
 
-    private fun editBudget() {
+    @SuppressLint("MissingInflatedId")
+    private fun showAlertDialog(alertMessage: String) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_text_view, null)
+        val alertTextView = dialogView.findViewById<TextView>(R.id.alertTextView)
+        alertTextView.text = alertMessage
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("Delete") { _, _ ->
+                deleteGoal()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
+    }
+
+    private fun editGoal() {
         val action = ViewGoalFragmentDirections.actionViewGoalFragmentToAddGoalFragment(isEditGoal = true)
         findNavController().navigate(action)
     }

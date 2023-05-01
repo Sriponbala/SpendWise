@@ -6,12 +6,13 @@
     android:id="@+id/filter_layout_linear"
     android:background="#e3f3ff"
     android:layout_height="wrap_content">
-    <ImageView
+    <!--<ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="13dp"
         android:src="@drawable/filter"
         app:tint="#515050"
-        android:layout_margin="8dp"/>
+        android:layout_margin="4dp"/>-->
 <!--
     <View
         android:layout_width="1dp"
@@ -28,11 +29,13 @@
         android:text="Apr 2023"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:background="?attr/selectableItemBackground"
-        android:textSize="16dp"
-        android:drawableTint="#515050"
-        android:drawableEnd="@drawable/arrow_drop_down"
-        android:layout_margin="8dp"/>
+        android:textSize="16sp"
+        android:padding="13dp"
+        android:layout_margin="4dp"
+        app:drawableTint="#515050"
+        app:drawableEndCompat="@drawable/arrow_drop_down" />
 <!--
     <View
         android:layout_width="1dp"
@@ -40,23 +43,30 @@
         android:layout_height="match_parent"/>
 -->
     <Spinner
+        android:theme="@style/Theme.SpendWise.SpinnerStyle"
         android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:padding="13dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:textAlignment="center"
         android:splitMotionEvents="false"
         style="@style/SpinnerTextStyle"
         android:entries="@array/recordTypes"
-        android:layout_margin="8dp"/>
+        android:layout_margin="4dp"/>
     <TextView
         android:id="@+id/recordTypeTv"
         android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_margin="8dp"
-        android:textSize="16dp"
+        android:layout_margin="4dp"
+        android:padding="13dp"
+        android:textSize="16sp"
         android:textAlignment="center"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
 </LinearLayout>

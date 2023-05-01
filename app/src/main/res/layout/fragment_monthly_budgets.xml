@@ -1,34 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:id="@+id/budgetRoot"
-    android:background="@color/recordPage"
+    style="@style/ScreenBackground"
     tools:context=".fragment.MonthlyBudgetsFragment">
 
-    <include layout="@layout/filter_layout"
-        android:id="@+id/budgetFragmentFilter"/>
-
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:splitMotionEvents="false"
-        android:layout_marginHorizontal="16dp"
-        android:id="@+id/budgetsRecycler"
-        android:layout_marginVertical="8dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/app_bar_monthly_budgets"
+            android:background="?android:attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-    <TextView
-        android:id="@+id/emptyBudgetsTextView"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:layout_width="match_parent"
+                android:id="@+id/toolbar_monthly_budgets"
+                app:title="Monthly Budgets"
+                app:titleTextColor="@color/white"
+                app:navigationIcon="@drawable/back_arrow"
+                app:navigationIconTint="@color/white"
+                android:layout_height="match_parent" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include layout="@layout/filter_layout"
+            android:id="@+id/budgetFragmentFilter"/>
+
+        <TextView
+            android:id="@+id/emptyBudgetsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No Budgets Found"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:visibility="gone"
+            />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollViewMonthlyBudgets"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linearInScrollView"
+                android:orientation="vertical">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:background="@color/recordPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:splitMotionEvents="false"
+                    android:id="@+id/budgetsRecycler"
+                    />
+                <include
+                    layout="@layout/blank_view_component"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabMonthlyBudgetsPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/baseline_add_24"
+        app:layout_anchor="@id/scrollViewMonthlyBudgets"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:id="@+id/budgetRoot"
+style="@style/ScreenBackground"
+tools:context=".fragment.MonthlyBudgetsFragment">
+
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:id="@+id/app_bar_monthly_budgets"
+    android:background="?android:attr/colorPrimary"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No Budgets Found"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="64dp"
-        android:gravity="center"
-        android:textSize="32sp"
-        android:visibility="visible" />
+        android:id="@+id/toolbar_monthly_budgets"
+        app:title="Monthly Budgets"
+        app:titleTextColor="@color/white"
+        app:navigationIcon="@drawable/back_arrow"
+        app:navigationIconTint="@color/white"
+        android:layout_height="match_parent" />
 
-</LinearLayout>
+</com.google.android.material.appbar.AppBarLayout>
+
+<include layout="@layout/filter_layout"
+    android:id="@+id/budgetFragmentFilter"/>
+
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/scrollViewMonthlyBudgets"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearInScrollView"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/emptyBudgetsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Budgets Found"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="64dp"
+            android:gravity="center"
+            android:textSize="32sp"
+            android:visibility="visible" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/recordPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:splitMotionEvents="false"
+            android:id="@+id/budgetsRecycler"
+            />
+        <include
+            layout="@layout/blank_view_component"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabRecordsPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:foregroundGravity="left"
+            android:src="@drawable/baseline_add_24"
+            app:layout_anchor="@id/scrollViewMonthlyBudgets"
+            app:layout_anchorGravity="bottom|end" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+</LinearLayout>-->

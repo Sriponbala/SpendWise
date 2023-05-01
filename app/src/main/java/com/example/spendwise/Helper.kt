@@ -1,10 +1,15 @@
 package com.example.spendwise
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.TextView
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -110,6 +115,11 @@ object Helper {
         val format = DecimalFormat("#,##,##0.00", DecimalFormatSymbols(Locale("en", "IN")))
         return format.format(number)
     }
+
+    fun formatNumberToIndianStyleWithoutDecimal(number: Float): String {
+        val format = DecimalFormat("#,##,##0", DecimalFormatSymbols(Locale("en", "IN")))
+        return format.format(number)
+    }
     fun setupEditTextValidation(editText: EditText) {
         editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -145,6 +155,12 @@ object Helper {
 
     fun validateAmount(amount: String): Boolean {
         val result = Pattern.matches("^\\d{1,5}(\\.\\d{0,2})?\$", amount)
+        Log.e("Amount", result.toString())
+        return result
+    }
+
+    fun validateGoalAmount(amount: String): Boolean {
+        val result = Pattern.matches("^\\d{1,10}\$", amount)
         Log.e("Amount", result.toString())
         return result
     }

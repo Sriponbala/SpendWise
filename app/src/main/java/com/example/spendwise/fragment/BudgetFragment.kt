@@ -37,6 +37,8 @@ class BudgetFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+     /*   navigationListener = parentFragment?.parentFragment as HomePageFragment
+        navigationListener.changeVisibilityOfFab(true)*/
         val factory = BudgetViewModelFactory(requireActivity().application)
         budgetViewModel = ViewModelProvider(requireActivity(), factory)[BudgetViewModel::class.java]
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
@@ -58,12 +60,17 @@ class BudgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        (activity as MainActivity).supportActionBar?.apply {
+        binding = FragmentBudgetBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+        binding.toolbarBudgets.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        /*(activity as MainActivity).supportActionBar?.apply {
             title = "Budgets"
             setDisplayHomeAsUpEnabled(false)
-        }
+        }*/
         Log.e("Landscape", "budget home onCreateView - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
-        binding = FragmentBudgetBinding.inflate(inflater, container, false)
+
         navigationListener = parentFragment?.parentFragment as HomePageFragment
         return binding.root
     }
@@ -158,12 +165,14 @@ class BudgetFragment : Fragment() {
                     setAdapter(adapterData)
                 } else {
                     binding.thisMonthNoBudgetsTv.visibility = View.VISIBLE
-                    binding.thisMonthBudgetsList.visibility = View.GONE
+                    setAdapter(emptyList())
+//                    binding.thisMonthBudgetsList.visibility = View.GONE
                     Log.e("Budget", "budgets empty")
                 }
             } else {
                 binding.thisMonthNoBudgetsTv.visibility = View.VISIBLE
-                binding.thisMonthBudgetsList.visibility = View.GONE
+                setAdapter(emptyList())
+//                binding.thisMonthBudgetsList.visibility = View.GONE
                 Log.e("Budget", "budgets - Null")
             }
         })

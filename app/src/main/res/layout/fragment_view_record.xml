@@ -1,626 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ViewRecordFragment">
+    android:background="@color/recordPage"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linearAddRecordView"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/app_bar_view_record"
+        android:background="?android:attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleGroupView"
+        <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:selectionRequired="true"
-            android:layout_margin="10dp"
-            android:padding="5dp"
-            app:singleSelection="true">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/incomeButtonView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Income"
-                app:strokeColor="@color/primaryBlue"
-                app:strokeWidth="1.5dp"
-                android:padding="10dp"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:clickable="false"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/expenseButtonView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expense"
-                app:strokeWidth="1.5dp"
-                app:strokeColor="@color/primaryBlue"
-                android:padding="10dp"
-                android:layout_weight="1"
-                android:clickable="false"
-                android:textColor="@color/black"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+            android:id="@+id/toolbar_view_record"
+            app:title="Record"
+            app:titleTextColor="@color/white"
+            app:menu="@menu/alter_record_menu"
+            app:navigationIcon="@drawable/back_arrow"
+            app:navigationIconTint="@color/white"
+            android:layout_height="match_parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp">
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:id="@+id/viewAmountTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:paddingVertical="20dp"
-                android:text="Amount"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@id/viewCategoryTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/constraintLayout"
-                app:layout_constraintEnd_toStartOf="@id/viewGuideline"/>
-
-            <EditText
-                android:id="@+id/viewAmountEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:inputType="numberDecimal"
-                android:maxLength="6"
-                android:maxLines="1"
-                android:textSize="16sp"
-                android:enabled="false"
-                app:layout_constraintBaseline_toBaselineOf="@+id/viewAmountTextView"
-                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/viewGuideline" />
-
-            <TextView
-                android:id="@+id/viewCategoryTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="20dp"
-                android:text="Category"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="@+id/viewAmountTextView"
-                app:layout_constraintTop_toBottomOf="@id/viewAmountTextView" />
-
-            <EditText
-                android:id="@+id/viewCategoryEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textSize="16sp"
-                android:enabled="false"
-                app:layout_constraintBaseline_toBaselineOf="@+id/viewCategoryTextView"
-                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/viewGuideline" />
-
-            <TextView
-                android:id="@+id/viewDateTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingVertical="20dp"
-                android:text="Date"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="@id/viewAmountTextView"
-                app:layout_constraintTop_toBottomOf="@id/viewCategoryTextView" />
-
-            <EditText
-                android:id="@+id/viewDateEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:inputType="date"
-                android:maxLines="1"
-                android:textSize="16sp"
-                android:enabled="false"
-                app:layout_constraintBaseline_toBaselineOf="@+id/viewDateTextView"
-                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/viewGuideline" />
-
-            <TextView
-                android:id="@+id/viewNoteTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:text="Note"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="@+id/viewAmountTextView"
-                app:layout_constraintTop_toBottomOf="@id/viewDateTextView" />
-
-            <EditText
-                android:id="@+id/viewNoteEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textSize="16sp"
-                android:enabled="false"
-                app:layout_constraintBaseline_toBaselineOf="@+id/viewNoteTextView"
-                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@id/viewGuideline" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/descriptionTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="20dp"
-                android:hint="Description"
-                android:enabled="false"
-                app:hintTextColor="@color/black"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:layout_constraintTop_toBottomOf="@id/viewNoteTextView">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/descriptionTextField"
-                    android:layout_width="match_parent"
-                    android:enabled="false"
-                    android:layout_height="wrap_content"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/viewGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.29927006" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-</ScrollView>
--->
-
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
         android:layout_height="match_parent">
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleGroupView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:selectionRequired="true"
-            android:focusableInTouchMode="false"
-            android:focusable="false"
-            android:clickable="false"
-            android:layout_marginBottom="16dp"
-            android:padding="5dp"
-            app:singleSelection="true">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/incomeButtonView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Income"
-                android:focusableInTouchMode="false"
-                android:focusable="false"
-                android:clickable="false"
-                app:strokeColor="#e3f3ff"
-                app:strokeWidth="1.5dp"
-                android:padding="10dp"
-                android:layout_weight="1"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/expenseButtonView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expense"
-                android:focusableInTouchMode="false"
-                android:focusable="false"
-                android:clickable="false"
-                app:strokeWidth="1.5dp"
-                app:strokeColor="#e3f3ff"
-                android:padding="10dp"
-                android:layout_weight="1"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
         <LinearLayout
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/HeadingTextStyle"
-                android:paddingEnd="5dp"
-                android:text="Amount"/>
-            <!--        <TextView-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="match_parent"-->
-            <!--            android:text="*"-->
-            <!--            android:textSize="16sp"-->
-            <!--            android:layout_marginEnd="16dp"-->
-            <!--            android:gravity="center"-->
-            <!--            android:textColor="@color/expenseColour"/>-->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=":"
-                android:textStyle="bold"
-                android:layout_marginStart="28dp"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="entertainment"
-                android:id="@+id/viewAmountEditText"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-<!--
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="21dp"
-                android:hint="">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/viewAmountEditText"
-                    style="@style/TextStyle"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
--->
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/HeadingTextStyle"
-                android:paddingEnd="5dp"
-                android:text="Category"/>
-            <!--
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="*"
-                        android:textSize="16sp"
-                        android:layout_marginEnd="16dp"
-                        android:gravity="center"
-                        android:textColor="@color/expenseColour"/>
-            -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=":"
-                android:textStyle="bold"
-                android:layout_marginStart="19dp"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="entertainment"
-                android:id="@+id/viewCategoryEditText"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-<!--
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:hint="">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/viewCategoryEditText"
-                    style="@style/TextStyle"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
--->
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/HeadingTextStyle"
-                android:paddingEnd="5dp"
-                android:text="Date"/>
-            <!--
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="*"
-                        android:textSize="16sp"
-                        android:layout_marginEnd="16dp"
-                        android:gravity="center"
-                        android:textColor="@color/expenseColour"/>
-            -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=":"
-                android:textStyle="bold"
-                android:layout_marginStart="52dp"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="entertainment"
-                android:id="@+id/viewDateEditText"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-<!--
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="46dp"
-                android:hint="">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/viewDateEditText"
-                    style="@style/TextStyle"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
--->
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/HeadingTextStyle"
-                android:paddingEnd="5dp"
-                android:text="Title"/>
-            <!--
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="*"
-                        android:textSize="16sp"
-                        android:layout_marginEnd="16dp"
-                        android:gravity="center"
-                        android:textColor="@color/expenseColour"/>
-            -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=":"
-                android:textStyle="bold"
-                android:layout_marginStart="52dp"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="entertainment"
-                android:id="@+id/viewNoteEditText"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/textColor"/>
-<!--
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:hint="">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:id="@+id/viewNoteEditText"
-                    style="@style/TextStyle"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
--->
-        </LinearLayout>
-
-
-        <!--<LinearLayout
-            android:layout_margin="16dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                style="@style/HeadingTextStyle"
-                android:paddingEnd="5dp"
-                android:text="Category"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="*"
-                android:textSize="16sp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:textColor="@color/expenseColour"/>
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    style="@style/TextStyle"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="30sp"
-                android:paddingEnd="5dp"
-                android:text="Date"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="*"
-                android:textSize="30sp"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                android:textColor="@color/teal_200"/>
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:hint="Date">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="15" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="30sp"
-                android:paddingEnd="5dp"
-                android:text="Title"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="*"
-                android:textSize="30sp"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                android:textColor="@color/teal_200"/>
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:hint="From">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLength="15" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>-->
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/HeadingTextStyle"
-            android:text="Description  :"/>
-        <androidx.core.widget.NestedScrollView
-            android:layout_marginBottom="16dp"
-            android:layout_width="match_parent"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="true"
-            android:background="@drawable/rectangle_description_box"
+            android:orientation="vertical"
             android:padding="16dp"
             android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/descriptionTextField"
-                style="@style/TextStyle"
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </androidx.core.widget.NestedScrollView>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Record Type"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="2dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="entertainment"
+                    android:id="@+id/viewRecordTypeEditText"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+            </LinearLayout>
 
-    </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Amount"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="35dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="entertainment"
+                    android:id="@+id/viewAmountEditText"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Category"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="27dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="entertainment"
+                    android:id="@+id/viewCategoryEditText"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Date"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="59dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="entertainment"
+                    android:id="@+id/viewDateEditText"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Title"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="59dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="entertainment"
+                    android:id="@+id/viewNoteEditText"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/viewEmptyDescription"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="Description"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=":"
+                    android:textStyle="bold"
+                    android:layout_marginStart="9dp"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="-"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/viewRecordDescriptionLabel"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/HeadingTextStyle"
+                android:text="Description    :"/>
+            <androidx.core.widget.NestedScrollView
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:id="@+id/descriptionScrollView"
+                android:fadeScrollbars="true"
+                android:background="@drawable/rectangle_description_box"
+                android:padding="16dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/descriptionTextField"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
 
 <!--
     <?xml version="1.0" encoding="utf-8"?>

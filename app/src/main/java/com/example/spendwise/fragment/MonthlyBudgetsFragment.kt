@@ -73,15 +73,23 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        (activity as MainActivity).supportActionBar?.apply {
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.back_arrow)
-        }
+        }*/
+
         Log.e("Landscape", "monthly budgtes frag onCreateView")
         Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.month.value}")
         Log.e("Landscape", "monthly budgtes frag onCreateView ${recordViewModel.year.value}")
         Log.e("Landscape", "monthly budgtes frag oncreateView${recordViewModel.recordType.value}")
         binding = FragmentMonthlyBudgetsBinding.inflate(inflater, container, false)
+
+        binding.toolbarMonthlyBudgets.apply {
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+        }
+
         filterView = FilterView(recordViewModel.also { Log.e("Landscape", "blah blah ${it.month.value}") }, binding.budgetFragmentFilter, this)
         filterView?.setMonthYearValue()
         Log.e("Landscape", "monthly budgtes frag onCreateView")
@@ -124,7 +132,10 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         budgetViewModel.monthlyBudgets.observe(viewLifecycleOwner, Observer { listOfBudgets ->
             if(listOfBudgets != null) {
                 if(listOfBudgets.isNotEmpty()) {
+                    Log.e("Test", "budgets in monthly budget obs $listOfBudgets")
+                    binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.VISIBLE
                     binding.emptyBudgetsTextView.visibility = View.GONE
+                    binding.budgetsRecycler.visibility = View.VISIBLE
                     var adapterData = mutableListOf<Pair<Budget, Float>>()
                     binding.budgetFragmentFilter.apply {
                         spinner.visibility = View.GONE
@@ -146,19 +157,19 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
 
                     recordViewModel.filteredRecords.observe(viewLifecycleOwner, Observer { listOfRecords ->
                         if(listOfRecords != null) {
-                            Log.e("Budget", "monthly budget - filtered rec obs " + listOfRecords.size.toString() )
+                            Log.e("Test", "monthly budget - filtered rec obs " + listOfRecords.size.toString() )
                             for(i in listOfRecords) {
-                                Log.e("Budget", "monthly budget - filtered rec obs $i")
+                                Log.e("Test", "monthly budget - filtered rec obs $i")
                             }
                             if(listOfRecords.isEmpty()) {
-                                Log.e("Budget", "records empty")
+                                Log.e("Test", "records empty")
                                 val data = mutableListOf<Pair<Budget, Float>>()
                                 listOfBudgets.forEach {
                                     data.add(Pair(it, 0f))
                                 }
                                 adapterData = data
                             } else {
-                                Log.e("Budget", "records not empty")
+                                Log.e("Test", "records not empty")
                                 val data = mutableListOf<Pair<Budget, Float>>()
                                 listOfBudgets.forEach { budget ->
                                     var total = 0f
@@ -172,7 +183,7 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                                 adapterData = data
                             }
                         } else {
-                            Log.e("Budget", "records - Null")
+                            Log.e("Test", "records - Null")
                             listOfBudgets.forEach {
                                 adapterData.add(Pair(it, 0f))
                             }
@@ -182,11 +193,17 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                     setAdapter(adapterData)
                 } else {
                     binding.emptyBudgetsTextView.visibility = View.VISIBLE
-                    Log.e("Budget", "budgets empty")
+                    binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.GONE
+                    setAdapter(emptyList())
+//                    binding.budgetsRecycler.visibility = View.GONE
+                    Log.e("Test", "budgets empty")
                 }
             } else {
                 binding.emptyBudgetsTextView.visibility = View.VISIBLE
-                Log.e("Budget", "budgets - Null")
+                binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.GONE
+                setAdapter(emptyList())
+//                binding.budgetsRecycler.visibility = View.GONE
+                Log.e("Test", "budgets - Null")
             }
         })
 
@@ -205,9 +222,14 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         })
 
         recordViewModel.fetchAllRecords(userId)
+
+        binding.fabMonthlyBudgetsPage.setOnClickListener {
+            findNavController().navigate(R.id.action_monthlyBudgetsFragment_to_addBudgetFragment)
+        }
     }
 
     private fun setAdapter(adapterData: List<Pair<Budget, Float>>) {
+        Log.e("Test", "adapter data in monthly budget setadapter $adapterData")
         val adapter = BudgetRecyclerViewAdapter(adapterData)
         adapter.setTheFragment(this)
         adapter.onItemClick = {

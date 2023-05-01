@@ -67,7 +67,7 @@ class FilterView(
     }
 
     fun createAndSetAdapter(context: Context, arrayRes: Int) {
-        ArrayAdapter.createFromResource(context, arrayRes, android.R.layout.simple_spinner_item).also { adapter ->
+        ArrayAdapter.createFromResource(context, arrayRes, R.layout.record_type_spinner_item).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding?.spinner?.adapter = adapter
         }

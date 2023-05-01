@@ -12,6 +12,7 @@ import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.domain.Budget
 import com.example.spendwise.fragment.BudgetFragment
+import com.google.android.material.divider.MaterialDivider
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>): Adapter<BudgetRecyclerViewAdapter.ViewHolder>() {
@@ -28,6 +29,7 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
         val remainingAmountCurrency: TextView = itemView.findViewById(R.id.remainingCurrencySymbol)
         val progressBar: LinearProgressIndicator = itemView.findViewById(R.id.budgetProgressBarRecycler)
         val budgetPercentText: TextView = itemView.findViewById(R.id.budgetPercentTextView)
+        val divider: MaterialDivider = itemView.findViewById(R.id.budgetDivider)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,6 +48,11 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, Float>>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.e("Budget", budgets.toString())
         val res = holder.itemView.resources
+        if(position == budgets.lastIndex) {
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }
         val item = budgets[position]
         holder.budgetName.text = item.first.category
         holder.budgetAmount.text = Helper.formatNumberToIndianStyle(item.first.maxAmount)//.toString()

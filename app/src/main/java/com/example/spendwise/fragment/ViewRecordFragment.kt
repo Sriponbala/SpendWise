@@ -1,17 +1,24 @@
 package com.example.spendwise.fragment
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.spendwise.Categories
+import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentViewRecordBinding
 import com.example.spendwise.enums.RecordType
+import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 
@@ -19,6 +26,7 @@ class ViewRecordFragment : Fragment() {
 
     private lateinit var binding: FragmentViewRecordBinding
     private lateinit var recordViewModel: RecordViewModel
+    private val categoryViewModel : CategoryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +35,9 @@ class ViewRecordFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+   /* override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.alter_record_menu, menu)
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
@@ -37,10 +45,27 @@ class ViewRecordFragment : Fragment() {
                 editRecord()
             }
             R.id.delete -> {
-                deleteRecord()
+                val alertMessage = resources.getString(R.string.deleteRecordAlert)
+                showAlertDialog(alertMessage)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showAlertDialog(alertMessage: String) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_text_view, null)
+        val alertTextView = dialogView.findViewById<TextView>(R.id.alertTextView)
+        alertTextView.text = alertMessage
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("Delete") { _, _ ->
+                deleteRecord()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     override fun onCreateView(
@@ -49,11 +74,18 @@ class ViewRecordFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentViewRecordBinding.inflate(inflater, container, false)
-
+        binding.toolbarViewRecord.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        binding.toolbarViewRecord.setOnMenuItemClickListener {
+            onOptionsItemSelected(it)
+        }
+/*
         (activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.back_arrow)
         }
+*/
         return binding.root
     }
 
@@ -61,13 +93,28 @@ class ViewRecordFragment : Fragment() {
 
         recordViewModel.record.observe(viewLifecycleOwner, Observer {
             if(it != null) {
+                Log.e("Test", "inside record observe in add Rec: rec - $it")
+                categoryViewModel.category.value = Categories.categoryList.find {category ->
+                    it.category == category.title
+                }
                 Log.e("Record", it.toString() + " view loaded" + it.recordId.toString())
-                binding.viewAmountEditText.setText(it.amount.toString())
-                binding.viewCategoryEditText.setText(it.category)
-                binding.viewDateEditText.setText(it.date)
-                binding.viewNoteEditText.setText(it.note)
-                binding.descriptionTextField.text = it.description
-                if(it.type == RecordType.INCOME.value) {
+                binding.viewAmountEditText.text = it.amount.toString()
+                binding.viewCategoryEditText.text = it.category
+                binding.viewDateEditText.text = it.date
+                binding.viewNoteEditText.text = it.note
+                if(it.description.isEmpty()) {
+                    binding.viewEmptyDescription.visibility = View.VISIBLE
+                    binding.viewRecordDescriptionLabel.visibility = View.GONE
+                    binding.descriptionScrollView.visibility = View.GONE
+                } else {
+                    binding.viewEmptyDescription.visibility = View.GONE
+                    binding.viewRecordDescriptionLabel.visibility = View.VISIBLE
+                    binding.descriptionScrollView.visibility = View.VISIBLE
+                    binding.descriptionTextField.text = it.description
+                }
+                binding.viewRecordTypeEditText.text = it.type
+
+                /*if(it.type == RecordType.INCOME.value) {
                     binding.incomeButtonView.setTextColor(resources.getColor(R.color.white))
                     binding.expenseButtonView.setTextColor(resources.getColor(R.color.gray))
                     binding.incomeButtonView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
@@ -79,7 +126,7 @@ class ViewRecordFragment : Fragment() {
                     binding.incomeButtonView.setBackgroundColor(resources.getColor(R.color.white))
                     binding.expenseButtonView.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                     binding.toggleGroupView.check(R.id.expenseButtonView)
-                }
+                }*/
             }
         })
 //        deleteRecord()
@@ -95,6 +142,11 @@ class ViewRecordFragment : Fragment() {
     private fun editRecord() {
         val action = ViewRecordFragmentDirections.actionViewRecordFragmentToAddRecordFragment(isEditRecord = true)
         findNavController().navigate(action)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        categoryViewModel.category.value = null
     }
 
 }

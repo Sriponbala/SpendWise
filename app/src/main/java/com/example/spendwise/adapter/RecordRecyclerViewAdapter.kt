@@ -21,6 +21,7 @@ import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.Month
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.fragment.DashboardFragment
+import com.google.android.material.divider.MaterialDivider
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -42,6 +43,7 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
         val category: TextView = itemView.findViewById(R.id.categoryTextView)
         val amount: TextView = itemView.findViewById(R.id.amountTextView)
         val date: TextView = itemView.findViewById(R.id.dateTextView)
+        val divider: MaterialDivider = itemView.findViewById(R.id.dividerRecordItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -62,6 +64,11 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val resources = holder.itemView.context.resources
+        if(position == records.lastIndex) {
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }
         val record = records[position]
         Log.e("Display", record.toString())
         var category: Category? = null

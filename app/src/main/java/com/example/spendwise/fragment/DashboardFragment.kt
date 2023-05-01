@@ -50,13 +50,17 @@ class DashboardFragment : Fragment() {
     private val quoteViewModel: QuoteViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("Scroll", "onCreate")
+        Log.e("Test", "onCreate dashboard")
         Log.e("Landscape", "dashboard onCreate")
+        /*navigationListener = parentFragment?.parentFragment as HomePageFragment
+        navigationListener.changeVisibilityOfFab(true)*/
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
         recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
         Log.e("Landscape", "dashboard onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         val factory = RestoreScrollPositionViewModelFactory(requireActivity().application)
         restoreScrollPositionViewModel = ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
+        val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
+//        recordViewModel.fetchAllRecords(userId)
     }
 
     override fun onCreateView(
@@ -121,7 +125,7 @@ class DashboardFragment : Fragment() {
         recordViewModel.recordType.value = RecordType.ALL.value
 
         recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
-            Log.e("Record", userId.toString() + " dashboard allrecords obs ")
+            Log.e("Coroutine", "$userId dashboard allrecords obs $it")
             recordViewModel.fetchRecords()
         })
 
@@ -134,8 +138,10 @@ class DashboardFragment : Fragment() {
 
         recordViewModel.filteredRecords.observe(viewLifecycleOwner, Observer {
             if(it != null) {
+                Log.e("Coroutine", "$userId dashboard filtered rec obs $it")
                 Log.e("Record", "filtered rec obs " + it.size.toString() )
                 for(i in it) {
+                    Log.e("Coroutine", "$userId dashboard filtered rec for loop $i")
                     Log.e("Record", "filtered rec obs " + i.toString() )
                 }
                 if(it.isEmpty()) {
@@ -147,6 +153,11 @@ class DashboardFragment : Fragment() {
                     binding.noExpenseTv.visibility = View.VISIBLE
                     binding.incomeChart.visibility = View.GONE
                     binding.expenseChart.visibility = View.GONE
+                    adapter = RecordRecyclerViewAdapter(it, Categories.categoryList)
+                    adapter.setTheFragment(this)
+                    binding.recordsOverViewList.adapter = adapter
+                    val layoutManager = LinearLayoutManager(this.context)
+                    binding.recordsOverViewList.layoutManager = layoutManager
                 } else {
                     binding.recordsOverviewNoRecords.visibility = View.GONE
                     recordViewModel.getIncomeOfTheMonth()
@@ -185,6 +196,12 @@ class DashboardFragment : Fragment() {
                             Log.e("Record", "income data for pie chart")
                             Log.e("Record", "income list - $it")
                             drawPieChart(RecordType.INCOME, it, binding.incomeChart)
+                        } else {
+                            binding.noIncomeTv.visibility = View.VISIBLE
+                            binding.incomeChart.visibility = View.GONE
+                            Log.e("Record", "income data for pie chart")
+                            Log.e("Record", "income list - $it")
+                            drawPieChart(RecordType.INCOME, emptyList(), binding.incomeChart)
                         }
                     })
 
@@ -203,6 +220,12 @@ class DashboardFragment : Fragment() {
                             Log.e("Record", "expense data for piechart")
                             Log.e("Record", "expense list - $it")
                             drawPieChart(RecordType.EXPENSE, it, binding.expenseChart)
+                        } else {
+                            binding.noExpenseTv.visibility = View.VISIBLE
+                            binding.expenseChart.visibility = View.GONE
+                            Log.e("Record", "expense data for piechart")
+                            Log.e("Record", "expense list - $it")
+                            drawPieChart(RecordType.EXPENSE, emptyList(), binding.expenseChart)
                         }
                     })
 

@@ -2,6 +2,7 @@ package com.example.spendwise.fragment
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -46,24 +47,41 @@ class AddRecordFragment : Fragment() {
         Log.e("User AddRecord", userViewModel.user.value?.userId.toString())*/
         val recordViewModelFactory = RecordViewModelFactory((activity as MainActivity).application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
-
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentAddRecordBinding.inflate(inflater, container, false)
         args = AddRecordFragmentArgs.fromBundle(requireArguments())
-        (activity as MainActivity).supportActionBar?.apply {
+        binding.toolbarAddRecord.apply {
+            title = if(args.isEditRecord) {
+                "Edit Record"
+            } else {
+                "Add Record"
+            }
+        }
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.baseline_close_24)
             title = if(args.isEditRecord) {
                 "Edit record"
             } else "Add record"
+        }*/
+        binding.toolbarAddRecord.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
         }
-        binding = FragmentAddRecordBinding.inflate(inflater, container, false)
+
 //        Helper.validateAmountField(binding.amountEditText)
-        Helper.setupEditTextValidation(binding.amountEditText)
+
+
+
+//        Helper.setupEditTextValidation(binding.amountEditText)
+
+
+
         /*userViewModel.user.value?.userId?.let {
             Log.e("UserId AddRecord", it.toString())
             recordViewModel.userId = it
@@ -76,12 +94,15 @@ class AddRecordFragment : Fragment() {
 
         if(args.isEditRecord && savedInstanceState == null) {
             if(recordViewModel.isTempDataSet) {
+                Log.e("Test", "inside recordViewModel.isTempDataSet - ${recordViewModel.isTempDataSet}")
                 recordViewModel.tempData.observe(viewLifecycleOwner, Observer {
                     Log.e("Edit", "isTempData true, inside temp data observe")
                     if(it != null) {
                         Log.e("Edit", "temp data not null ${it.toString()}")
                         binding.amountEditText.setText(it["Amount"])
-                        binding.dateEditText.setText(it["Date"])
+                        binding.dateEditText.setText(it["Date"]).also { _ ->
+                            Log.e("Test", "inside updating date edittext tempdata - date- ${it["Date"]}")
+                        }
                         binding.noteEditText.setText(it["Title"])
                         binding.descriptionTextField.setText(it["Description"])
                         recordViewModel.tempData.value = null
@@ -90,7 +111,9 @@ class AddRecordFragment : Fragment() {
             } else {
                 Log.e("Edit", "isTempData false")
                 recordViewModel.record.observe(viewLifecycleOwner, Observer {
+                    Log.e("Test", "inside record observe in add Rec: rec - $it")
                     if(it != null) {
+                        Log.e("Test", "inside record observe in add Rec, rec not null : rec - $it")
                         Log.e("Edit", "record data not null")
                         if(it.type == RecordType.INCOME.value) {
                             binding.toggleGroup.check(R.id.incomeButton)
@@ -99,7 +122,9 @@ class AddRecordFragment : Fragment() {
                         }
                         Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
                         binding.amountEditText.setText(it.amount.toString())
-                        binding.dateEditText.setText(it.date)
+                        binding.dateEditText.setText(it.date).also { _ ->
+                            Log.e("Test", "inside updating date edittext rec obs - date- ${it.date}")
+                        }
                         binding.categoryEditText.setText(it.category)
                         binding.noteEditText.setText(it.note)
                         binding.descriptionTextField.setText(it.description)
@@ -113,7 +138,7 @@ class AddRecordFragment : Fragment() {
         binding.incomeButton.setTextColor(resources.getColor(R.color.white))
         binding.expenseButton.setTextColor(resources.getColor(R.color.gray))
         binding.incomeButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-        binding.expenseButton.setBackgroundColor(resources.getColor(R.color.white))
+        binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
         type = RecordType.INCOME
 
         binding.toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -121,13 +146,27 @@ class AddRecordFragment : Fragment() {
                 binding.incomeButton.setTextColor(resources.getColor(R.color.white))
                 binding.expenseButton.setTextColor(resources.getColor(R.color.gray))
                 binding.incomeButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.white))
+                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
+//                binding.incomeButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.checkedToggleButtonStrokeColor))
+//                binding.expenseButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.uncheckedToggleButtonStrokeColor))
+
+//                binding.incomeButton.setTextColor(resources.getColor(R.color.checkedToggleButtonTextColour))
+//                binding.expenseButton.setTextColor(resources.getColor(R.color.uncheckedToggleButtonTextColour))
+//                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
+//                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
                 type = RecordType.INCOME
             } else if(checkedId == R.id.expenseButton && isChecked) {
                 binding.incomeButton.setTextColor(resources.getColor(R.color.gray))
                 binding.expenseButton.setTextColor(resources.getColor(R.color.white))
-                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.white))
+                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
                 binding.expenseButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+//                binding.incomeButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.uncheckedToggleButtonStrokeColor))
+//                binding.expenseButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.checkedToggleButtonStrokeColor))
+
+//                binding.incomeButton.setTextColor(resources.getColor(R.color.uncheckedToggleButtonTextColour))
+//                binding.expenseButton.setTextColor(resources.getColor(R.color.checkedToggleButtonTextColour))
+//                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
+//                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
                 type = RecordType.EXPENSE
             }
             binding.categoryEditText.text.clear()
@@ -146,9 +185,12 @@ class AddRecordFragment : Fragment() {
             } else addRecord()
         }
         categoryViewModel.category.observe(viewLifecycleOwner, Observer { category ->
+            Log.e("Test", "inside category observe: cat - $category")
             Log.e("Edit", "inside category observe")
             if(category != null) {
+                Log.e("Test", "inside category observe: cat not null - $category")
                 Log.e("Edit", "category not null")
+                categoryViewModel.queryText = ""
                 binding.categoryEditText.setText(category.title)
                 if(args.isEditRecord) {
                     Log.e("Record", "${args.isEditRecord} - edit - $category")
@@ -165,9 +207,13 @@ class AddRecordFragment : Fragment() {
         })
 
         binding.categoryEditText.setOnClickListener {
+            Log.e("Test", "categoryEdittext.setOnClickListener true")
             Log.e("Edit", "category edit text onclick")
-            recordViewModel.isTempDataSet = true
-            recordViewModel.tempData.value = mapOf("Amount" to binding.amountEditText.text.toString(), "Date" to binding.dateEditText.text.toString(), "Title" to binding.noteEditText.text.toString(), "Description" to binding.descriptionTextField.text.toString())
+            if(args.isEditRecord) {
+                Log.e("Test", "categoryEdittext.setOnClickListener and isEditRecord true")
+                recordViewModel.isTempDataSet = true
+                recordViewModel.tempData.value = mapOf("Amount" to binding.amountEditText.text.toString(), "Date" to binding.dateEditText.text.toString(), "Title" to binding.noteEditText.text.toString(), "Description" to binding.descriptionTextField.text.toString())
+            }
             val action = AddRecordFragmentDirections.actionAddRecordFragmentToCategoryFragment(type.value, R.id.addRecordFragment)
             findNavController().navigate(action)
         }
@@ -223,20 +269,41 @@ class AddRecordFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
-        return if(binding.amountEditText.text.isEmpty()) {
+        if(binding.amountEditText.text.isEmpty()) {
             binding.amountEditText.error = "Amount should not be empty"
+        } else {
+            binding.amountEditText.error = null
+        }
+        if(!Helper.validateAmount(binding.amountEditText.text.toString())) {
+            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+        } else {
+            binding.amountEditText.error = null
+        }
+        if(binding.categoryEditText.text.isEmpty()) {
+            binding.categoryEditText.error = "Category should not be empty"
+        } else {
+            binding.categoryEditText.error = null
+        }
+        if(binding.dateEditText.text.isEmpty()) {
+            binding.dateEditText.error = "Date should not be empty"
+        } else {
+            binding.dateEditText.error = null
+        }
+
+        return if(binding.amountEditText.text.isEmpty()) {
+//            binding.amountEditText.error = "Amount should not be empty"
 //            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(!Helper.validateAmount(binding.amountEditText.text.toString())) {
-            binding.amountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            binding.amountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
 //            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.categoryEditText.text.isEmpty()) {
-            binding.categoryEditText.error = "Category should not be empty"
+//            binding.categoryEditText.error = "Category should not be empty"
 //            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.dateEditText.text.isEmpty()) {
-            binding.dateEditText.error = "Date should not be empty"
+//            binding.dateEditText.error = "Date should not be empty"
 //            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else true

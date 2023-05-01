@@ -77,4 +77,12 @@
 
     <color name="bottomNavIconTint">#90ceff</color>
 
+    <color name="checkedToggleButtonTextColour">@color/primaryBlue</color>
+    <color name="uncheckedToggleButtonTextColour">@color/gray</color>
+
+    <color name="uncheckedToggleButtonColour">@color/cardBehindScreenDark</color>
+
+    <color name="uncheckedToggleButtonStrokeColor">@color/gray</color>
+    <color name="checkedToggleButtonStrokeColor">@color/primaryBlue</color>
+
 </resources>

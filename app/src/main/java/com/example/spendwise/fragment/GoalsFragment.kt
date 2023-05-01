@@ -34,6 +34,8 @@ class GoalsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+/*        navigationListener = parentFragment?.parentFragment as HomePageFragment
+        navigationListener.changeVisibilityOfFab(true)*/
         val factory = GoalViewModelFactory(requireActivity().application)
         goalViewModel = ViewModelProvider(requireActivity(), factory)[GoalViewModel::class.java]
         val restoreFactory = RestoreScrollPositionViewModelFactory(requireActivity().application)

@@ -12,12 +12,18 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/from_left"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_loginFragment_to_homePageFragment"
             app:destination="@id/homePageFragment"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left" />
     </fragment>
 
     <fragment
@@ -27,12 +33,18 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_signUpFragment_to_homePageFragment"
             app:destination="@id/homePageFragment"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left" />
     </fragment>
 
     <fragment
@@ -41,19 +53,26 @@
         tools:layout="@layout/fragment_home_page">
         <action
             android:id="@+id/action_homePageFragment_to_addRecordFragment"
-            app:destination="@id/addRecordFragment" />
+            app:destination="@id/addRecordFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:popExitAnim="@anim/exit_slide_dowm" />
         <action
             android:id="@+id/action_homePageFragment_to_addBudgetFragment"
-            app:destination="@id/addBudgetFragment" />
+            app:destination="@id/addBudgetFragment"
+            app:popExitAnim="@anim/exit_slide_dowm"
+            app:enterAnim="@anim/slide_in_bottom_sheet" />
         <action
             android:id="@+id/action_homePageFragment_to_addGoalFragment"
-            app:destination="@id/addGoalFragment" />
+            app:destination="@id/addGoalFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:popExitAnim="@anim/exit_slide_dowm" />
         <action
             android:id="@+id/action_homePageFragment_to_recordsFragment"
             app:destination="@id/recordsFragment" />
         <action
             android:id="@+id/action_homePageFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
+            app:destination="@id/statisticsFragment"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_homePageFragment_to_categoryFragment"
             app:destination="@id/categoryFragment"
@@ -69,7 +88,11 @@
             app:destination="@id/monthlyBudgetsFragment" />
         <action
             android:id="@+id/action_homePageFragment_to_viewGoalFragment"
-            app:destination="@id/viewGoalFragment" />
+            app:destination="@id/viewGoalFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <!--<action
             android:id="@+id/action_homePageFragment_to_bottomSheetFragment"
             app:destination="@id/bottomSheetFragment" />-->
@@ -84,7 +107,11 @@
             android:id="@+id/action_addBudgetFragment_to_categoryFragment"
             app:destination="@id/categoryFragment"
             app:popUpTo="@id/categoryFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="isEditBudget"
             app:argType="boolean"
@@ -124,7 +151,18 @@
             android:defaultValue="@null" />
         <action
             android:id="@+id/action_recordsFragment_to_viewRecordFragment"
-            app:destination="@id/viewRecordFragment" />
+            app:destination="@id/viewRecordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popExitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_left" />
+        <action
+            android:id="@+id/action_recordsFragment_to_addRecordFragment"
+            app:destination="@id/addRecordFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/exit_slide_dowm"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -136,7 +174,8 @@
             app:argType="string" />
         <action
             android:id="@+id/action_statisticsFragment_to_recordsFragment"
-            app:destination="@id/recordsFragment" />
+            app:destination="@id/recordsFragment"
+            />
     </fragment>
     <!--<fragment
         android:id="@+id/expensesFragment"
@@ -166,12 +205,15 @@
             android:id="@+id/action_addRecordFragment_to_homePageFragment"
             app:destination="@id/homePageFragment"
             app:popUpTo="@id/addRecordFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"
+             />
         <action
             android:id="@+id/action_addRecordFragment_to_categoryFragment"
             app:destination="@id/categoryFragment"
-            app:popUpTo="@id/categoryFragment"
-            app:popUpToInclusive="true" />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="category"
             app:argType="string"
@@ -195,7 +237,10 @@
             app:argType="integer"/>
         <action
             android:id="@+id/action_categoryFragment_to_recordsFragment"
-            app:destination="@id/recordsFragment" />
+            app:destination="@id/recordsFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
 
 <!--    <action android:id="@+id/action_global_userProfileFragment" app:destination="@id/userProfileFragment"/>-->
@@ -209,7 +254,11 @@
         tools:layout="@layout/fragment_view_record">
         <action
             android:id="@+id/action_viewRecordFragment_to_addRecordFragment"
-            app:destination="@id/addRecordFragment" />
+            app:destination="@id/addRecordFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/exit_slide_dowm" />
     </fragment>
     <fragment
         android:id="@+id/viewBudgetFragment"
@@ -218,7 +267,11 @@
         tools:layout="@layout/fragment_view_budget" >
         <action
             android:id="@+id/action_viewBudgetFragment_to_addBudgetFragment"
-            app:destination="@id/addBudgetFragment" />
+            app:destination="@id/addBudgetFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/exit_slide_dowm" />
     </fragment>
     <fragment
         android:id="@+id/monthlyBudgetsFragment"
@@ -227,11 +280,20 @@
         tools:layout="@layout/fragment_monthly_budgets" >
         <action
             android:id="@+id/action_monthlyBudgetsFragment_to_viewBudgetFragment"
-            app:destination="@id/viewBudgetFragment" />
+            app:destination="@id/viewBudgetFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="period"
             app:argType="string"
             android:defaultValue="Monthly" />
+        <action
+            android:id="@+id/action_monthlyBudgetsFragment_to_addBudgetFragment"
+            app:destination="@id/addBudgetFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:popExitAnim="@anim/exit_slide_dowm" />
     </fragment>
     <fragment
         android:id="@+id/viewGoalFragment"
@@ -240,7 +302,11 @@
         tools:layout="@layout/fragment_view_goal" >
         <action
             android:id="@+id/action_viewGoalFragment_to_addGoalFragment"
-            app:destination="@id/addGoalFragment" />
+            app:destination="@id/addGoalFragment"
+            app:enterAnim="@anim/slide_in_bottom_sheet"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/exit_slide_dowm" />
     </fragment>
 
 

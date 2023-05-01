@@ -29,9 +29,20 @@ class RestoreScrollPositionViewModel(application: Application): AndroidViewModel
         Log.e("Scroll", _budgetScrollPosition.value.toString())
     }
 
+    private val _statsScrollPosition = MutableLiveData<Int?>()
+    val statsScrollPosition: LiveData<Int?>
+        get() = _statsScrollPosition
+
+    fun updateStatsScrollPosition(position: Int) {
+        Log.e("Scroll", position.toString())
+        _statsScrollPosition.value = position
+        Log.e("Scroll", _statsScrollPosition.value.toString())
+    }
+
     var scrollPositionMonthlyBudgets: Int = 0
     var scrollPositionRecords: Int = 0
     var scrollPositionGoals: Int = 0
+    var scrollPositionCategory: Int = 0
 
     fun clear() {
         _dashboardScrollPosition.value = null

@@ -6,4 +6,7 @@ import com.example.spendwise.enums.RecordType
 
 interface NavigationListener {
     fun onActionReceived(destination: Fragment, title: RecordType = RecordType.ALL, period: Period = Period.MONTH)
+
+    fun changeVisibilityOfFab(showFab: Boolean)
+
 }

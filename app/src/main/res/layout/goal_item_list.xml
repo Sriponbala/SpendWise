@@ -5,13 +5,16 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:paddingTop="16dp"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/goalIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/piggy_bank"
         android:background="@drawable/rounded_background"
         android:padding="6dp"
@@ -24,7 +27,8 @@
         android:id="@+id/goalNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:ellipsize="end"
@@ -106,8 +110,9 @@
         android:textSize="14sp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/dividerGoalItem"/>
 
     <TextView
         android:id="@+id/savedGoalAmtTv"
@@ -123,8 +128,16 @@
         android:textSize="14sp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@id/savedLabelTextView"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/dividerGoalItem"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerGoalItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

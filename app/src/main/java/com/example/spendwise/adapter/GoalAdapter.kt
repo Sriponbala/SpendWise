@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.marginBottom
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.domain.Budget
 import com.example.spendwise.domain.Goal
+import com.google.android.material.divider.MaterialDivider
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
@@ -25,6 +27,7 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
         val goalIcon: ImageView = itemView.findViewById(R.id.goalIcon)
         val savedAmount: TextView = itemView.findViewById(R.id.savedGoalAmtTv)
         val progressBar: LinearProgressIndicator = itemView.findViewById(R.id.goalProgressLinear)
+        val divider: MaterialDivider = itemView.findViewById(R.id.dividerGoalItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,6 +40,14 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.e("Goal", goals.toString())
         val res = holder.itemView.resources
+        if(goals.lastIndex == position) {
+            /*val marginLayoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
+            marginLayoutParams.bottomMargin = 64
+            holder.itemView.layoutParams = marginLayoutParams*/
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }
         val item = goals[position]
         holder.goalName.text = item.goalName
         holder.desiredDate.text = if(item.desiredDate == "") "No Target Date" else item.desiredDate

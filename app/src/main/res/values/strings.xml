@@ -17,6 +17,10 @@
     <!--    <string name="rupee_symbol">\u20B9</string>-->
     <string name="rupee_symbol">₹</string>
     <string name="netBalance">Net Balance</string>
+    <string name="logOutAlert">Are you sure to log out of your account?</string>
+    <string name="deleteRecordAlert">This record will be deleted permanently. Proceed with deletion?</string>
+    <string name="deleteBudgetAlert">This budget will be deleted permanently. Proceed with deletion?</string>
+    <string name="deleteGoalAlert">This goal will be deleted permanently. Proceed with deletion?</string>
     <string-array name="recordTypes">
         <item>All</item>
         <item>Income</item>

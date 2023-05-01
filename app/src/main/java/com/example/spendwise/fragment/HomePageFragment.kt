@@ -116,29 +116,29 @@ class HomePageFragment : Fragment(), NavigationListener {
         when(menuItem.itemId) {
             R.id.dashBoardFragment -> {
                 if(getCurrentDestinationId() != R.id.dashBoardFragment) {
-                    binding.fabHomePage.visibility = View.VISIBLE
                     navController.navigate(R.id.action_homePageFragment_to_dashBoardFragment)//, null, navOptions)
+                    binding.fabHomePage.visibility = View.VISIBLE
                 }
                 flag =  true
             }
             R.id.budgetFragment -> {
                 if(getCurrentDestinationId() != R.id.budgetFragment) {
-                    binding.fabHomePage.visibility = View.VISIBLE
                     navController.navigate(R.id.action_homePageFragment_to_budgetFragment)//, null, navOptions)
+                    binding.fabHomePage.visibility = View.VISIBLE
                 }
                 flag =  true
             }
             R.id.goalsFragment -> {
                 if(getCurrentDestinationId() != R.id.goalsFragment) {
-                    binding.fabHomePage.visibility = View.VISIBLE
                     navController.navigate(R.id.action_homePageFragment_to_goalsFragment)
+                    binding.fabHomePage.visibility = View.VISIBLE
                 }
                 flag =  true
             }
             R.id.settingsFragment -> {
                 if(getCurrentDestinationId() != R.id.settingsFragment) {
-                    binding.fabHomePage.visibility = View.GONE
                     navController.navigate(R.id.action_homePageFragment_to_settingsFragment)
+                    binding.fabHomePage.visibility = View.GONE
                 }
                 flag = true
             }
@@ -296,7 +296,17 @@ class HomePageFragment : Fragment(), NavigationListener {
         }
     }
 
+    override fun changeVisibilityOfFab(showFab: Boolean) {
+        if(showFab) {
+            binding.fabHomePage.visibility = View.VISIBLE
+        } else {
+            binding.fabHomePage.visibility = View.GONE
+        }
+    }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("Test", "Home destroy")
+    }
 
 }

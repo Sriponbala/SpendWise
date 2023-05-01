@@ -3,6 +3,7 @@ package com.example.spendwise.fragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.text.method.Touch.scrollTo
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -25,7 +26,9 @@ import com.example.spendwise.enums.RecordType
 import com.example.spendwise.interfaces.FilterViewDelegate
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
+import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -42,6 +45,7 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
     private lateinit var recordType: String
     private lateinit var recordViewModel: RecordViewModel
     private val categoryViewModel: CategoryViewModel by activityViewModels()
+    private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
     private var filterView: FilterView? = null  // FilterView(this, requireActivity().application)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +62,8 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
             recordViewModel.userId = it
         }*/
         Log.e("Landscape", "stats onCreate - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
+        val factory = RestoreScrollPositionViewModelFactory(requireActivity().application)
+        restoreScrollPositionViewModel = ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
         val args = StatisticsFragmentArgs.fromBundle(requireArguments())
         recordType = args.recordType
         if(savedInstanceState == null) {
@@ -75,11 +81,18 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
-        (activity as MainActivity).supportActionBar?.apply {
+        /*(activity as MainActivity).supportActionBar?.apply {
             title = "$recordType Stats"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.back_arrow)
+        }*/
+        binding.toolbarStatistics.apply {
+            title = "$recordType Stats"
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
+
         filterView = FilterView(recordViewModel, binding.filterLayoutRecordsFragment, this)
         Log.e("Landscape", "stats onCreateView - ${recordViewModel.month.value} - ${recordViewModel.month.value}")
         filterView?.setMonthYearValue()
@@ -92,6 +105,13 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
             filterView?.showMonthYearPicker(requireContext())
         }
 //        filterView?.createAndSetAdapter(requireContext(), R.array.recordTypes)
+
+        restoreScrollPositionViewModel.statsScrollPosition.observe(viewLifecycleOwner, Observer {
+            Log.e("Scroll", it.toString() + "observe")
+            if (it != null) {
+                binding.scrollViewStats.scrollTo(0, it)
+            }
+        })
 
         val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
         Log.e("userId records", userId.toString())
@@ -146,12 +166,14 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
                             recordViewModel.dataForPieChart.value?.let { data ->
                                 if(data.isNotEmpty()) {
                                     binding.emptyRecordsList.visibility = View.GONE
+                                    binding.emptyScrollView.visibility = View.GONE
                                     binding.pieChart.visibility = View.VISIBLE
                                     binding.statsRecyclerView.visibility = View.VISIBLE
                                     drawPieChart(data)
                                     setStatisticsRecyclerView(data)
                                 } else {
                                     binding.emptyRecordsList.visibility = View.VISIBLE
+                                    binding.emptyScrollView.visibility = View.VISIBLE
                                     binding.pieChart.visibility = View.GONE
                                     binding.statsRecyclerView.visibility = View.GONE
                                 }
@@ -253,8 +275,27 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         binding.pieChart.centerText = recordType
     }
 
+    override fun onPause() {
+
+        super.onPause()
+        Log.e("Animation", "on pause statistics fragment")
+        Log.e("Scroll", "onPause")
+        restoreScrollPositionViewModel.updateDashboardScrollPosition(binding.scrollViewStats.scrollY)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e("Animation", "on stop statistics fragment")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.e("Animation", "on destroy view statistics fragment")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        Log.e("Animation", "on destroy statistics fragment")
         Log.e("Landscape", "statsfrag onDestroy")
         /*filterView?.clear()
         filterView = null*/

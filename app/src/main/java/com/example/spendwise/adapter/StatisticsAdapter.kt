@@ -15,6 +15,7 @@ import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.domain.Category
 import com.example.spendwise.enums.Month
+import com.google.android.material.divider.MaterialDivider
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -39,6 +40,7 @@ class StatisticsAdapter(private val records: List<Pair<Category, Float>>): Recyc
         val percentText: TextView = itemView.findViewById(R.id.percentText)
         val categoryName: TextView = itemView.findViewById(R.id.categoryName)
         val amount: TextView = itemView.findViewById(R.id.amountStats)
+        val divider: MaterialDivider = itemView.findViewById(R.id.statsDivider)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,6 +57,11 @@ class StatisticsAdapter(private val records: List<Pair<Category, Float>>): Recyc
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val resources = holder.itemView.context.resources
         val record = records[position]
+        if(position == records.lastIndex) {
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }
         Log.e("Display", record.toString())
         val category = record.first
         holder.categoryBgColor.backgroundTintList = ColorStateList.valueOf(resources.getColor(category.bgColor))

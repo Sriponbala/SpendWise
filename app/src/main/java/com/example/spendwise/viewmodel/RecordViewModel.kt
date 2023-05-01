@@ -13,6 +13,7 @@ import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.repository.RecordRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,11 +28,19 @@ class RecordViewModel(
     get() = _records
     private var filterByCategory = false
 
+    var queryText: String = ""
+    var newQueryText: String = ""
+    val searchedList = MutableLiveData<List<Record>?>()
+
     val incomeStatsDone = MutableLiveData<Boolean>()
 
     /*var records: LiveData<List<Record>> = repository.getAllRecords(userId).also {
         Log.e("Records", it.value?.size.toString())
     }*/
+
+    private var _filteredRecordsForDashboard = MutableLiveData<List<Record>?>()
+    val filteredRecordsForDashboard: LiveData<List<Record>?>
+        get() = _filteredRecordsForDashboard
 
     private var _filteredRecords = MutableLiveData<List<Record>?>()
     val filteredRecords: LiveData<List<Record>?>
@@ -86,7 +95,10 @@ class RecordViewModel(
             record.type == RecordType.INCOME.value
         }.also {
             it?.forEach { record ->
+                Log.e("Total Balance", "record amount income - ${record.amount}")
                 income += record.amount
+                Log.e("Total Balance", "incrementing income - $income")
+
             }
         }
         incomeOfTheMonth.value = income
@@ -105,6 +117,7 @@ class RecordViewModel(
     }
 
     fun getTotalBalanceOfTheMonth() {
+        Log.e("Total Balance", "Income - ${incomeOfTheMonth.value}, Expense - ${expenseOfTheMonth.value}")
         val balance = expenseOfTheMonth.value?.let { incomeOfTheMonth.value?.minus(it) } ?: 0f
         totalBalanceOfTheMonth.value = balance
     }
@@ -112,7 +125,19 @@ class RecordViewModel(
     private var user = 0
 
     fun fetchAllRecords(userId: Int) {
-        viewModelScope.launch/*(Dispatchers.IO)*/ {
+        viewModelScope.launch {
+            var fetchedRecords: List<Record>? = null
+            fetchedRecords = repository.getAllUserRecords(userId)
+            Log.e("Coroutine", "fetched rec delay")
+            withContext(Dispatchers.Main) {
+                _records.value = fetchedRecords.also {
+                    Log.e("Coroutine", "record fetch all _records.value " + it.toString())
+                }
+                _filteredRecordsForDashboard.value = fetchedRecords
+                user = userId
+            }
+        }
+        /*viewModelScope.launch*//*(Dispatchers.IO)*//* {
             var fetchedRecords: List<Record>? = null
             val job = launch {
                 Log.e("UserID", "record fetch all records " + userId.toString())
@@ -127,15 +152,16 @@ class RecordViewModel(
                 _records.value = fetchedRecords.also {
                     Log.e("UserID", "record fetch all _records.value " + it.toString())
                 }
+                _filteredRecordsForDashboard.value = fetchedRecords
                  user = userId
                 Log.e("Record", userId.toString() + " viewmodel getusers below ${_records.value?.size}")
             }
-           /* Log.e("Record", userId.toString() + " viewmodel getusers above ${_records.value?.size}")
+           *//* Log.e("Record", userId.toString() + " viewmodel getusers above ${_records.value?.size}")
             _records.value = repository.getAllUserRecords(userId)
-            Log.e("Record", userId.toString() + " viewmodel getusers below ${_records.value?.size}")*/
+            Log.e("Record", userId.toString() + " viewmodel getusers below ${_records.value?.size}")*//*
 
-        }
-        Log.e("Record", _record.value.toString() + " fetchAll " +_record.value?.recordId.toString())
+        }*/
+//        Log.e("Record", _record.value.toString() + " fetchAll " +_record.value?.recordId.toString())
     }
 
     private var _dataForPieChart = MutableLiveData<List<Pair<Category, Float>>?>()
@@ -212,7 +238,9 @@ class RecordViewModel(
     get() = _record
 
     fun setSelectedRecord(record: Record) {
-        _record.value = record
+        _record.value = record.also {
+            Log.e("Test", "inside setSelectedRec in rec Viewmodel : rec - $record")
+        }
     }
 
     fun updateRecord(

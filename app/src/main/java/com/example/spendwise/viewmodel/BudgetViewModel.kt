@@ -80,9 +80,11 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             val job = launch {
                 _budget.value?.let {
+                    Log.e("Test", "deleting budget in viewmodel before repo call")
                     repository.deleteBudget(it)
                 }
                 period.value?.let {
+                    Log.e("Test", "in deleting budget in viewmodel before  fetch budgets call")
                     fetchBudgetsOfThePeriod(userId, it)
                 }
             }
@@ -92,6 +94,7 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
                     fetchAllRecords(user)
                     fetchRecords()
                 }*/
+                Log.e("Test", "in main thread deleting budget in viewmodel before updating budget value ")
                 _budget.value = null
                 _budgetItem.value = null
             }

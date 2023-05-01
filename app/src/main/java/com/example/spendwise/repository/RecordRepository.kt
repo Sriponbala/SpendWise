@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.example.spendwise.dao.RecordDao
 import com.example.spendwise.domain.Record
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class RecordRepository(private val recordDao: RecordDao) {
@@ -24,11 +25,9 @@ class RecordRepository(private val recordDao: RecordDao) {
     suspend fun getAllUserRecords(userId: Int): List<Record> {
         return withContext(Dispatchers.IO) {
             val list = recordDao.getAllUserRecords(userId)
-            Log.e("Record", userId.toString() + " repo getusers")
+            Log.e("Coroutine", userId.toString() + " repo getusers")
             list
         }
-//        Log.e("RecordRepo", userId.toString())
-//        return recordDao.getAllUserRecords(userId)
     }
 
     suspend fun updateRecord(record: Record) {

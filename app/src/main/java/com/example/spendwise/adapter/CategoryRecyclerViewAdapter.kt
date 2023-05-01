@@ -14,6 +14,7 @@ import com.example.spendwise.fragment.AddRecordFragmentDirections
 import com.example.spendwise.fragment.CategoryFragment
 import com.example.spendwise.fragment.CategoryFragmentArgs
 import com.example.spendwise.fragment.CategoryFragmentDirections
+import com.google.android.material.divider.MaterialDivider
 
 class CategoryRecyclerViewAdapter(private var categories: List<Category>): RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
 
@@ -21,6 +22,7 @@ class CategoryRecyclerViewAdapter(private var categories: List<Category>): Recyc
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val categoryImage: ImageView = itemView.findViewById(R.id.categoryImage)
         val categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
+        val divider: MaterialDivider = itemView.findViewById(R.id.categoryItemDivider)
     }
 
     fun filterList(filteredList: List<Category>) {
@@ -38,6 +40,11 @@ class CategoryRecyclerViewAdapter(private var categories: List<Category>): Recyc
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.categoryImage.setImageResource(categories[position].logo)
+        if(position == categories.lastIndex) {
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }
         val colorStateList = ColorStateList.valueOf(holder.itemView.resources.getColor(categories[position].bgColor))
         holder.categoryImage.backgroundTintList = colorStateList
         holder.categoryTextView.text = categories[position].title

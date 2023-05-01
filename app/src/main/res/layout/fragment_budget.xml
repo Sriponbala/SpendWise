@@ -1,70 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootScrollViewBudget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ScreenBackground"
+    android:orientation="vertical"
     tools:context=".fragment.BudgetFragment">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        style="@style/ScreenBackground"
-        android:id="@+id/budgetsRoot">
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/app_bar_budgets"
+        android:background="?android:attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_marginBottom="16dp"
-            android:id="@+id/thisMonthCardView"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar_budgets"
+            app:title="Budgets"
+            app:titleTextColor="@color/white"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        style="@style/ScreenBackground"
+        android:id="@+id/rootScrollViewBudget"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/CardViewStyle">
-            <LinearLayout
-                android:id="@+id/thisMonthLinear"
+            android:orientation="vertical"
+            style="@style/ScreenBackground"
+            android:id="@+id/budgetsRoot">
+
+            <androidx.cardview.widget.CardView
+                android:layout_marginBottom="16dp"
+                android:id="@+id/thisMonthCardView"
                 android:layout_width="match_parent"
-                android:layout_margin="16dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/thisMonthTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="This Month"
-                    style="@style/HeadingTextStyle" />
-                <TextView
-                    android:id="@+id/thisMonthNoBudgetsTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No budgets found"
-                    android:textSize="14sp"
-                    android:layout_marginVertical="16dp"
-                    android:layout_gravity="center_horizontal"
-                     />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/thisMonthBudgetsList"
-                    android:layout_marginVertical="16dp"
-                    android:splitMotionEvents="false"
+                style="@style/CardViewStyle">
+                <LinearLayout
+                    android:id="@+id/thisMonthLinear"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/showMonthlyBudgets"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ALL BUDGETS"
-                    android:textStyle="bold"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/thisMonthTv"
+                        android:layout_width="wrap_content"
+                        android:layout_marginVertical="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_height="wrap_content"
+                        android:text="This Month"
+                        style="@style/HeadingTextStyle" />
+                    <TextView
+                        android:id="@+id/thisMonthNoBudgetsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No budgets found"
+                        android:textSize="14sp"
+                        android:layout_gravity="center_horizontal"
+                        />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/thisMonthBudgetsList"
+                        android:splitMotionEvents="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/showMonthlyBudgets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VIEW MONTHLY BUDGETS"
+                        android:padding="16dp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:textColor="@color/colorPrimary"/>
 
-</androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

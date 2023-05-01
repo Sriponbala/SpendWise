@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Saved Amount"
-        style="@style/HeadingTextStyle"
+        android:textColor="@color/textColor"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -31,8 +32,7 @@
             android:id="@+id/savedAmtTileTInput"
             android:layout_width="match_parent"
             android:inputType="numberDecimal"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

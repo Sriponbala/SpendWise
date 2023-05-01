@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.databinding.DataBindingUtil.bind
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -34,7 +36,7 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var drawer: DrawerLayout
+    //    private lateinit var drawer: DrawerLayout
 //    private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
@@ -48,7 +50,8 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbarMain)
+//        setSupportActionBar(binding.toolbarMain)
+//        supportActionBar?.hide()
         val sharedPref = getSharedPreferences("LoginStatus", MODE_PRIVATE)
         editor = sharedPref.edit()
 
@@ -65,12 +68,19 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         }
         navController.graph = navGraph
         // Define the top level destinations for the AppBarConfiguration
-        appBarConfiguration = AppBarConfiguration.Builder(R.id.homePageFragment, R.id.dashBoardFragment, R.id.loginFragment, R.id.signUpFragment)
-            .build()
-        NavigationUI.setupActionBarWithNavController(this, navController)//, appBarConfiguration)
+        /*appBarConfiguration = AppBarConfiguration.Builder(R.id.homePageFragment, R.id.dashBoardFragment, R.id.loginFragment, R.id.signUpFragment)
+            .build()*/
+//        NavigationUI.setupActionBarWithNavController(this, navController)//, appBarConfiguration)
 //        NavigationUI.setupWithNavController(binding.navView, navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            /*if(destination == navGraph.findNode(R.id.addRecordFragment)) {
+                binding.appBarAddRecord.visibility = View.GONE
+                supportActionBar?.hide()
+            } else {
+                binding.appBarAddRecord.visibility = View.VISIBLE
+                supportActionBar?.show()
+            }*/
 //            currentDestination = destination
             Log.e("Destination", destination.displayName)
             // Check if the current destination is the desired one to lock the drawer
@@ -82,44 +92,61 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             Log.e("Destination", supportActionBar?.title.toString())
 //            Log.e("Destination", shouldNotLockDrawer.toString())
             // Lock or unlock the drawer based on the destination
-           /* if (shouldNotLockDrawer) {
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                toggle = ActionBarDrawerToggle(this, drawer, binding.toolbarMain, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-                binding.root.addDrawerListener(toggle)
-                toggle.syncState()
-            } else {
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-
-            }*/
+            /* if (shouldNotLockDrawer) {
+                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                 toggle = ActionBarDrawerToggle(this, drawer, binding.toolbarMain, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                 binding.root.addDrawerListener(toggle)
+                 toggle.syncState()
+             } else {
+                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+             }*/
         }
 //        binding.navView.setNavigationItemSelectedListener(this)
 
         /*// Set up the ActionBar with the NavController and AppBarConfiguration
         setupActionBarWithNavController(navController, appBarConfiguration)*/
+        val recordViewModelFactory = RecordViewModelFactory(application)
+        val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
+        recordViewModel.fetchAllRecords(sharedPref.getInt("userId", 0))
     }
 
     override fun onSupportNavigateUp(): Boolean {
-       /* // Update the visibility and icon of the Up button based on the current fragment's state
-        val currentDestination = navController.currentDestination
-        val canNavigateUp = currentDestination?.id !in appBarConfiguration.topLevelDestinations
-        supportActionBar?.setDisplayHomeAsUpEnabled(canNavigateUp)
-        // Set the desired icon drawable based on the current fragment's state
-        val iconDrawable = if (canNavigateUp) R.drawable.back_arrow else null
-        if (iconDrawable != null) {
-            supportActionBar?.setHomeAsUpIndicator(iconDrawable)
-        }
-
-        // Handle Up button click event based on the current fragment's state
-        return if (canNavigateUp) {
-            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-        } else {
-            // Handle other actions for Up button click event
-            // For example, show a menu or perform some other action
-            // ...
-            true
-        }*/
+        /* // Update the visibility and icon of the Up button based on the current fragment's state
+         val currentDestination = navController.currentDestination
+         val canNavigateUp = currentDestination?.id !in appBarConfiguration.topLevelDestinations
+         supportActionBar?.setDisplayHomeAsUpEnabled(canNavigateUp)
+         // Set the desired icon drawable based on the current fragment's state
+         val iconDrawable = if (canNavigateUp) R.drawable.back_arrow else null
+         if (iconDrawable != null) {
+             supportActionBar?.setHomeAsUpIndicator(iconDrawable)
+         }
+         // Handle Up button click event based on the current fragment's state
+         return if (canNavigateUp) {
+             navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+         } else {
+             // Handle other actions for Up button click event
+             // For example, show a menu or perform some other action
+             // ...
+             true
+         }*/
         Log.e("NavigateUp", "")
-        if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
+        when {
+            (navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) -> {
+                Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
+                val recordViewModelFactory = RecordViewModelFactory(application)
+                val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
+                recordViewModel.isTempDataSet = false
+            }
+
+            (navController.currentDestination?.id == R.id.categoryFragment) -> {
+                Log.e("Search", "empty querytext from main activity")
+                val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
+                    Log.e("Search", it.toString())
+                }
+                categoryViewModel.queryText = ""
+            }
+        }
+        /*if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
             Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
             val recordViewModelFactory = RecordViewModelFactory(application)
             val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
@@ -131,7 +158,7 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
                 Log.e("Search", it.toString())
             }
             categoryViewModel.queryText = ""
-        }
+        }*/
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
@@ -142,16 +169,22 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.homePageFragment)?.label)} - ${navGraph.findNode(R.id.dashBoardFragment)?.label}")
 //        Log.e("Main", "${navController.currentDestination?.label?.equals(navGraph.findNode(R.id.userProfileFragment)?.label)} - ${navGraph.findNode(R.id.userProfileFragment)?.label}")
 //        Log.e("Main", currentDestination.displayName)
-       /* if(navController.currentDestination?.id == R.id.categoryFragment) {
-            Log.e("Quote", "empty querytext from main activity")
-            val categoryViewModel = CategoryViewModel()
-            categoryViewModel.queryText = ""
-        }*/
+        /* if(navController.currentDestination?.id == R.id.categoryFragment) {
+             Log.e("Quote", "empty querytext from main activity")
+             val categoryViewModel = CategoryViewModel()
+             categoryViewModel.queryText = ""
+         }*/
         if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
             Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
             val recordViewModelFactory = RecordViewModelFactory(application)
             val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
             recordViewModel.isTempDataSet = false
+        }
+        if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.recordsFragment)?.label) == true) {
+            val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
+                Log.e("Test", it.toString())
+            }
+            categoryViewModel.category.value = null
         }
         if(navController.currentDestination?.label?.equals(navGraph.findNode(R.id.loginFragment)?.label) == true) {
             Log.e("Main", "current - login")
@@ -163,10 +196,22 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             finish()
         } else if(navController.currentDestination?.id == R.id.categoryFragment){
             Log.e("Search", "empty querytext from main activity")
+            Log.e("Navigation", "current destination is categoryFragment")
             val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
                 Log.e("Search", it.toString())
             }
             categoryViewModel.queryText = ""
+            super.onBackPressed()
+        }  else if(navController.currentDestination?.id == R.id.recordsFragment){
+            Log.e("Search", "empty querytext from main activity")
+            Log.e("Navigation", "current destination is categoryFragment")
+//            val recordViewModelFactory = RecordViewModelFactory(application)
+            val recordViewModel = ViewModelProvider(this)[RecordViewModel::class.java].also{
+                Log.e("Search", it.toString())
+                Log.e("RecordViewModel Check", it.toString())
+
+            }
+            recordViewModel.queryText = ""
             super.onBackPressed()
         } else {
             super.onBackPressed()
@@ -217,7 +262,6 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
                 navController.navigate(R.id.action_global_loginFragment)
             }
         }
-
         return true
     }*/
 
@@ -231,7 +275,6 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
         val r = ViewModelProvider(this, RecordViewModelFactory(application))[RecordViewModel::class.java]
         *//*u.deleteAllRecords()
         r.deleteAllRecords()*//*
-
     }*/
 
 }

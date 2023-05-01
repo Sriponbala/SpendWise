@@ -53,8 +53,8 @@ class LoginFragment : Fragment() {
             editor = sharedPref.edit()
         }
 
-        emailFocusListener()
-        passwordFocusListener()
+        //emailFocusListener()
+        //passwordFocusListener()
 
         binding.loginButton.setOnClickListener{
             login()
@@ -107,9 +107,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
-        val isEmailValid = validEmail() == null
-        val isPasswordValid = validPasswordText() == null
-        if (isEmailValid && isPasswordValid) {
+      //  val isEmailValid = validEmail() == null
+      //  val isPasswordValid = validPasswordText() == null
+        /*if (isEmailValid && isPasswordValid) {
             val email = binding.emailTextInputEditText.text.toString()
             userViewModel.checkIfUserExists(email)
             userViewModel.isEmailExists.observe(viewLifecycleOwner, Observer {
@@ -125,10 +125,23 @@ class LoginFragment : Fragment() {
         } else {
             binding.emailTextInputLayout.helperText = validEmail()
             binding.passwordTextInputLayout.helperText = validPasswordText()
-        }
+        }*/
+        val email = binding.emailTextInputEditText.text.toString()
+        userViewModel.checkIfUserExists(email)
+        userViewModel.isEmailExists.observe(viewLifecycleOwner, Observer {
+            if(it != null) {
+                if(it) {
+                    loginUser()
+                } else {
+                    binding.emailTextInputLayout.helperText = "Invalid email id, user does not exist"
+                }
+                userViewModel.isEmailExists.value = null
+            }
+        })
     }
 
     private fun loginUser() {
+        binding.emailTextInputLayout.helperText = null
         userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
         userViewModel.isUserFetched.observe(viewLifecycleOwner, Observer {
             Log.e("UserID","isFetched - " + it?.toString())

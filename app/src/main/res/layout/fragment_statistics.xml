@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/recordPage"
+    style="@style/ScreenBackground"
     tools:context=".fragment.StatisticsFragment"
     android:id="@+id/rootRecord"
     android:orientation="vertical"
@@ -17,25 +17,52 @@
         android:padding="10dp">
 
     </LinearLayout>-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/app_bar_statistics"
+        android:background="?android:attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar_statistics"
+            app:title="Statistics"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/back_arrow"
+            app:navigationIconTint="@color/white"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <include layout="@layout/filter_layout"
         android:id="@+id/filter_layout_recordsFragment"/>
 
-    <TextView
-        android:id="@+id/emptyRecordsList"
-        android:padding="100dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_gravity="center"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/emptyScrollView"
         android:visibility="gone"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:text="No records found"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/emptyRecordsList"
+            android:padding="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:text="No Records Found"/>
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollViewStats"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:background="@color/recordPage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -53,11 +80,12 @@
                 android:layout_height="wrap_content"/>-->
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
                 android:id="@+id/statsRecyclerView"
                 android:splitMotionEvents="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

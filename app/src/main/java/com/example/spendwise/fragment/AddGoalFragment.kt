@@ -54,14 +54,13 @@ class AddGoalFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val factory = GoalViewModelFactory(requireActivity().application)
         goalViewModel = ViewModelProvider(requireActivity(), factory)[GoalViewModel::class.java]
-        args = AddGoalFragmentArgs.fromBundle(requireArguments())
-        (activity as MainActivity).supportActionBar?.apply {
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.baseline_close_24)
             title = if(args.isEditGoal) {
                 "Edit Goal"
             } else "Add Goal"
-        }
+        }*/
     }
 
     override fun onCreateView(
@@ -72,6 +71,17 @@ class AddGoalFragment : Fragment() {
 
         // Inflate the layout for this fragment
         binding = FragmentAddGoalBinding.inflate(inflater, container, false)
+        args = AddGoalFragmentArgs.fromBundle(requireArguments())
+        binding.toolbarAddGoal.apply {
+            title = if(args.isEditGoal) {
+                "Edit Goal"
+            } else {
+                "Add Goal"
+            }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+        }
         return binding.root
     }
 
@@ -92,6 +102,7 @@ class AddGoalFragment : Fragment() {
             goalViewModel.goal.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     binding.etGoalName.setText(it.goalName)
+//                    val normalValue = "%.0f".format(scientificValue)
                     binding.etGoalAmount.setText(it.targetAmount.toString())
                     binding.etSavedGoalAmount.setText(it.savedAmount.toString())
                     val selectedIcon = IconsForSpinner.goalIcons.find { icon -> icon.goalIcon == it.goalIcon }
@@ -178,16 +189,38 @@ class AddGoalFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
-        return if(binding.etGoalName.text?.isEmpty() == true) {
+        if(binding.etGoalName.text?.isEmpty() == true) {
             binding.etGoalName.error = "Goal name should not be empty"
+        } else {
+            binding.etGoalName.error = null
+        }
+        if(binding.etGoalAmount.text?.isEmpty() == true) {
+            binding.etGoalAmount.error = "Target amount should not be empty"
+        } else {
+            binding.etGoalAmount.error = null
+        }
+        if(!Helper.validateAmount(binding.etGoalAmount.text.toString())) {
+            binding.etGoalAmount.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+        } else {
+            binding.etGoalAmount.error = null
+        }
+        if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateAmount(binding.etSavedGoalAmount.text.toString())) {
+            binding.etSavedGoalAmount.error = "Can be empty / should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+        } else {
+            binding.etSavedGoalAmount.error = null
+        }
+
+        return if(binding.etGoalName.text?.isEmpty() == true) {
+//            binding.etGoalName.error = "Goal name should not be empty"
             /*Toast.makeText(
                 this.requireContext(),
                 "Goal name should not be empty",
                 Toast.LENGTH_SHORT
             ).show()*/
             false
-        } else if(binding.etGoalAmount.text?.isEmpty() == true) {
-            binding.etGoalAmount.error = "Target amount should not be empty"
+        }
+        else if(binding.etGoalAmount.text?.isEmpty() == true) {
+//            binding.etGoalAmount.error = "Target amount should not be empty"
             /*Toast.makeText(
                 this.requireContext(),
                 "Target amount should not be empty",
@@ -195,11 +228,11 @@ class AddGoalFragment : Fragment() {
             ).show()*/
             false
         } else if(!Helper.validateAmount(binding.etGoalAmount.text.toString())) {
-            binding.etGoalAmount.error = "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            binding.etGoalAmount.error = "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
 //            Toast.makeText(this.requireContext(), "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateAmount(binding.etSavedGoalAmount.text.toString())) {
-            binding.etSavedGoalAmount.error = "Saved amount can be empty or should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            binding.etSavedGoalAmount.error = "Saved amount can be empty or should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
 //            Toast.makeText(this.requireContext(), "Saved amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else true

@@ -14,8 +14,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraintBudget"
-    android:layout_marginBottom="16dp"
     android:clickable="true"
+    android:paddingTop="8dp"
     android:focusable="true"
     android:background="?attr/selectableItemBackground"
     android:layout_width="match_parent"
@@ -29,6 +29,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:maxEms="10"
+        android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="@id/constraintBudget"
         app:layout_constraintTop_toTopOf="@id/constraintBudget" />
     <TextView
@@ -49,6 +50,7 @@
         android:textColor="@color/textColor"
         android:text="100000000000000000000"
         android:maxLines="1"
+        android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxEms="10"
         app:layout_constraintEnd_toEndOf="@id/constraintBudget"
@@ -59,6 +61,8 @@
         android:layout_height="wrap_content"
         android:paddingVertical="4dp"
         app:trackThickness="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:trackColor="@color/progressBarAtFirst"
         app:layout_constraintTop_toBottomOf="@id/budgetNameText"
         app:layout_constraintStart_toStartOf="@id/budgetNameText"
@@ -116,6 +120,7 @@
         android:text="Spent"
         android:textColor="@color/textColor"
         android:maxLines="1"
+        app:layout_constraintBottom_toTopOf="@id/budgetDivider"
         app:layout_constraintStart_toStartOf="@id/budgetNameText"
         app:layout_constraintTop_toBottomOf="@id/spentCurrencySymbol" />
     <TextView
@@ -124,8 +129,10 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:text="Remains"
+        android:layout_marginBottom="8dp"
         android:textColor="@color/textColor"
         android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@id/budgetDivider"
         app:layout_constraintEnd_toEndOf="@id/budgetAmountText"
         app:layout_constraintTop_toTopOf="@id/spentText" />
 
@@ -139,4 +146,9 @@
         app:layout_constraintEnd_toEndOf="@+id/budgetProgressBarRecycler"
         app:layout_constraintTop_toTopOf="@+id/budgetProgressBarRecycler" />
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/budgetDivider"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

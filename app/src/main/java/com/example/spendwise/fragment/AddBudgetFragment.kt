@@ -18,6 +18,7 @@ import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddBudgetBinding
 import com.example.spendwise.domain.Budget
+import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.BudgetViewModel
 import com.example.spendwise.viewmodel.CategoryViewModel
@@ -46,15 +47,29 @@ class AddBudgetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentAddBudgetBinding.inflate(inflater, container, false)
         args = AddBudgetFragmentArgs.fromBundle(requireArguments())
-        (activity as MainActivity).supportActionBar?.apply {
+        /*setHasOptionsMenu(true)
+        binding.toolbarAddBudgets.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }*/
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.baseline_close_24)
             title = if(args.isEditBudget) {
                 "Edit Budget"
             } else "Add Budget"
+        }*/
+        binding.toolbarAddBudget.apply {
+            title = if(args.isEditBudget) {
+                "Edit Budget"
+            } else {
+                "Add Budget"
+            }
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
-        binding = FragmentAddBudgetBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -77,7 +92,7 @@ class AddBudgetFragment : Fragment() {
                     if(it != null) {
                         binding.budgetNameEditText.setText(it.budgetName)
                         binding.budgetAmountEditText.setText(it.maxAmount.toString())
-                        binding.budgetPeriodEditText.setText(it.period)
+//                        binding.budgetPeriodEditText.setText(it.period)
                         binding.budgetCategoryEditText.setText(it.category)
                     }
                 })
@@ -93,14 +108,17 @@ class AddBudgetFragment : Fragment() {
 
         categoryViewModel.category.observe(viewLifecycleOwner, Observer { category ->
             if(category != null) {
+                categoryViewModel.queryText = ""
                 binding.budgetCategoryEditText.setText(category.title)
                 categoryViewModel.category.value = null
             }
         })
 
         binding.budgetCategoryEditText.setOnClickListener {
-            recordViewModel.isTempDataSet = true
-            recordViewModel.tempData.value = mapOf("BudgetName" to binding.budgetNameEditText.text.toString(), "Amount" to binding.budgetAmountEditText.text.toString())
+            if(args.isEditBudget) {
+                recordViewModel.isTempDataSet = true
+                recordViewModel.tempData.value = mapOf("BudgetName" to binding.budgetNameEditText.text.toString(), "Amount" to binding.budgetAmountEditText.text.toString())
+            }
             val action = AddBudgetFragmentDirections.actionAddBudgetFragmentToCategoryFragment(RecordType.EXPENSE.value, R.id.addBudgetFragment)
             findNavController().navigate(action)
         }
@@ -114,7 +132,7 @@ class AddBudgetFragment : Fragment() {
         if(validateAllFields()) {
             val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
             Log.e("userId add record", userId.toString())
-            budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), binding.budgetPeriodEditText.text.toString())
+            budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)//binding.budgetPeriodEditText.text.toString())
             budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner, Observer {
                 if(it != null) {
                     if(it) {
@@ -124,7 +142,8 @@ class AddBudgetFragment : Fragment() {
                             userId = userId,
                             budgetName = binding.budgetNameEditText.text.toString(),
                             maxAmount = binding.budgetAmountEditText.text.toString().toFloat(),
-                            period = binding.budgetPeriodEditText.text.toString(),
+//                            period = binding.budgetPeriodEditText.text.toString(),
+                            period = Period.MONTH.value,
                             category = binding.budgetCategoryEditText.text.toString()
                         )
                         moveToPreviousPage()
@@ -144,7 +163,7 @@ class AddBudgetFragment : Fragment() {
                     userId = userId,
                     budgetName = binding.budgetNameEditText.text.toString(),
                     budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
-                    period = binding.budgetPeriodEditText.text.toString(),
+                    period = Period.MONTH.value,//binding.budgetPeriodEditText.text.toString(),
                     category = binding.budgetCategoryEditText.text.toString())
                 /* userId,
                  binding.budgetNameEditText.text.toString(),
@@ -153,7 +172,7 @@ class AddBudgetFragment : Fragment() {
                  binding.budgetCategoryEditText.text.toString())*/
                 moveToPreviousPage()
             } else {
-                budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), binding.budgetPeriodEditText.text.toString())
+                budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)//binding.budgetPeriodEditText.text.toString())
                 budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         if(it) {
@@ -163,7 +182,7 @@ class AddBudgetFragment : Fragment() {
                                 userId = userId,
                                 budgetName = binding.budgetNameEditText.text.toString(),
                                 budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
-                                period = binding.budgetPeriodEditText.text.toString(),
+                                period = Period.MONTH.value, //binding.budgetPeriodEditText.text.toString(),
                                 category = binding.budgetCategoryEditText.text.toString())
                             /* userId,
                              binding.budgetNameEditText.text.toString(),
@@ -192,20 +211,41 @@ class AddBudgetFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
-        return if(binding.budgetNameEditText.text?.isEmpty() == true) {
+        if(binding.budgetNameEditText.text?.isEmpty() == true) {
             binding.budgetNameEditText.error = "Budget name should not be empty"
+        } else {
+            binding.budgetNameEditText.error = null
+        }
+        if(binding.budgetAmountEditText.text?.isEmpty() == true) {
+            binding.budgetAmountEditText.error = "Amount should not be empty"
+        } else {
+            binding.budgetNameEditText.error = null
+        }
+        if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
+            binding.budgetAmountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+        } else {
+            binding.budgetAmountEditText.error = null
+        }
+        if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
+            binding.budgetCategoryEditText.error = "Category should not be empty"
+        } else {
+            binding.budgetCategoryEditText.error = null
+        }
+
+        return if(binding.budgetNameEditText.text?.isEmpty() == true) {
+//            binding.budgetNameEditText.error = "Budget name should not be empty"
 //            Toast.makeText(this.requireContext(), "Budget name should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.budgetAmountEditText.text?.isEmpty() == true) {
-            binding.budgetAmountEditText.error = "Amount should not be empty"
+//            binding.budgetAmountEditText.error = "Amount should not be empty"
 //            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
-            binding.budgetAmountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+//            binding.budgetAmountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
 //            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
-            binding.budgetCategoryEditText.error = "Category should not be empty"
+//            binding.budgetCategoryEditText.error = "Category should not be empty"
 //            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else {

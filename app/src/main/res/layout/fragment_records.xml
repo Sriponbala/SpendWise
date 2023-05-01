@@ -10,223 +10,396 @@
 
 </>-->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.RecordsFragment"
+    android:id="@+id/coordinatorLayoutRecords"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/ScreenBackground"
-    android:orientation="vertical"
-    android:id="@+id/rootRecord">
+    >
 
-    <include layout="@layout/filter_layout"
-        android:id="@+id/filter_layout_recordsFragment"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/recordsConstraint"
-        android:paddingHorizontal="16dp"
-        android:background="@drawable/outline"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/linearIncome"
+        android:layout_height="match_parent"
+        style="@style/ScreenBackground"
+        android:orientation="vertical"
+        android:id="@+id/rootRecord">
+
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/app_bar_records"
+            android:background="?android:attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:theme="@style/Theme.SpendWise.ToolbarStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/toolbar_records"
+                    app:title="Records"
+                    app:titleTextColor="@color/white"
+                    app:navigationIcon="@drawable/back_arrow"
+                    app:navigationIconTint="@color/white"
+                    android:layout_height="match_parent">
+
+                </com.google.android.material.appbar.MaterialToolbar>
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/recordsSearchView"
+                    android:theme="@style/Theme.SpendWise.SearchViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/primaryBlue"
+                    app:searchHintIcon="@null"
+                    app:closeIcon="@drawable/baseline_close_24"
+                    app:queryHint="Search records by title, category"
+                    android:textColorHint="@color/white"
+                    app:iconifiedByDefault="true"/>
+
+                <!--<include
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    layout="@layout/search_view_component"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/new_search_icon"
+                    android:padding="16dp"/>-->
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <include layout="@layout/filter_layout"
+            android:id="@+id/filter_layout_recordsFragment"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recordsConstraint"
+            android:background="@drawable/outline"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:id="@+id/currentMonthIncomeTv"
+                style="@style/HeadingTextStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="50dp"
                 android:text="Income"
-                style="@style/TextStyle"
-                android:layout_margin="8dp"
-                />
+                app:layout_constraintEnd_toEndOf="@+id/incomeAmountTV"
+                app:layout_constraintStart_toStartOf="@+id/incomeAmountTV"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/currentMonthExpenseTv"
+                style="@style/HeadingTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="43dp"
+                android:text="Expense"
+                app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
+                app:layout_constraintEnd_toEndOf="@id/expenseAmountTV"
+                app:layout_constraintStart_toStartOf="@id/expenseAmountTV"
+                app:layout_constraintTop_toTopOf="@id/currentMonthIncomeTv" />
+
+            <TextView
+                android:id="@+id/currentMonthTotalTv"
+                style="@style/HeadingTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/netBalance"
+                app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
+                app:layout_constraintEnd_toEndOf="@+id/totalAmountTV"
+                app:layout_constraintStart_toStartOf="@+id/totalAmountTV"
+                app:layout_constraintTop_toTopOf="@id/currentMonthIncomeTv" />
+
             <TextView
                 android:id="@+id/incomeAmountTV"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="\u20B9 0.0"
-                android:textAlignment="viewEnd"
-                android:textColor="#006400"
-                android:layout_margin="8dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearExpense"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearIncome"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Expense"
                 style="@style/TextStyle"
-                android:layout_margin="8dp"
-                />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="0.00"
+                android:textColor="@color/incomeColour"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@id/expenseAmountTV"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/currentMonthIncomeTv" />
+
             <TextView
                 android:id="@+id/expenseAmountTV"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="\u20B9 0.0"
-                android:textColor="#FF0000"
-                android:textAlignment="viewEnd"
-                android:layout_margin="8dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearTotal"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearExpense"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/netBalance"
                 style="@style/TextStyle"
-                android:layout_margin="8dp"
-                />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="0.00"
+                android:textColor="@color/expenseColour"
+                android:textAlignment="center"
+                app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/totalAmountTV"
+                app:layout_constraintStart_toEndOf="@+id/incomeAmountTV"
+                app:layout_constraintTop_toBottomOf="@+id/currentMonthExpenseTv" />
+
             <TextView
                 android:id="@+id/totalAmountTV"
+                style="@style/TextStyle"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="\u20B9 0.0"
-                android:textAlignment="viewEnd"
+                android:layout_margin="16dp"
+                android:text="0.00"
                 android:textColor="@color/colorPrimary"
-                android:layout_margin="8dp"
-                />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-<!--
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardView"
-        app:cardCornerRadius="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:id="@+id/linearForCardView"
+                android:textAlignment="center"
+                app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/expenseAmountTV"
+                app:layout_constraintTop_toBottomOf="@+id/currentMonthTotalTv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:id="@+id/recordsConstraint"
+                android:paddingHorizontal="16dp"
+                android:background="@drawable/outline"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/linearIncome"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Income"
+                        style="@style/TextStyle"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:id="@+id/incomeAmountTV"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="\u20B9 0.0"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#006400"
+                        android:layout_margin="8dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearExpense"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/linearIncome"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Expense"
+                        style="@style/TextStyle"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:id="@+id/expenseAmountTV"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="\u20B9 0.0"
+                        android:textColor="#FF0000"
+                        android:textAlignment="viewEnd"
+                        android:layout_margin="8dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearTotal"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/linearExpense"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/netBalance"
+                        style="@style/TextStyle"
+                        android:layout_margin="8dp"
+                        />
+                    <TextView
+                        android:id="@+id/totalAmountTV"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="\u20B9 0.0"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_margin="8dp"
+                        />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        -->
+        <!--
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView"
+                app:cardCornerRadius="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/linearForCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    &lt;!&ndash;<LinearLayout
+                        android:id="@+id/linearIncome"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@android:color/holo_green_dark"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Income"
+                            android:padding="8dp"
+                            android:layout_margin="16dp"
+                            android:textColor="@color/white"
+                            />
+                        <TextView
+                            android:id="@+id/incomeAmountTV"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="\u20B9 0.0"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/white"
+                            android:padding="8dp"
+                            android:layout_margin="10dp"
+                            />
+                    </LinearLayout>&ndash;&gt;
+                    &lt;!&ndash;<LinearLayout
+                        android:id="@+id/linearExpense"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@android:color/holo_red_light"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Expense"
+                            android:textColor="@color/white"
+                            android:padding="8dp"
+                            android:layout_margin="10dp"
+                            />
+                        <TextView
+                            android:id="@+id/expenseAmountTV"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="\u20B9 0.0"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/white"
+                            android:padding="8dp"
+                            android:layout_margin="10dp"
+                            />
+                    </LinearLayout>&ndash;&gt;
+        &lt;!&ndash;
+                    <LinearLayout
+                        android:id="@+id/linearTotal"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@android:color/holo_blue_light"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Total"
+                            android:textColor="@color/white"
+                            android:padding="8dp"
+                            android:layout_margin="10dp"
+                            />
+                        <TextView
+                            android:id="@+id/totalAmountTV"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="\u20B9 0.0"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/white"
+                            android:padding="8dp"
+                            android:layout_margin="10dp"
+                            />
+                    </LinearLayout>
+        &ndash;&gt;
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        -->
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            &lt;!&ndash;<LinearLayout
-                android:id="@+id/linearIncome"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:background="@android:color/holo_green_dark"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Income"
-                    android:padding="8dp"
-                    android:layout_margin="16dp"
-                    android:textColor="@color/white"
-                    />
-                <TextView
-                    android:id="@+id/incomeAmountTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="\u20B9 0.0"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/white"
-                    android:padding="8dp"
-                    android:layout_margin="10dp"
-                    />
-            </LinearLayout>&ndash;&gt;
-            &lt;!&ndash;<LinearLayout
-                android:id="@+id/linearExpense"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:background="@android:color/holo_red_light"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Expense"
-                    android:textColor="@color/white"
-                    android:padding="8dp"
-                    android:layout_margin="10dp"
-                    />
-                <TextView
-                    android:id="@+id/expenseAmountTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="\u20B9 0.0"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/white"
-                    android:padding="8dp"
-                    android:layout_margin="10dp"
-                    />
-            </LinearLayout>&ndash;&gt;
-&lt;!&ndash;
+            android:layout_height="match_parent">
             <LinearLayout
-                android:id="@+id/linearTotal"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:background="@android:color/holo_blue_light"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/emptyRecordsList"
+                    android:padding="100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Total"
-                    android:textColor="@color/white"
-                    android:padding="8dp"
-                    android:layout_margin="10dp"
-                    />
-                <TextView
-                    android:id="@+id/totalAmountTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="\u20B9 0.0"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/white"
-                    android:padding="8dp"
-                    android:layout_margin="10dp"
-                    />
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:textSize="25sp"
+                    android:text="No records found"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recordsRecyclerView"
+                    android:splitMotionEvents="false"
+                    android:background="@color/recordPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <include
+                    layout="@layout/blank_view_component"/>
             </LinearLayout>
-&ndash;&gt;
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
--->
+        </androidx.core.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/emptyRecordsList"
-        android:padding="100dp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:textSize="25sp"
-        android:text="No records found"/>
+    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recordsRecyclerView"
-        android:splitMotionEvents="false"
-        android:paddingTop="8dp"
-        android:background="@color/recordPage"
-        android:paddingBottom="16dp"
-        android:paddingHorizontal="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRecordsPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_24"
+        app:layout_anchorGravity="bottom|end"
+        android:layout_gravity="clip_horizontal"
+        app:layout_anchor="@id/rootRecord"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        />
 
-</LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

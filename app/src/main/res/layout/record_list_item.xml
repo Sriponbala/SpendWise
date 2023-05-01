@@ -14,6 +14,7 @@
         android:id="@+id/categoryLogo"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/rounded_background"
         android:padding="6dp"
         android:src="@drawable/piggy_bank"
@@ -44,7 +45,7 @@
         android:id="@+id/amountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxEms="7"
         android:maxLines="1"
@@ -57,15 +58,16 @@
 
     <TextView
         android:id="@+id/noteTextView"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxEms="7"
         android:maxLines="1"
         android:text="Theriyama spend paniten"
-        style="@style/TextStyle"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/dividerRecordItem"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/categoryLogo"
         app:layout_constraintStart_toStartOf="@id/categoryTextView"
         app:layout_constraintTop_toBottomOf="@id/categoryTextView" />
 
@@ -84,12 +86,11 @@
         app:layout_constraintEnd_toEndOf="@+id/amountTextView" />
 
     <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider"
+        android:id="@+id/dividerRecordItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:paddingHorizontal="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/noteTextView" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

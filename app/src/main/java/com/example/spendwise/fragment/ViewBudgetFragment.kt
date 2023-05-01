@@ -1,9 +1,12 @@
 package com.example.spendwise.fragment
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -33,9 +36,9 @@ class ViewBudgetFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+/*    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.alter_record_menu, menu)
-    }
+    }*/
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
@@ -43,10 +46,27 @@ class ViewBudgetFragment : Fragment() {
                 editBudget()
             }
             R.id.delete -> {
-                deleteBudget()
+                val alertMessage = resources.getString(R.string.deleteBudgetAlert)
+                showAlertDialog(alertMessage)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showAlertDialog(alertMessage: String) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_text_view, null)
+        val alertTextView = dialogView.findViewById<TextView>(R.id.alertTextView)
+        alertTextView.text = alertMessage
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("Delete") { _, _ ->
+                deleteBudget()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     override fun onCreateView(
@@ -55,10 +75,19 @@ class ViewBudgetFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentViewBudgetBinding.inflate(inflater, container, false)
-        (activity as MainActivity).supportActionBar?.apply {
+        binding.toolbarViewBudget.apply {
+            setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            setOnMenuItemClickListener {
+                onOptionsItemSelected(it)
+            }
+        }
+
+        /*(activity as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.back_arrow)
-        }
+        }*/
         return binding.root
     }
 

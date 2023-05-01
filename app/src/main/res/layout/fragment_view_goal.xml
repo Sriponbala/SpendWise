@@ -82,12 +82,36 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.ViewGoalFragment"
+    android:orientation="vertical"
+    android:background="@color/recordPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/app_bar_view_goal"
+        android:background="?android:attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar_view_goal"
+            app:title="Goal"
+            app:titleTextColor="@color/white"
+            app:navigationIcon="@drawable/back_arrow"
+            app:menu="@menu/alter_record_menu"
+            app:navigationIconTint="@color/white"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <LinearLayout
         android:id="@+id/linear"
@@ -95,11 +119,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="16dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintViewGoalIcon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/imageViewGoal"
                 android:layout_width="48dp"
@@ -276,4 +300,4 @@
 
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>
