@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -91,7 +92,7 @@ class AddBudgetFragment : Fragment() {
                 budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         binding.budgetNameEditText.setText(it.budgetName)
-                        binding.budgetAmountEditText.setText(it.maxAmount.toString())
+                        binding.budgetAmountEditText.setText(Helper.formatDecimal(it.maxAmount.toBigDecimal()))
 //                        binding.budgetPeriodEditText.setText(it.period)
                         binding.budgetCategoryEditText.setText(it.category)
                     }
@@ -126,6 +127,38 @@ class AddBudgetFragment : Fragment() {
         /*val category = AddRecordFragmentArgs.fromBundle(requireArguments()).category
         binding.categoryEditText.setText(category)*/
 
+        binding.budgetNameEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+                binding.budgetNameTextInputLayout.error = null
+            }
+        }
+        binding.budgetCategoryEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+                binding.budgetCategoryTextInputLayout.error = null
+            }
+        }
+        binding.budgetAmountEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+//                binding.budgetAmountTextInputLayout.error = null
+                if(budgetViewModel.amountError.isNotEmpty()) {
+                    if(binding.budgetAmountEditText.text?.isEmpty() == true) {
+                        binding.budgetAmountTextInputLayout.error = "Amount should not be empty"
+                        budgetViewModel.amountError = "Amount should not be empty"
+                    } else if(Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
+                        binding.budgetAmountTextInputLayout.error = "Amount can not be zero"
+                        budgetViewModel.amountError = "Amount can not be zero"
+                    } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
+                        binding.budgetAmountTextInputLayout.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                        budgetViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                    } else {
+                        binding.budgetAmountTextInputLayout.error = null
+                        budgetViewModel.amountError = ""
+                    }
+                } else {
+                    binding.budgetAmountTextInputLayout.error = null
+                }
+            }
+        }
     }
 
     private fun addBudget() {
@@ -141,7 +174,7 @@ class AddBudgetFragment : Fragment() {
                         budgetViewModel.insertBudget(
                             userId = userId,
                             budgetName = binding.budgetNameEditText.text.toString(),
-                            maxAmount = binding.budgetAmountEditText.text.toString().toFloat(),
+                            maxAmount = binding.budgetAmountEditText.text.toString(),
 //                            period = binding.budgetPeriodEditText.text.toString(),
                             period = Period.MONTH.value,
                             category = binding.budgetCategoryEditText.text.toString()
@@ -162,7 +195,7 @@ class AddBudgetFragment : Fragment() {
                 budgetViewModel.updateBudget(
                     userId = userId,
                     budgetName = binding.budgetNameEditText.text.toString(),
-                    budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
+                    budgetAmount = binding.budgetAmountEditText.text.toString(),
                     period = Period.MONTH.value,//binding.budgetPeriodEditText.text.toString(),
                     category = binding.budgetCategoryEditText.text.toString())
                 /* userId,
@@ -181,7 +214,7 @@ class AddBudgetFragment : Fragment() {
                             budgetViewModel.updateBudget(
                                 userId = userId,
                                 budgetName = binding.budgetNameEditText.text.toString(),
-                                budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
+                                budgetAmount = binding.budgetAmountEditText.text.toString(),
                                 period = Period.MONTH.value, //binding.budgetPeriodEditText.text.toString(),
                                 category = binding.budgetCategoryEditText.text.toString())
                             /* userId,
@@ -212,27 +245,31 @@ class AddBudgetFragment : Fragment() {
 
     private fun validateAllFields(): Boolean {
         if(binding.budgetNameEditText.text?.isEmpty() == true) {
-            binding.budgetNameEditText.error = "Budget name should not be empty"
+            binding.budgetNameTextInputLayout.error = "Budget name should not be empty"
         } else {
-            binding.budgetNameEditText.error = null
+            binding.budgetNameTextInputLayout.error = null
         }
         if(binding.budgetAmountEditText.text?.isEmpty() == true) {
-            binding.budgetAmountEditText.error = "Amount should not be empty"
+            binding.budgetAmountTextInputLayout.error = "Amount should not be empty"
+            budgetViewModel.amountError = "Amount should not be empty"
+        } else if(Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
+//            binding.amountEditText.error = "Amount can not be zero"
+            binding.budgetAmountTextInputLayout.error = "Amount can not be zero"
+            budgetViewModel.amountError = "Amount can not be zero"
+        } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
+            binding.budgetAmountTextInputLayout.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+            budgetViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
         } else {
-            binding.budgetNameEditText.error = null
-        }
-        if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
-            binding.budgetAmountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-        } else {
-            binding.budgetAmountEditText.error = null
+            binding.budgetAmountTextInputLayout.error = null
+            budgetViewModel.amountError = ""
         }
         if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
-            binding.budgetCategoryEditText.error = "Category should not be empty"
+            binding.budgetCategoryTextInputLayout.error = "Category should not be empty"
         } else {
-            binding.budgetCategoryEditText.error = null
+            binding.budgetCategoryTextInputLayout.error = null
         }
 
-        return if(binding.budgetNameEditText.text?.isEmpty() == true) {
+        return if(binding.budgetNameEditText.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
 //            binding.budgetNameEditText.error = "Budget name should not be empty"
 //            Toast.makeText(this.requireContext(), "Budget name should not be empty", Toast.LENGTH_SHORT).show()
             false

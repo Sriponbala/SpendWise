@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="4dp"
+    app:cardCornerRadius="4dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:paddingTop="8dp"
+        android:background="@color/listItemCardColor"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/goalIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/piggy_bank"
+            android:background="@drawable/rounded_background"
+            android:padding="6dp"
+            app:layout_constraintBottom_toTopOf="@id/goalProgressLinear"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/goalNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxEms="7"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@id/desiredDateTextView"
+            app:layout_constraintEnd_toStartOf="@+id/goalLabelTextView"
+            app:layout_constraintStart_toEndOf="@id/goalIcon"
+            app:layout_constraintTop_toTopOf="@id/goalIcon" />
+
+        <TextView
+            android:id="@+id/goalLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="7"
+            android:maxLines="1"
+            android:text="@string/goal_label"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/goalNameTextView" />
+
+        <TextView
+            android:id="@+id/targetAmountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintStart_toEndOf="@id/desiredDateTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/desiredDateTextView" />
+
+        <TextView
+            android:id="@+id/desiredDateTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="7"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@id/goalIcon"
+            app:layout_constraintEnd_toStartOf="@+id/targetAmountTextView"
+            app:layout_constraintStart_toStartOf="@id/goalNameTextView" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/goalProgressLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            app:indicatorColor="@color/progressIndicatorLeisure"
+            app:trackCornerRadius="4dp"
+            app:trackColor="#D9DCD9"
+            app:layout_constraintEnd_toEndOf="@id/goalLabelTextView"
+            app:layout_constraintStart_toStartOf="@id/goalIcon"
+            app:layout_constraintTop_toBottomOf="@id/goalIcon"
+            app:trackThickness="8dp" />
+
+        <TextView
+            android:id="@+id/savedLabelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/goalProgressLinear"
+            android:text="@string/saved_label"
+            android:textStyle="bold"
+            android:textColor="@color/incomeColour"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/dividerGoalItem"/>
+
+        <TextView
+            android:id="@+id/savedGoalAmtTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/incomeColour"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/dividerGoalItem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/savedLabelTextView"
+            app:layout_constraintTop_toBottomOf="@id/goalProgressLinear" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/dividerGoalItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

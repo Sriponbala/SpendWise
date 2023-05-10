@@ -1,9 +1,9 @@
 package com.example.spendwise.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.text.method.Touch.scrollTo
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.BudgetRecyclerViewAdapter
 import com.example.spendwise.databinding.FragmentBudgetBinding
@@ -26,6 +28,7 @@ import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
+import java.math.BigDecimal
 
 class BudgetFragment : Fragment() {
 
@@ -113,7 +116,7 @@ class BudgetFragment : Fragment() {
                     Log.e("Landscape", "budget home onViewCreate in mb obs bud not empty- ${recordViewModel.month.value} - ${recordViewModel.year.value}")
                     binding.thisMonthNoBudgetsTv.visibility = View.GONE
                     binding.thisMonthBudgetsList.visibility = View.VISIBLE
-                    var adapterData = mutableListOf<Pair<Budget, Float>>()
+                    var adapterData = mutableListOf<Pair<Budget, BigDecimal>>()
 
                     /*recordViewModel.allRecords.observe(viewLifecycleOwner, Observer {
                         Log.e("Budget", userId.toString() + " monthly budgets allrecords obs ")
@@ -135,19 +138,19 @@ class BudgetFragment : Fragment() {
                             }
                             if(listOfRecords.isEmpty()) {
                                 Log.e("Budget", "records empty")
-                                val data = mutableListOf<Pair<Budget, Float>>()
+                                val data = mutableListOf<Pair<Budget, BigDecimal>>()
                                 listOfBudgets.forEach {
-                                    data.add(Pair(it, 0f))
+                                    data.add(Pair(it, BigDecimal(0)))
                                 }
                                 adapterData = data
                             } else {
                                 Log.e("Budget", "records not empty")
-                                val data = mutableListOf<Pair<Budget, Float>>()
+                                val data = mutableListOf<Pair<Budget, BigDecimal>>()
                                 listOfBudgets.forEach { budget ->
-                                    var total = 0f
+                                    var total = BigDecimal(0)
                                     listOfRecords.forEach { record ->
                                         if(budget.category == record.category) {
-                                            total += record.amount
+                                            total += (record.amount).toBigDecimal()
                                         }
                                     }
                                     data.add(Pair(budget, total))
@@ -157,7 +160,7 @@ class BudgetFragment : Fragment() {
                         } else {
                             Log.e("Budget", "records - Null")
                             listOfBudgets.forEach {
-                                adapterData.add(Pair(it, 0f))
+                                adapterData.add(Pair(it, BigDecimal(0)))
                             }
                         }
 
@@ -185,11 +188,21 @@ class BudgetFragment : Fragment() {
         restoreScrollPositionViewModel.updateBudgetScrollPosition(binding.rootScrollViewBudget.scrollY)
     }
 
-    private fun setAdapter(adapterData: List<Pair<Budget, Float>>) {
+    private fun setAdapter(adapterData: List<Pair<Budget, BigDecimal>>) {
         val adapter = BudgetRecyclerViewAdapter(adapterData)
         adapter.setTheFragment(this)
+        adapter.onItemClick = {
+            navigationListener.onActionReceived(ViewBudgetFragment(), budget = it)
+        }
         binding.thisMonthBudgetsList.adapter = adapter
-        binding.thisMonthBudgetsList.layoutManager = LinearLayoutManager(this.requireContext())
+        val spanCount = if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            resources.configuration.screenWidthDp >= 600) {
+            binding.thisMonthBudgetsList.setBackgroundColor(resources.getColor(R.color.behindScreen))
+            2
+        } else {
+            1
+        }
+        binding.thisMonthBudgetsList.layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(this.requireContext())
     }
 
     private fun moveToNextFragment(period: Period) {

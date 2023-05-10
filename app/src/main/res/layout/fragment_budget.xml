@@ -30,10 +30,10 @@
         android:layout_width="match_parent"
         style="@style/ScreenBackground"
         android:id="@+id/rootScrollViewBudget"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             style="@style/ScreenBackground"
             android:id="@+id/budgetsRoot">
@@ -42,12 +42,12 @@
                 android:layout_marginBottom="16dp"
                 android:id="@+id/thisMonthCardView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 style="@style/CardViewStyle">
                 <LinearLayout
                     android:id="@+id/thisMonthLinear"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/thisMonthTv"
@@ -55,37 +55,46 @@
                         android:layout_marginVertical="16dp"
                         android:layout_marginStart="16dp"
                         android:layout_height="wrap_content"
-                        android:text="This Month"
+                        android:text="@string/current_month_budgets_label"
                         style="@style/HeadingTextStyle" />
                     <TextView
                         android:id="@+id/thisMonthNoBudgetsTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No budgets found"
+                        android:text="@string/no_budgets_info"
                         android:textSize="14sp"
+                        android:layout_marginHorizontal="40dp"
+                        android:textAlignment="center"
                         android:layout_gravity="center_horizontal"
                         />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:nestedScrollingEnabled="true"
                         android:id="@+id/thisMonthBudgetsList"
                         android:splitMotionEvents="false"
+                        android:overScrollMode="never"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/showMonthlyBudgets"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW MONTHLY BUDGETS"
-                        android:padding="16dp"
+                        android:text="@string/view_monthly_budgets_button"
+                        android:letterSpacing="0"
+                        android:layout_marginStart="8dp"
                         android:textStyle="bold"
                         android:clickable="true"
                         android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
                         android:textColor="@color/colorPrimary"/>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            <include
+                layout="@layout/blank_view_component"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 

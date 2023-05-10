@@ -1,6 +1,7 @@
 package com.example.spendwise.adapter
 
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,14 +17,15 @@ import com.example.spendwise.R
 import com.example.spendwise.domain.Category
 import com.example.spendwise.enums.Month
 import com.google.android.material.divider.MaterialDivider
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class StatisticsAdapter(private val records: List<Pair<Category, Float>>): RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
+class StatisticsAdapter(private val records: List<Pair<Category, BigDecimal>>): RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
 
-    private var total = 0f
-    var onItemClick: ((Pair<Category, Float>) -> Unit)? = null
+    private var total = BigDecimal(0)
+    var onItemClick: ((Pair<Category, BigDecimal>) -> Unit)? = null
 
     init {
         calculateTotal()
@@ -57,7 +59,7 @@ class StatisticsAdapter(private val records: List<Pair<Category, Float>>): Recyc
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val resources = holder.itemView.context.resources
         val record = records[position]
-        if(position == records.lastIndex) {
+        if(position == records.lastIndex || resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             holder.divider.visibility = View.GONE
         } else {
             holder.divider.visibility = View.VISIBLE
@@ -66,7 +68,9 @@ class StatisticsAdapter(private val records: List<Pair<Category, Float>>): Recyc
         val category = record.first
         holder.categoryBgColor.backgroundTintList = ColorStateList.valueOf(resources.getColor(category.bgColor))
         holder.categoryName.text = category.title
-        holder.percentText.text = "${((record.second / total) * 100).toInt()}"
+        holder.percentText.text = "${((record.second / total) * BigDecimal(100)).toInt()}"
+        Log.e("Coroutine", "${((record.second / total) * BigDecimal(100)).toInt()}" +
+                " ${record.second}, $total, ${(record.second / total)}, ${((record.second / total) * BigDecimal(100))}")
         holder.amount.text = Helper.formatNumberToIndianStyle(record.second)
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(record)

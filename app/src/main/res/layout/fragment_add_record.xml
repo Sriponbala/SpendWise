@@ -28,7 +28,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/addRecordScrollView">
@@ -50,7 +50,7 @@
                     android:id="@+id/incomeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Income"
+                    android:text="@string/income_label"
                     android:padding="12dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -61,7 +61,7 @@
                     android:id="@+id/expenseButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expense"
+                    android:text="@string/expense_label"
                     android:padding="12dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -70,6 +70,214 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="@string/amount_label"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/asterisk"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/expenseColour"/>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/amountTextInputLayoutRecord"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginHorizontal="16dp"
+                app:errorEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/amountEditText"
+                    android:drawableEnd="@drawable/baseline_currency_rupee_24"
+                    android:drawableTint="@color/headingTextColor"
+                    android:maxLines="1"
+                    android:maxLength="8"
+                    android:inputType="numberDecimal"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="@string/category"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/asterisk"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/expenseColour"/>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/categoryTextInputLayoutRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:errorEnabled="true"
+                android:layout_marginHorizontal="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/categoryEditText"
+                    android:drawableEnd="@drawable/selection_arrow"
+                    android:drawableTint="@color/headingTextColor"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="@string/date_label"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/asterisk"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center"
+                    android:textColor="@color/expenseColour"/>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dateTextInputLayoutRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:errorEnabled="true"
+                android:layout_marginHorizontal="16dp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/dateEditText"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:inputType="date"
+                    android:drawableEnd="@drawable/date_icon"
+                    android:drawableTint="@color/headingTextColor"
+                    android:maxLines="1"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="@string/title_label"/>
+<!--
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Opt.)"/>
+-->
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/noteTextInputLayoutRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:counterEnabled="true"
+                android:layout_marginHorizontal="16dp"
+                app:counterMaxLength="25"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:maxLines="1"
+                    android:id="@+id/noteEditText"
+                    android:inputType="text"
+                    android:maxLength="25"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    style="@style/HeadingTextStyle"
+                    android:paddingEnd="5dp"
+                    android:text="@string/description_label"/>
+<!--
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(Opt.)"/>
+-->
+            </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginHorizontal="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionTextField"
+                    android:layout_width="match_parent"
+                    android:scrollbars="vertical"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/save_button"
+                android:layout_gravity="center" />
+
+<!--
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
@@ -110,10 +318,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:inputType="numberDecimal"
-                    android:maxLength="12"
                     android:maxLines="1"
                     android:textSize="16sp"
-                    android:hint="Enter Amount"
                     app:layout_constraintBaseline_toBaselineOf="@+id/amountTextView"
                     app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                     app:layout_constraintHorizontal_weight="1"
@@ -154,7 +360,6 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:clickable="true"
-                    android:hint="Select Category"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textSize="16sp"
@@ -200,7 +405,6 @@
                     android:focusableInTouchMode="false"
                     android:clickable="true"
                     android:inputType="date"
-                    android:hint="Select Date"
                     android:maxLines="1"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/dateTextView"
@@ -227,8 +431,7 @@
                     android:layout_marginHorizontal="16dp"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:maxLength="35"
-                    android:hint="Enter Title"
+                    android:maxLength="25"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/noteTextView"
                     app:layout_constraintEnd_toEndOf="@id/constraintLayout"
@@ -278,8 +481,9 @@
                     app:layout_constraintTop_toBottomOf="@id/descriptionTextInputLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+-->
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </LinearLayout>

@@ -17,20 +17,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:theme="@style/Theme.SpendWise.ToolbarStyle"
+            android:layout_width="match_parent"
+            android:id="@+id/toolbar_category"
+            app:title="Select A Category"
+            app:navigationIcon="@drawable/back_arrow"
+            app:navigationIconTint="@color/white"
+            android:layout_height="match_parent"/>
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:theme="@style/Theme.SpendWise.ToolbarStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:id="@+id/toolbar_category"
-                app:title="Select A Category"
-                app:navigationIcon="@drawable/back_arrow"
-                app:navigationIconTint="@color/white"
-                android:layout_height="match_parent"/>
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/categorySearchView"
@@ -46,6 +46,7 @@
                 app:iconifiedByDefault="true"/>
 
         </LinearLayout>
+-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -55,8 +56,8 @@
         android:id="@+id/categoryRecyclerView"
         android:layout_width="match_parent"
         android:splitMotionEvents="false"
-        android:scrollbars="vertical"
-        android:layout_height="wrap_content"/>
+        android:overScrollMode="never"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/emptyCategoriesTextView"
@@ -66,7 +67,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:visibility="gone"
-        android:text="No Categories Found"
+        android:text="@string/no_categories_found_info"
         android:textSize="25sp"/>
 
 </LinearLayout>

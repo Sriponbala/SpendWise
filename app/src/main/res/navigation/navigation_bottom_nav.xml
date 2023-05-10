@@ -31,31 +31,19 @@
     <action
         android:id="@+id/action_homePageFragment_to_budgetFragment"
         app:launchSingleTop="true"
-        app:enterAnim="@anim/fade_in"
-        app:exitAnim="@anim/fade_out"
-        app:popEnterAnim="@anim/fade_in"
         app:destination="@id/budgetFragment"/>
     <action
         android:id="@+id/action_homePageFragment_to_goalsFragment"
         app:launchSingleTop="true"
-        app:enterAnim="@anim/fade_in"
-        app:exitAnim="@anim/fade_out"
-        app:popEnterAnim="@anim/fade_in"
         app:destination="@id/goalsFragment" />
     <action
         android:id="@+id/action_homePageFragment_to_dashBoardFragment"
         app:launchSingleTop="true"
-        app:enterAnim="@anim/fade_in"
-        app:exitAnim="@anim/fade_out"
-        app:popEnterAnim="@anim/fade_in"
         app:destination="@id/dashBoardFragment" />
     <action
         android:id="@+id/action_homePageFragment_to_settingsFragment"
         app:destination="@id/settingsFragment"
-        app:enterAnim="@anim/fade_in"
-        app:exitAnim="@anim/fade_out"
-        app:launchSingleTop="true"
-        app:popEnterAnim="@anim/fade_in" />
+        app:launchSingleTop="true" />
 
 </navigation>
 

@@ -1,6 +1,7 @@
 package com.example.spendwise.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.Touch.scrollTo
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.spendwise.R
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spendwise.Helper
 import com.example.spendwise.activity.MainActivity
@@ -36,6 +38,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -165,14 +168,16 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
                         if(flag) {
                             recordViewModel.dataForPieChart.value?.let { data ->
                                 if(data.isNotEmpty()) {
-                                    binding.emptyRecordsList.visibility = View.GONE
+                                    binding.emptyRecordsList.emptyDataLinearRoot.visibility = View.GONE
                                     binding.emptyScrollView.visibility = View.GONE
                                     binding.pieChart.visibility = View.VISIBLE
                                     binding.statsRecyclerView.visibility = View.VISIBLE
                                     drawPieChart(data)
                                     setStatisticsRecyclerView(data)
                                 } else {
-                                    binding.emptyRecordsList.visibility = View.VISIBLE
+                                    binding.emptyRecordsList.emptyDataLinearRoot.visibility = View.VISIBLE
+                                    binding.emptyRecordsList.emptyDataImage.setImageResource(R.drawable.stats)
+                                    binding.emptyRecordsList.emptyDataText.text = "No Stats Found"
                                     binding.emptyScrollView.visibility = View.VISIBLE
                                     binding.pieChart.visibility = View.GONE
                                     binding.statsRecyclerView.visibility = View.GONE
@@ -204,10 +209,18 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         findNavController().navigate(action)
     }
 
-    private fun setStatisticsRecyclerView(list: List<Pair<Category, Float>>) {
+    private fun setStatisticsRecyclerView(list: List<Pair<Category, BigDecimal>>) {
         val adapter = StatisticsAdapter(list)
         binding.statsRecyclerView.adapter = adapter
-        binding.statsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            resources.configuration.screenWidthDp >= 600) {
+                        binding.statsRecyclerView.setBackgroundColor(resources.getColor(R.color.behindScreen))
+            2
+        } else {
+                        binding.statsRecyclerView.setBackgroundColor(resources.getColor(R.color.recordPage))
+            1
+        }
+        binding.statsRecyclerView.layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(requireContext())
         adapter.onItemClick = {
             recordViewModel.period = Period.MONTH
             recordViewModel.category.value = it.first
@@ -216,13 +229,13 @@ class StatisticsFragment : Fragment(), FilterViewDelegate, OnChartValueSelectedL
         }
     }
 
-    private fun drawPieChart(list: List<Pair<Category, Float>>) {
+    private fun drawPieChart(list: List<Pair<Category, BigDecimal>>) {
 
-        var total = 0f
+        var total = BigDecimal(0)
         val data = ArrayList<PieEntry>()
         val sliceColors = mutableListOf<Int>()
         list.forEach { value ->
-            data.add(PieEntry(value.second, value.first.title))
+            data.add(PieEntry(value.second.toFloat(), value.first.title))
             sliceColors.add(resources.getColor(value.first.bgColor))
             total += value.second
         }

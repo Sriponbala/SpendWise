@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.SearchFragment">
+
+    <com.google.android.material.search.SearchBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>-->
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.RecordsFragment"
+    android:id="@+id/coordinatorLayoutRecords"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/ScreenBackground"
+        android:orientation="vertical"
+        android:id="@+id/rootRecord">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/app_bar_records"
+            android:background="?android:attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/back_arrow"
+                    android:paddingStart="8dp"
+                    android:paddingVertical="16dp"
+                    android:paddingEnd="8dp"/>
+<!--
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:theme="@style/Theme.SpendWise.ToolbarStyle"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/toolbar_records"
+                    app:titleTextColor="@color/white"
+                    app:navigationIcon="@drawable/back_arrow"
+                    app:navigationIconTint="@color/white"
+                    android:layout_height="match_parent">
+
+                </com.google.android.material.appbar.MaterialToolbar>
+-->
+                <include
+                    android:id="@+id/searchComponent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    layout="@layout/search_view_component" />
+               <!-- <androidx.appcompat.widget.SearchView
+                    android:id="@+id/recordsSearchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/primaryBlue"
+                    app:searchHintIcon="@null"
+                    app:closeIcon="@drawable/baseline_close_24"
+                    app:queryHint="Search records by title, category"
+                    android:textColorHint="@color/white"
+                    app:iconifiedByDefault="false"/>-->
+
+                <!--<include
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    layout="@layout/search_view_component"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/new_search_icon"
+                    android:padding="16dp"/>-->
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+<!--
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/emptyRecordsList"
+                    android:padding="100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:textSize="25sp"
+                    android:text="No records found"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recordsRecyclerView"
+                    android:splitMotionEvents="false"
+                    android:background="@color/recordPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+-->
+
+    </LinearLayout>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

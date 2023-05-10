@@ -1,18 +1,11 @@
 package com.example.spendwise.fragment
 
-import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences.Editor
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -21,13 +14,15 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentHomePageBinding
+import com.example.spendwise.domain.Budget
+import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.LogInStatus
 import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.listeners.NavigationListener
 import com.example.spendwise.viewmodel.*
 import com.example.spendwise.viewmodelfactory.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.math.BigDecimal
 
 
 class HomePageFragment : Fragment(), NavigationListener {
@@ -249,7 +244,7 @@ class HomePageFragment : Fragment(), NavigationListener {
     }
 */
 
-    override fun onActionReceived(destination: Fragment, title: RecordType, period: Period) {
+    override fun onActionReceived(destination: Fragment, title: RecordType, period: Period, record: Record?, budget: Pair<Budget, BigDecimal>?) {
         when(destination) {
             is RecordsFragment -> {
                 val action = HomePageFragmentDirections.actionHomePageFragmentToRecordsFragment(selectedCategory = null, hideFilterView = false, hideAmountView = false, hideDescriptionText = true)
@@ -292,6 +287,19 @@ class HomePageFragment : Fragment(), NavigationListener {
             is ViewGoalFragment -> {
                 Log.e("Goal", "Homepage")
                 parentNavController.navigate(R.id.action_homePageFragment_to_viewGoalFragment)
+            }
+            is ViewRecordFragment -> {
+                record?.let {
+                    ViewModelProvider(requireActivity(), RecordViewModelFactory(requireActivity().application))[RecordViewModel::class.java].setSelectedRecord(it)
+                    parentNavController.navigate(R.id.action_homePageFragment_to_viewRecordFragment)
+                }
+
+            }
+            is ViewBudgetFragment -> {
+                budget?.let {
+                    ViewModelProvider(requireActivity(), BudgetViewModelFactory(requireActivity().application))[BudgetViewModel::class.java].setSelectedBudgetItem(it)
+                    parentNavController.navigate(R.id.action_homePageFragment_to_viewBudgetFragment)
+                }
             }
         }
     }

@@ -7,16 +7,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.room.PrimaryKey
+import com.example.spendwise.Helper
 import com.example.spendwise.database.SpendWiseDatabase
-import com.example.spendwise.domain.Budget
 import com.example.spendwise.domain.Goal
 import com.example.spendwise.enums.GoalStatus
-import com.example.spendwise.repository.BudgetRepository
 import com.example.spendwise.repository.GoalRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class GoalViewModel(application: Application): AndroidViewModel(application) {
 
@@ -32,14 +31,16 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
     val goals: LiveData<List<Goal>?>
         get() = _goals
 
-    fun insertGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
-        viewModelScope.launch {
+    var savedAmountError = ""
+    var targetAmountError = ""
 
-                val goal = Goal(userId, goalName, targetAmount).apply {
-                    this.savedAmount = savedAmount
+    fun insertGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = "0.00", goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
+        viewModelScope.launch {
+                val goal = Goal(userId, goalName.trim(), Helper.formatDecimalToThreePlaces(BigDecimal(targetAmount.trim()))).apply {
+                    this.savedAmount = Helper.formatDecimalToThreePlaces(BigDecimal(savedAmount.trim()))
                     this.goalColor = goalColor
                     this.goalIcon = goalIcon
-                    this.desiredDate = desiredDate
+                    this.desiredDate = desiredDate.trim()
                 }
                 repository.insertGoal(goal)
 
@@ -65,18 +66,18 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun updateGoal(userId: Int, goalName: String, targetAmount: Float, savedAmount: Float = 0f, goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "", goalStatus: String = GoalStatus.ACTIVE.value) {
+    fun updateGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = "0.00", goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "", goalStatus: String = GoalStatus.ACTIVE.value) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedGoal: Goal? = null
             val job = launch {
                 _goal.value?.let {
-                    updatedGoal = Goal(userId, goalName, targetAmount).apply {
-                        this.savedAmount = savedAmount
+                    updatedGoal = Goal(userId, goalName.trim(), Helper.formatDecimalToThreePlaces(BigDecimal(targetAmount.trim()))).apply {
+                        this.savedAmount = Helper.formatDecimalToThreePlaces(BigDecimal(savedAmount.trim()))
                         this.goalColor = goalColor
                         this.goalIcon = goalIcon
-                        this.desiredDate = desiredDate
+                        this.desiredDate = desiredDate.trim()
                         this.goalId = it.goalId
-                        this.goalStatus = goalStatus
+                        this.goalStatus = goalStatus.trim()
                     }
                     repository.updateGoal(updatedGoal!!)
                     fetchAllGoals(userId)
@@ -113,9 +114,9 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         _goals.value = null
     }
 
-    fun updateGoalStatus(goalStatus: String) {
+    fun updateGoalStatus() {
         _goal.value?.let {
-            updateGoal(it.userId, it.goalName, it.targetAmount, it.savedAmount, it.goalColor, it.goalIcon, it.desiredDate, GoalStatus.COMPLETED.value)
+            updateGoal(it.userId, it.goalName, it.targetAmount, it.savedAmount, it.goalColor, it.goalIcon, it.desiredDate, GoalStatus.CLOSED.value)
         }
     }
 

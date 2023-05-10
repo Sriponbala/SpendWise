@@ -40,12 +40,17 @@
     <include layout="@layout/filter_layout"
         android:id="@+id/filter_layout_recordsFragment"/>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/emptyScrollView"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+        <include
+            android:id="@+id/emptyRecordsList"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            layout="@layout/empty_data"
+            android:layout_gravity="center"/>
+        <!--<TextView
             android:id="@+id/emptyRecordsList"
             android:padding="100dp"
             android:layout_width="match_parent"
@@ -54,35 +59,39 @@
             android:visibility="gone"
             android:layout_gravity="center"
             android:textSize="25sp"
-            android:text="No Records Found"/>
-    </androidx.core.widget.NestedScrollView>
+            android:text="No Records Found"/>-->
+    </ScrollView>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollViewStats"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:background="@color/recordPage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <com.github.mikephil.charting.charts.PieChart
-                android:nestedScrollingEnabled="true"
-                android:id="@+id/pieChart"
-                android:layout_marginTop="16dp"
+            <LinearLayout
+                android:background="@color/recordPage"
                 android:layout_width="match_parent"
-                android:layout_marginHorizontal="30dp"
-                android:layout_height="250dp" />
-
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.github.mikephil.charting.charts.PieChart
+                    android:nestedScrollingEnabled="true"
+                    android:id="@+id/pieChart"
+                    android:layout_marginVertical="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_height="250dp" />
+            </LinearLayout>
             <!--<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/statsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>-->
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginTop="16dp"
                 android:id="@+id/statsRecyclerView"
                 android:splitMotionEvents="false"
+                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

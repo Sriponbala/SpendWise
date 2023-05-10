@@ -25,7 +25,7 @@ class RecordRepository(private val recordDao: RecordDao) {
     suspend fun getAllUserRecords(userId: Int): List<Record> {
         return withContext(Dispatchers.IO) {
             val list = recordDao.getAllUserRecords(userId)
-            Log.e("Coroutine", userId.toString() + " repo getusers")
+            Log.e("Coroutine", "$userId repo get users")
             list
         }
     }
@@ -47,4 +47,10 @@ class RecordRepository(private val recordDao: RecordDao) {
             recordDao.deleteAllRecords()
         }
     }*/
+
+    suspend fun getAprilRecords(): List<Record> {
+        return withContext(Dispatchers.IO) {
+            recordDao.getAprilRecords()
+        }
+    }
 }

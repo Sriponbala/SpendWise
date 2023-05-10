@@ -13,6 +13,7 @@ import com.example.spendwise.repository.BudgetRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class BudgetViewModel(application: Application): AndroidViewModel(application) {
 
@@ -22,8 +23,8 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
     val budget: LiveData<Budget?>
     get() = _budget
 
-    private val _budgetItem = MutableLiveData<Pair<Budget, Float>?>()
-    val budgetItem: LiveData<Pair<Budget, Float>?>
+    private val _budgetItem = MutableLiveData<Pair<Budget, BigDecimal>?>()
+    val budgetItem: LiveData<Pair<Budget, BigDecimal>?>
         get() = _budgetItem
 
 
@@ -32,6 +33,8 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
     get() = _monthlyBudgets
 
     val budgetCategoryAlreadyExists = MutableLiveData<Boolean>()
+
+    var amountError: String = ""
 
     fun checkIfCategoryAlreadyExists(userId: Int, category: String, period: String) {
         viewModelScope.launch {
@@ -46,10 +49,10 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun insertBudget(userId: Int, budgetName: String, maxAmount: Float, category: String, period: String) {
+    fun insertBudget(userId: Int, budgetName: String, maxAmount: String, category: String, period: String) {
         viewModelScope.launch {
             val job = launch {
-                repository.insertBudget(Budget(userId, budgetName, maxAmount, category, period))
+                repository.insertBudget(Budget(userId, budgetName.trim(), maxAmount.trim(), category.trim(), period.trim()))
             }
         }
     }
@@ -69,7 +72,7 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
     }
 
     // onItemClick of adapter
-    fun setSelectedBudgetItem(budgetItem: Pair<Budget, Float>) {
+    fun setSelectedBudgetItem(budgetItem: Pair<Budget, BigDecimal>) {
         _budget.value = budgetItem.first
         _budgetItem.value = budgetItem
     }
@@ -103,12 +106,12 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
 
 //    val isBudgetUpdated = MutableLiveData<Boolean>()
 
-    fun updateBudget(userId: Int, budgetName: String, budgetAmount: Float, period: String, category: String) {
+    fun updateBudget(userId: Int, budgetName: String, budgetAmount: String, period: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedBudget: Budget? = null
             val job = launch {
                 _budget.value?.let {
-                    updatedBudget = Budget(userId = it.userId, budgetName = budgetName, maxAmount = budgetAmount, category = category, period = period).apply {
+                    updatedBudget = Budget(userId = it.userId, budgetName = budgetName.trim(), maxAmount = budgetAmount.trim(), category = category.trim(), period = period.trim()).apply {
                         budgetId = it.budgetId
                     }
                     repository.updateBudget(updatedBudget!!)
@@ -141,7 +144,7 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
 
 
     var isBudgetUpdated = false
-    fun updateBudgetItemRecordsAmount(amount: Float) {
+    fun updateBudgetItemRecordsAmount(amount: BigDecimal) {
         Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel" )
         _budget.value?.let {
             Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel inside let 1" )

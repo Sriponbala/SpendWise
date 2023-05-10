@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -60,6 +61,12 @@ class SignUpFragment : Fragment() {
         }
         binding.LoginTextView.setOnClickListener {
             it.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+        }
+
+        binding.confirmPasswordTextInputEditText.addTextChangedListener {
+            if(it != null) {
+                binding.confirmPasswordTextInputLayout.error = Helper.validateConfirmPassword(binding.passwordTextInputEditText.text.toString(),binding.confirmPasswordTextInputEditText.text.toString())
+            }
         }
 
     }

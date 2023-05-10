@@ -24,6 +24,148 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+<!--
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:background="@color/primaryBlue"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:theme="@style/Theme.SpendWise.ToolbarStyle"
+                        android:layout_width="match_parent"
+                        android:id="@+id/toolbar_record"
+                        app:title="Records"
+                        app:titleTextColor="@color/white"
+                        app:navigationIcon="@drawable/back_arrow"
+                        app:navigationIconTint="@color/white"
+                        android:layout_height="match_parent"/>
+                    <include
+                        layout="@layout/search_view_component"
+                        android:layout_width="match_parent"
+                        app:layout_collapseMode="pin"
+                        android:layout_margin="16dp"
+                        android:layout_height="wrap_content" />
+
+                    <include layout="@layout/filter_layout"
+                        app:layout_collapseMode="pin"
+                        android:id="@+id/filter_layout_recordsFragment"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/recordsConstraint"
+                        android:background="@drawable/outline"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/currentMonthIncomeTv"
+                            style="@style/HeadingTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_marginEnd="50dp"
+                            android:text="Income"
+                            app:layout_constraintEnd_toEndOf="@+id/incomeAmountTV"
+                            app:layout_constraintStart_toStartOf="@+id/incomeAmountTV"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/currentMonthExpenseTv"
+                            style="@style/HeadingTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:layout_marginEnd="43dp"
+                            android:text="Expense"
+                            app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
+                            app:layout_constraintEnd_toEndOf="@id/expenseAmountTV"
+                            app:layout_constraintStart_toStartOf="@id/expenseAmountTV"
+                            app:layout_constraintTop_toTopOf="@id/currentMonthIncomeTv" />
+
+                        <TextView
+                            android:id="@+id/currentMonthTotalTv"
+                            style="@style/HeadingTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:text="@string/netBalance"
+                            app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
+                            app:layout_constraintEnd_toEndOf="@+id/totalAmountTV"
+                            app:layout_constraintStart_toStartOf="@+id/totalAmountTV"
+                            app:layout_constraintTop_toTopOf="@id/currentMonthIncomeTv" />
+
+                        <TextView
+                            android:id="@+id/incomeAmountTV"
+                            style="@style/TextStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:text="0.00"
+                            android:textColor="@color/incomeColour"
+                            android:textAlignment="center"
+                            app:layout_constraintEnd_toStartOf="@id/expenseAmountTV"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/currentMonthIncomeTv" />
+
+                        <TextView
+                            android:id="@+id/expenseAmountTV"
+                            style="@style/TextStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:text="0.00"
+                            android:textColor="@color/expenseColour"
+                            android:textAlignment="center"
+                            app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/totalAmountTV"
+                            app:layout_constraintStart_toEndOf="@+id/incomeAmountTV"
+                            app:layout_constraintTop_toBottomOf="@+id/currentMonthExpenseTv" />
+
+                        <TextView
+                            android:id="@+id/totalAmountTV"
+                            style="@style/TextStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:text="0.00"
+                            android:textColor="@color/colorPrimary"
+                            android:textAlignment="center"
+                            app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/expenseAmountTV"
+                            app:layout_constraintTop_toBottomOf="@+id/currentMonthTotalTv" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+                &lt;!&ndash;<androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:padding="8dp"
+                    app:layout_collapseMode="pin"
+                    app:queryHint="Search" />&ndash;&gt;
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+-->
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -33,11 +175,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="2"
+                android:id="@+id/toolbar_records_fragment"
                 android:layout_height="match_parent">
+<!--
                 <com.google.android.material.appbar.MaterialToolbar
                     android:theme="@style/Theme.SpendWise.ToolbarStyle"
                     android:layout_width="0dp"
@@ -49,34 +191,95 @@
                     app:navigationIconTint="@color/white"
                     android:layout_height="match_parent">
                 </com.google.android.material.appbar.MaterialToolbar>
+-->
+
+                <ImageButton
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back_arrow"
+                    app:layout_constraintStart_toStartOf="@id/toolbar_records_fragment"
+                    app:layout_constraintTop_toTopOf="@id/toolbar_records_fragment"
+                    android:paddingVertical="16dp"
+                    android:paddingStart="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@color/primaryBlue"
+                    android:foreground="?attr/selectableItemBackground"/>
+                <ImageButton
+                    android:id="@+id/searchViewBackBtn"
+                    android:background="@color/primaryBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back_arrow"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="@id/toolbar_records_fragment"
+                    app:layout_constraintTop_toTopOf="@id/toolbar_records_fragment"
+                    android:paddingVertical="16dp"
+                    android:paddingStart="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    />
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="@id/toolbar_records_fragment"
+                    app:layout_constraintStart_toEndOf="@id/back"
+                    android:text="@string/records_label"
+                    android:paddingVertical="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="32dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
+
+                <ImageView
+                    android:id="@+id/searchIcon"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/new_search_icon"
+                    app:layout_constraintEnd_toEndOf="@id/toolbar_records_fragment"
+                    app:layout_constraintTop_toTopOf="@id/toolbar_records_fragment"
+                    android:padding="16dp"/>
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/recordsSearchView"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:theme="@style/Theme.SpendWise.SearchViewStyle"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:background="@color/primaryBlue"
-                    app:searchHintIcon="@null"
-                    app:closeIcon="@drawable/baseline_close_24"
-                    app:queryHint="Search records by title, category"
                     android:textColorHint="@color/white"
-                    app:iconifiedByDefault="true"/>
-
+                    app:closeIcon="@drawable/baseline_close_24"
+                    app:iconifiedByDefault="true"
+                    app:layout_constraintStart_toEndOf="@id/searchViewBackBtn"
+                    app:layout_constraintEnd_toEndOf="@id/toolbar_records_fragment"
+                    app:layout_constraintTop_toTopOf="@id/toolbar_records_fragment"
+                    app:queryHint="Search records by title, category"
+                    app:searchHintIcon="@null" />
                 <!--<include
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    layout="@layout/search_view_component"/>
+                    layout="@layout/search_view_component"/>-->
+<!--
                 <ImageView
+                    android:id="@+id/searchIcon"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/new_search_icon"
-                    android:padding="16dp"/>-->
-            </LinearLayout>
+                    android:padding="16dp"/>
+-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
-
 
         <include layout="@layout/filter_layout"
             android:id="@+id/filter_layout_recordsFragment"/>
@@ -105,9 +308,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="8dp"
                         android:layout_marginEnd="50dp"
-                        android:text="Income"
+                        android:text="@string/income_label"
                         app:layout_constraintEnd_toEndOf="@+id/incomeAmountTV"
                         app:layout_constraintStart_toStartOf="@+id/incomeAmountTV"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -117,9 +320,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="8dp"
                         android:layout_marginEnd="43dp"
-                        android:text="Expense"
+                        android:text="@string/expense_label"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
                         app:layout_constraintEnd_toEndOf="@id/expenseAmountTV"
                         app:layout_constraintStart_toStartOf="@id/expenseAmountTV"
@@ -130,7 +333,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="20dp"
                         android:text="@string/netBalance"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
                         app:layout_constraintEnd_toEndOf="@+id/totalAmountTV"
@@ -140,10 +345,20 @@
                     <TextView
                         android:id="@+id/incomeAmountTV"
                         style="@style/TextStyle"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="8dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:text="@string/no_data_value"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/incomeColour"
                         android:textAlignment="center"
                         app:layout_constraintEnd_toStartOf="@id/expenseAmountTV"
@@ -154,10 +369,20 @@
                     <TextView
                         android:id="@+id/expenseAmountTV"
                         style="@style/TextStyle"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="8dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:text="@string/no_data_value"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/expenseColour"
                         android:textAlignment="center"
                         app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
@@ -169,10 +394,20 @@
                     <TextView
                         android:id="@+id/totalAmountTV"
                         style="@style/TextStyle"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="8dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:text="@string/no_data_value"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/colorPrimary"
                         android:textAlignment="center"
                         app:layout_constraintBaseline_toBaselineOf="@id/incomeAmountTV"
@@ -182,6 +417,73 @@
                         app:layout_constraintTop_toBottomOf="@+id/currentMonthTotalTv" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/recordsLinearIncomeExpense"
+                    android:background="@drawable/outline"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/currentMonthIncomeExpenseTvLinear"
+                        style="@style/HeadingTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:layout_marginEnd="50dp"
+                        android:text="@string/income_label"
+                        app:layout_constraintEnd_toEndOf="@+id/incomeAmountTV"
+                        app:layout_constraintStart_toStartOf="@+id/incomeAmountTV"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/incomeExpenseAmountTVLinear"
+                        style="@style/TextStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:gravity="center"
+                        android:ellipsize="end"
+                        android:textColor="@color/incomeColour"
+                        android:textAlignment="viewEnd"
+                        app:layout_constraintEnd_toStartOf="@id/expenseAmountTV"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/currentMonthIncomeTv"
+                        tools:ignore="RtlCompat" />
+                </LinearLayout>
+
+
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_gravity="center">
+                                    <include
+                                        android:id="@+id/emptyRecordsList"
+                                        android:layout_height="match_parent"
+                                        android:layout_width="match_parent"
+                                        layout="@layout/empty_data"/>
+                                </LinearLayout>
+                -->
+
+                <ScrollView
+                    android:id="@+id/scrollViewEmptyDataRecords"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <include
+                        android:id="@+id/emptyRecordsList"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        layout="@layout/empty_data"
+                        android:layout_gravity="center"/>
+                </ScrollView>
 
                 <!--
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -369,6 +671,7 @@
                     </com.google.android.material.card.MaterialCardView>
                 -->
 
+<!--
                 <TextView
                     android:id="@+id/emptyRecordsList"
                     android:padding="100dp"
@@ -380,13 +683,16 @@
                     android:visibility="gone"
                     android:textSize="25sp"
                     android:text="No records found"/>
+-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recordsRecyclerView"
                     android:splitMotionEvents="false"
-                    android:background="@color/recordPage"
+                    android:paddingVertical="4dp"
+                    android:overScrollMode="never"
+                    android:background="@color/behindScreen"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"/>
                 <include
                     layout="@layout/blank_view_component"/>
 

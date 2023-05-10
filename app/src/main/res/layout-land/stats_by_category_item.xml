@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/statsByCategoryRv"
+    app:cardUseCompatPadding="true"
+    android:elevation="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_margin="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="4dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/listItemCardColor"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/percentLinear"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/rounded_corners_rectangle"
+            android:backgroundTint="@color/tertiary_container"
+            app:layout_constraintBottom_toTopOf="@id/statsDivider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/percentText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                style="@style/TextStyle"
+                android:textAlignment="center"
+                android:maxLength="3"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/percentSymbol"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginVertical="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="@string/percentage_symbol"
+                android:textColor="@color/white"
+                style="@style/TextStyle"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/categoryName"
+            style="@style/TextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/percentLinear"
+            app:layout_constraintEnd_toStartOf="@id/currencySymbol"
+            app:layout_constraintStart_toEndOf="@id/percentLinear"
+            app:layout_constraintTop_toTopOf="@id/percentLinear" />
+
+        <TextView
+            android:id="@+id/currencySymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginEnd="1.25dp"
+            android:text="@string/rupee_symbol"
+            android:textAlignment="viewEnd"
+            style="@style/TextStyle"
+            app:layout_constraintStart_toEndOf="@id/categoryName"
+            app:layout_constraintEnd_toStartOf="@id/amountStats"
+            app:layout_constraintTop_toTopOf="@id/categoryName"/>
+        <TextView
+            android:layout_marginHorizontal="2dp"
+            android:id="@+id/amountStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            style="@style/TextStyle"
+            android:maxEms="14"
+            android:ellipsize="end"
+            android:textAlignment="viewEnd"
+            android:maxLines="1"
+            android:layout_marginEnd="16dp"
+            android:paddingTop="1.25dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/categoryName"
+            app:layout_constraintStart_toEndOf="@id/currencySymbol"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/currencySymbol"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/statsDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="16dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

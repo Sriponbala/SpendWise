@@ -8,14 +8,17 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/ScreenBackground"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp">
+        app:cardCornerRadius="4dp"
+        >
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/newSearchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:iconifiedByDefault="false"
             app:queryHint="Search category here..."
+            style="@style/ScreenBackground"
             app:queryBackground="@android:color/transparent"
             />
     </com.google.android.material.card.MaterialCardView>

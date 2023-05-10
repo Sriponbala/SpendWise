@@ -1,19 +1,18 @@
 package com.example.spendwise.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
-import android.text.method.Touch.scrollTo
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spendwise.DataBinderMapperImpl
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.GoalAdapter
@@ -64,7 +63,7 @@ class GoalsFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    restoreScrollPositionViewModel.scrollPositionGoals = (binding.goalsRecyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    restoreScrollPositionViewModel.scrollPositionGoals = (binding.goalsRecyclerView.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
                 }
             }
         })
@@ -73,10 +72,12 @@ class GoalsFragment : Fragment() {
             if(it != null) {
                 if(it.isNotEmpty()) {
                     setAdapter(it)
-                    binding.emptyGoalsTextView.visibility = View.GONE
+                    binding.scrollViewEmptyDataGoals.visibility = View.GONE
                     binding.goalsRecyclerView.visibility = View.VISIBLE
                 } else {
-                    binding.emptyGoalsTextView.visibility = View.VISIBLE
+                    binding.scrollViewEmptyDataGoals.visibility = View.VISIBLE
+                    binding.noData.emptyGoals.emptyDataImage.setImageResource(R.drawable.goal)
+                    binding.noData.emptyGoals.emptyDataText.text = "No Goals Found\nClick (+) To Add Goal"
                     binding.goalsRecyclerView.visibility = View.GONE
                 }
             }
@@ -91,8 +92,16 @@ class GoalsFragment : Fragment() {
             navigationListener.onActionReceived(destination = ViewGoalFragment())
         }
         binding.goalsRecyclerView.adapter = adapter
-        binding.goalsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        (binding.goalsRecyclerView.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionGoals)
+        val spanCount = if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            resources.configuration.screenWidthDp >= 600) {
+            binding.goalsRecyclerView.setBackgroundColor(resources.getColor(R.color.behindScreen))
+            2
+        } else {
+            binding.goalsRecyclerView.setBackgroundColor(resources.getColor(R.color.recordPage))
+            1
+        }
+        binding.goalsRecyclerView.layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(requireContext())
+        (binding.goalsRecyclerView.layoutManager as GridLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionGoals)
     }
 
     override fun onResume() {

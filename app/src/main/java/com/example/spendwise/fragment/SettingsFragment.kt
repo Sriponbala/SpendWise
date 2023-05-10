@@ -12,12 +12,8 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.spendwise.DataBinderMapperImpl
 import com.example.spendwise.R
-import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.SettingsRecyclerViewAdapter
-import com.example.spendwise.databinding.FragmentDashboardBinding
 import com.example.spendwise.databinding.FragmentSettingsBinding
 import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType

@@ -3,6 +3,7 @@ package com.example.spendwise.adapter
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +34,9 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
 
     private lateinit var colorStateList: ColorStateList
     var onItemClick: ((Record) -> Unit)? = null
+    var onItemClickRecordsFragment: ((Record, Int) -> Unit)? = null
     private lateinit var fragment: Fragment
+    private val calendar = Calendar.getInstance()
 
     init {
         Log.e("UserID", "record adapter " + records.toString())
@@ -43,17 +47,18 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
         val category: TextView = itemView.findViewById(R.id.categoryTextView)
         val amount: TextView = itemView.findViewById(R.id.amountTextView)
         val date: TextView = itemView.findViewById(R.id.dateTextView)
+//        val card: CardView = itemView.findViewById(R.id.recordCardView)
         val divider: MaterialDivider = itemView.findViewById(R.id.dividerRecordItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.record_list_item, parent, false)
-        if (fragment is DashboardFragment) {
+        /*if (fragment is DashboardFragment) {
             view.isClickable = false
             view.isFocusable = false
             view.foreground = null
-        }
+        }*/
         return ViewHolder(view)
     }
 
@@ -64,7 +69,15 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val resources = holder.itemView.context.resources
-        if(position == records.lastIndex) {
+        /*if(position == records.lastIndex) {
+            holder.divider.visibility = View.GONE
+        } else {
+            holder.divider.visibility = View.VISIBLE
+        }*/
+        if(records.lastIndex == position || resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            /*val marginLayoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
+            marginLayoutParams.bottomMargin = 64
+            holder.itemView.layoutParams = marginLayoutParams*/
             holder.divider.visibility = View.GONE
         } else {
             holder.divider.visibility = View.VISIBLE
@@ -85,22 +98,33 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
         } else if (record.type == RecordType.INCOME.value) {
             holder.amount.setTextColor(resources.getColor(R.color.incomeColour))
         }
-        holder.amount.text = "$rupeeSymbol ${Helper.formatNumberToIndianStyle(record.amount)}"
+        holder.amount.text = "$rupeeSymbol ${Helper.formatNumberToIndianStyle((record.amount).toBigDecimal())}"
         holder.category.text = record.category
-        holder.title.text = record.note
-        category?.logo?.let { holder.categoryLogo.setImageResource(it) }
+        if(record.note.isEmpty()) {
+            holder.title.visibility = View.GONE
+        } else {
+            holder.title.visibility = View.VISIBLE
+            holder.title.text = record.note
+        }
+        category?.logo?.let { holder.categoryLogo.setImageResource(it)
+        holder.categoryLogo.setColorFilter(resources.getColor(R.color.logoColor), PorterDuff.Mode.SRC_ATOP)
+        }
         category?.bgColor?.let {
             Log.e("Color", "$it")
             colorStateList = ColorStateList.valueOf(resources.getColor(it))//ContextCompat.getColorStateList(holder.itemView.context, R.color.background_tint)!!
             Log.e("Color", colorStateList.toString())
             holder.categoryLogo.backgroundTintList = colorStateList
         }
-        val date = parseDate(record.date)
-        val monthName = Month.values()[date?.monthValue?.minus(1)!!].value
-        val monthYear = "$monthName ${date.dayOfMonth}"
+//        val date = parseDate(Helper.formatDate(record.date))
+        calendar.time = record.date
+        val monthName = Month.values()[calendar.get(Calendar.MONTH)].value//Month.values()[date?.monthValue?.minus(1)!!].value
+        val monthYear = "$monthName ${calendar.get(Calendar.DAY_OF_MONTH)}"//"$monthName ${date.dayOfMonth}"
         holder.date.text = monthYear
+//        val date = record.date
+
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(records[position])
+            onItemClickRecordsFragment?.invoke(records[position], position)
         }
     }
 

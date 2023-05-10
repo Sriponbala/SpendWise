@@ -61,6 +61,10 @@
         <item name="android:background">@color/cardBehindScreenDark</item>
     </style>
 
+    <style name="ExtraViewBackground">
+        <item name="android:background">@color/cardBehindScreenDark</item>
+    </style>
+
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom_sheet</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom_sheet</item>

@@ -1,5 +1,7 @@
 package com.example.spendwise.fragment
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -10,12 +12,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spendwise.Categories
 import com.example.spendwise.Helper
@@ -32,13 +33,11 @@ import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.color.MaterialColors
+import java.math.BigDecimal
 
 class DashboardFragment : Fragment() {
 
@@ -145,9 +144,13 @@ class DashboardFragment : Fragment() {
                     Log.e("Record", "filtered rec obs " + i.toString() )
                 }
                 if(it.isEmpty()) {
-                    binding.currentMonthIncomeText.text = Helper.formatNumberToIndianStyle(0f)
-                    binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
-                    binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
+                    binding.currentMonthIncomeText.text = "--"//Helper.formatNumberToIndianStyle(0f)
+                    binding.currentMonthExpenseText.text = "--"//Helper.formatNumberToIndianStyle(0f)
+                    binding.currentMonthTotalText.text = "--"//Helper.formatNumberToIndianStyle(0f)
+//                    binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
+                    binding.incomeAmount.visibility = View.GONE
+                    binding.expenseAmount.visibility = View.GONE
+//                    binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} ${Helper.formatNumberToIndianStyle(0f)}"
                     binding.recordsOverviewNoRecords.visibility = View.VISIBLE
                     binding.noIncomeTv.visibility = View.VISIBLE
                     binding.noExpenseTv.visibility = View.VISIBLE
@@ -156,19 +159,41 @@ class DashboardFragment : Fragment() {
                     adapter = RecordRecyclerViewAdapter(it, Categories.categoryList)
                     adapter.setTheFragment(this)
                     binding.recordsOverViewList.adapter = adapter
-                    val layoutManager = LinearLayoutManager(this.context)
+                    val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                        resources.configuration.screenWidthDp >= 600) {
+//                        binding.recordsOverViewList.setBackgroundColor(resources.getColor(R.color.behindScreen))
+                        2
+                    } else {
+//                        binding.recordsOverViewList.setBackgroundColor(resources.getColor(R.color.recordPage))
+                        1
+                    }
+                    val layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(this.context)
                     binding.recordsOverViewList.layoutManager = layoutManager
                 } else {
                     binding.recordsOverviewNoRecords.visibility = View.GONE
+                    binding.incomeAmount.visibility = View.VISIBLE
+                    binding.expenseAmount.visibility = View.VISIBLE
                     recordViewModel.getIncomeOfTheMonth()
                     recordViewModel.getExpenseOfTheMonth()
                     recordViewModel.getTotalBalanceOfTheMonth()
                     binding.recordsOverViewList.visibility = View.VISIBLE
                     adapter = RecordRecyclerViewAdapter(it.takeLast(4).reversed(), Categories.categoryList)
                     adapter.setTheFragment(this)
+                    val spanCount = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                        resources.configuration.screenWidthDp >= 600) {
+//                        binding.recordsOverViewList.setBackgroundColor(resources.getColor(R.color.behindScreen))
+                        2
+                    } else {
+//                        binding.recordsOverViewList.setBackgroundColor(resources.getColor(R.color.recordPage))
+                        1
+                    }
                     binding.recordsOverViewList.adapter = adapter
-                    val layoutManager = LinearLayoutManager(this.context)
+                    val layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(this.context)
                     binding.recordsOverViewList.layoutManager = layoutManager
+                    adapter.onItemClick = { record ->
+                        Log.e("Coroutine", "selected record dashboard $record")
+                        navigationListener.onActionReceived(ViewRecordFragment(), record = record)
+                    }
                     recordViewModel.getDataTransformed(it, RecordType.INCOME)
                     /*recordViewModel.incomeStatsDone.observe(viewLifecycleOwner, Observer { incomeDone ->
                         if(incomeDone != null) {
@@ -270,68 +295,114 @@ class DashboardFragment : Fragment() {
                 Log.e("Income", it.toString())
                 val amt = Helper.formatNumberToIndianStyle(it)
                 Log.e("Income", amt.toString())
-                binding.currentMonthIncomeText.text = "$amt"
-                binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
+                //Helper.adjustFontSizeToTextView(binding.currentMonthIncomeText, "$amt")
+                if(amt == "0.00") {
+                    binding.incomeAmount.visibility = View.GONE
+                    binding.currentMonthIncomeText.text = "--"
+                } else {
+                    binding.incomeAmount.visibility = View.VISIBLE
+                    binding.incomeAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
+                    binding.currentMonthIncomeText.text = "$amt"
+                }
+
             }
         })
         recordViewModel.expenseOfTheMonth.observe(viewLifecycleOwner, Observer {
             if(it != null) {
                 val amt = Helper.formatNumberToIndianStyle(it)
-                binding.currentMonthExpenseText.text = "$amt"
-                binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
+                if(amt == "0.00") {
+                    binding.expenseAmount.visibility = View.GONE
+                    binding.currentMonthExpenseText.text = "--"
+                } else {
+                    binding.expenseAmount.visibility = View.VISIBLE
+                    binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
+                    binding.currentMonthExpenseText.text = "$amt"
+                }
+//                binding.expenseAmount.text = "${resources.getString(R.string.rupee_symbol)} $amt"
             }
         })
         recordViewModel.totalBalanceOfTheMonth.observe(viewLifecycleOwner, Observer {
             if(it != null) {
                 val amt = Helper.formatNumberToIndianStyle(it)
+                Log.e("Income", "net balance" + amt.toString())
                 binding.currentMonthTotalText.text = "$amt"
               //  binding.totalAmountTV.text = "${resources.getString(R.string.rupee_symbol)} $it"
             }
         })
 
+        binding.currentMonthTotalText.setOnClickListener {
+            if(it != null && binding.currentMonthTotalText.text.toString().isNotEmpty()) {
+                if(binding.currentMonthTotalText.text.toString() == "--") {
+                    showDialog("Net Balance", binding.currentMonthTotalText.text.toString())
+                } else {
+                    showDialog("Net Balance", "₹ ${binding.currentMonthTotalText.text.toString()}")
+                }
+            }
+        }
+
+        binding.currentMonthExpenseText.setOnClickListener {
+            if(it != null && binding.currentMonthExpenseText.text.toString().isNotEmpty()) {
+                if(binding.currentMonthExpenseText.text.toString() == "--") {
+                    showDialog("Expense", binding.currentMonthExpenseText.text.toString())
+                } else {
+                    showDialog("Expense", "₹ ${binding.currentMonthExpenseText.text.toString()}")
+                }
+            }
+        }
+
+        binding.currentMonthIncomeText.setOnClickListener {
+            if(it != null && binding.currentMonthIncomeText.text.toString().isNotEmpty()) {
+                if(binding.currentMonthIncomeText.text.toString() == "--") {
+                    showDialog("Income", binding.currentMonthIncomeText.text.toString())
+                } else {
+                    showDialog("Income", "₹ ${binding.currentMonthIncomeText.text.toString()}")
+                }
+            }
+        }
     }
 
-    private fun drawPieChart(recordType: RecordType, list: List<Pair<Category, Float>>, pieChart: PieChart) {
-
-        var total = 0f
-        val data = ArrayList<PieEntry>()
-        val sliceColors = mutableListOf<Int>()
-        list.forEach { value ->
-            data.add(PieEntry(value.second, value.first.title))
-            sliceColors.add(resources.getColor(value.first.bgColor))
-            total += value.second
-        }
-
-        val pieDataSet = PieDataSet(data, "List")
-
-        pieDataSet.colors = sliceColors
-        pieDataSet.valueTextSize = 1f
-        pieDataSet.valueTextColor = Color.BLACK
-        pieDataSet.setDrawValues(true)
-
-        val pieData = PieData(pieDataSet)
-
-        pieChart.setDrawEntryLabels(false)
-        pieChart.isHighlightPerTapEnabled = false
-        pieChart.centerText = """${recordType.value}
-            |₹ ${Helper.formatNumberToIndianStyle(total)}
-        """.trimMargin()
-        val centerOfChartColor = view?.let { MaterialColors.getColor(it, com.google.android.material.R.attr.colorTertiaryContainer) }
-        if (centerOfChartColor != null) {
-            pieChart.setHoleColor(centerOfChartColor)
-        }
-        pieChart.setCenterTextColor(resources.getColor(R.color.textColor))
+    private fun drawPieChart(recordType: RecordType, list: List<Pair<Category, BigDecimal>>, pieChart: PieChart) {
+        try {
+            var total = BigDecimal(0)
+            val data = ArrayList<PieEntry>()
+            val sliceColors = mutableListOf<Int>()
+            list.forEach { value ->
+                data.add(PieEntry(value.second.toFloat(), value.first.title))
+                sliceColors.add(resources.getColor(value.first.bgColor))
+                total += value.second
+            }
+            val pieDataSet = PieDataSet(data, "List")
+            pieDataSet.colors = sliceColors
+            pieDataSet.valueTextSize = 1f
+            pieDataSet.valueTextColor = Color.BLACK
+            pieDataSet.setDrawValues(true)
+            val pieData = PieData(pieDataSet)
+            pieChart.setDrawEntryLabels(false)
+            pieChart.isHighlightPerTapEnabled = false
+            /*pieChart.centerText = """${recordType.value}
+                |₹ ${Helper.formatNumberToIndianStyle(total)}
+            """.trimMargin()*/
+            pieChart.centerText = """${recordType.value}""".trimMargin()
+            val centerOfChartColor = view?.let { MaterialColors.getColor(it, com.google.android.material.R.attr.colorTertiaryContainer) }
+            if (centerOfChartColor != null) {
+                pieChart.setHoleColor(centerOfChartColor)
+            }
+            pieChart.setCenterTextColor(resources.getColor(R.color.textColor))
 //        pieChart.setOnChartValueSelectedListener(null)
 //        binding.pieChart.description.textAlign = Paint.Align.RIGHT
-        pieChart.data = pieData
-        pieChart.description.text = ""
+            pieChart.data = pieData
+            pieChart.description.text = ""
 //        binding.pieChart.description.textSize = 25f
 //        pieChart.centerText = recordType
-        pieChart.holeRadius = 60f
-        pieChart.transparentCircleRadius = 0f
+            pieChart.holeRadius = 60f
+            pieChart.transparentCircleRadius = 0f
 //        pieChart.animateY(1000)
-        pieChart.legend.isEnabled = false
-        pieChart.invalidate()
+            pieChart.legend.isEnabled = false
+            pieChart.invalidate()
+        } catch (exception: Exception) {
+            Log.e("Error", "nep: ${exception.localizedMessage}")
+        }
+
     }
 
     override fun onPause() {
@@ -354,5 +425,17 @@ class DashboardFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         Log.e("Scroll", "onDetach")
+    }
+
+    @SuppressLint("MissingInflatedId")
+    private fun showDialog(title: String, amount: String) {
+       // val dialogView = LayoutInflater.from(context).inflate(R.layout.alert_text_view, null)
+       // val alertTextView = dialogView.findViewById<TextView>(R.id.alertTextView)
+        val dialog = AlertDialog.Builder(context).setTitle(title).setMessage(amount)
+            .setPositiveButton("Close", null)
+            .setNegativeButton("", null)
+            .create()
+
+        dialog.show()
     }
 }

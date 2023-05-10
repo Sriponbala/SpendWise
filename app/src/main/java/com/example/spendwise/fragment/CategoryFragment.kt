@@ -40,14 +40,10 @@ class CategoryFragment : Fragment() {
     private val categoryViewModel: CategoryViewModel by activityViewModels()
     private lateinit var restoreScrollPositionViewModel: RestoreScrollPositionViewModel
     private lateinit var adapter: CategoryRecyclerViewAdapter
-    private lateinit var searchView: SearchView
-    private lateinit var searchItem: MenuItem
-//    private val recordView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(savedInstanceState == null) {
-           // categoryViewModel = CategoryViewModel()
             categoryViewModel.also{
                 Log.e("Search", it.toString())
                 Log.e("Category", it.toString())
@@ -63,17 +59,8 @@ class CategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        /*(activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.back_arrow)
-        }*/
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
         val args = CategoryFragmentArgs.fromBundle(requireArguments())
-
-//        binding.toolbarCategory.inflateMenu(R.menu.search_menu)
-        Log.e("Category", "above seacrh item")
-       // searchItem = binding.toolbarCategory.menu.findItem(R.id.action_search)
-        //searchView = searchItem?.actionView as SearchView
 
         if(savedInstanceState == null) {
             /*categoryViewModel.queryText = ""
@@ -87,26 +74,26 @@ class CategoryFragment : Fragment() {
         Log.e("Category", "Below search view")
 
        // searchView.queryHint = "Search Categories"
-        Log.e("Category", "query text : ${categoryViewModel.queryText}")
+        /*Log.e("Category", "query text : ${categoryViewModel.queryText}")
         if(categoryViewModel.queryText.isNotEmpty()) {
             binding.categorySearchView.isIconified = false
             binding.categorySearchView.onActionViewExpanded()
             binding.categorySearchView.setQuery(categoryViewModel.queryText, false)
             binding.categorySearchView.isFocusable = true
-            /*Log.e("Category", "query text not empty : ${categoryViewModel.queryText}")
+            *//*Log.e("Category", "query text not empty : ${categoryViewModel.queryText}")
             searchView.isIconified = false
             searchItem.expandActionView()
             searchView.setQuery(categoryViewModel.queryText.also {
                 Log.e("Category", "inside query text in searchview.setQuery: $it")
             }, false)
-            searchView.isFocusable = true*/
+            searchView.isFocusable = true*//*
             categoryViewModel.searchedList.value = categoryViewModel.filteredCategoryList.value?.filter {
                 Log.e("Category", "inside filtered category list above lowercase")
                 it.title.lowercase().contains(categoryViewModel.queryText)//.lowercase()) //.lowercase add pananum
             }
 //            filterCategories(categoryViewModel.queryText)
             Log.e("Category", categoryViewModel.searchedList.value.toString())
-        } /*else {
+        }*/ /*else {
             Log.e("Category", "query text empty : ${categoryViewModel.queryText}")
             searchView.isIconified = true
             searchItem.collapseActionView()
@@ -115,7 +102,7 @@ class CategoryFragment : Fragment() {
         }*/
 //        searchView.setIconifiedByDefault(true)
 
-        binding.categorySearchView.setOnCloseListener {
+        /*binding.categorySearchView.setOnCloseListener {
             Log.e("Records search", "inside setOn close listener")
             categoryViewModel.queryText = ""
             binding.categorySearchView.clearFocus()
@@ -126,7 +113,7 @@ class CategoryFragment : Fragment() {
                 Log.e("Records search", "filtered rec list - $it")
             }
             true
-        }
+        }*/
 
         /*searchView.setOnCloseListener {
             Log.e("Category", "inside setOn close listener")
@@ -138,7 +125,7 @@ class CategoryFragment : Fragment() {
             true
         }*/
 
-        binding.categorySearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        /*binding.categorySearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.e("Category", "onQueryTextListener")
                 return false
@@ -149,7 +136,7 @@ class CategoryFragment : Fragment() {
                 filterCategories(newText)
                 return false
             }
-        })
+        })*/
         binding.toolbarCategory.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -308,16 +295,16 @@ class CategoryFragment : Fragment() {
             Log.e("Search", "saved instance bundle not null")
             categoryViewModel.filteredCategoryList.value = categoryList.filter{category ->
                 category.recordType.value == recordType }
-            categoryViewModel.filteredCategoryList.observe(viewLifecycleOwner, Observer{
+            /*categoryViewModel.filteredCategoryList.observe(viewLifecycleOwner, Observer{
                 Log.e("Search", "filteredcatlist 1 $it")
                 if(it != null) {
                     Log.e("Search", "filteredcatlist 2 $it")
-                    /*categoryViewModel.filteredCategoryList.value = categoryList.filter{category ->
-                        category.recordType.value == recordType }*/
+                    *//*categoryViewModel.filteredCategoryList.value = categoryList.filter{category ->
+                        category.recordType.value == recordType }*//*
                     categoryViewModel.searchedList.value = it
                 }
                 Log.e("Search", "filteredcatlist 3")
-            })
+            })*/
         } else Log.e("Search", "saved instance bundle null")
 
 //        categoryViewModel.filteredCategoryList.observe(viewLifecycleOwner, Observer{
@@ -333,7 +320,7 @@ class CategoryFragment : Fragment() {
 
      //   val categories = categoryList.filter { it.recordType.value == recordType }
 
-        categoryViewModel.searchedList.observe(viewLifecycleOwner, Observer {
+        categoryViewModel.filteredCategoryList.observe(viewLifecycleOwner, Observer {
             Log.e("Search", "filteredcatlist 4 $it")
             if(it != null) {
                 if(it.isNotEmpty()) {
@@ -346,13 +333,12 @@ class CategoryFragment : Fragment() {
                     (binding.categoryRecyclerView.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionCategory)
                     adapter.onItemClick = { category ->
                         categoryViewModel.category.value = category
-                        binding.categorySearchView.isIconified = true
+                        /*binding.categorySearchView.isIconified = true
                         binding.categorySearchView.isFocusable = false
                         categoryViewModel.queryText = ""
                         binding.categorySearchView.setQuery("", false)
                         binding.categorySearchView.clearFocus()
-                        binding.categorySearchView.onActionViewCollapsed()
-//                        searchItem.collapseActionView()
+                        binding.categorySearchView.onActionViewCollapsed()*/
 
                         when(prevFragment) {
                             R.id.homePageFragment -> {

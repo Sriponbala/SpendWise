@@ -1,6 +1,7 @@
 package com.example.spendwise.adapter
 
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.spendwise.domain.Budget
 import com.example.spendwise.domain.Goal
 import com.google.android.material.divider.MaterialDivider
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import java.math.BigDecimal
 
 class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapter.ViewHolder>() {
 
@@ -40,7 +42,7 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.e("Goal", goals.toString())
         val res = holder.itemView.resources
-        if(goals.lastIndex == position) {
+        if(goals.lastIndex == position || res.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             /*val marginLayoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams
             marginLayoutParams.bottomMargin = 64
             holder.itemView.layoutParams = marginLayoutParams*/
@@ -49,10 +51,10 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
             holder.divider.visibility = View.VISIBLE
         }
         val item = goals[position]
-        holder.goalName.text = item.goalName
+        holder.goalName.text = item.goalName.ifEmpty { "-" }
         holder.desiredDate.text = if(item.desiredDate == "") "No Target Date" else item.desiredDate
-        holder.targetAmount.text = "₹ ${Helper.formatNumberToIndianStyle(item.targetAmount)}"
-        holder.savedAmount.text = "₹ ${Helper.formatNumberToIndianStyle(item.savedAmount)}"
+        holder.targetAmount.text = "₹ ${Helper.formatNumberToIndianStyle(item.targetAmount.toBigDecimal())}"
+        holder.savedAmount.text = "₹ ${Helper.formatNumberToIndianStyle(item.savedAmount.toBigDecimal())}"
         holder.goalIcon.apply{
             Log.e("Goal", "${item.goalName} - icon - ${item.goalIcon}")
             setImageResource(item.goalIcon)
@@ -60,7 +62,11 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
             backgroundTintList = ColorStateList.valueOf(res.getColor(item.goalColor))
             /*setColorFilter(res.getColor(R.color.white))*/ }
         holder.progressBar.apply {
-            progress = ((item.savedAmount/item.targetAmount) * 100).toInt()
+            try{
+                progress = ((item.savedAmount.toBigDecimal()/item.targetAmount.toBigDecimal()) * BigDecimal(100)).toInt()
+            } catch (e: Exception) {
+                Log.e("Coroutine", e.message.toString() + " ${item.savedAmount}")
+            }
         }
 
         holder.itemView.setOnClickListener {

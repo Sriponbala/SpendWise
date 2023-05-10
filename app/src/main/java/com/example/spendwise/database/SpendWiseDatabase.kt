@@ -1,9 +1,12 @@
 package com.example.spendwise.database
 
 import android.content.Context
+import androidx.databinding.adapters.Converters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.spendwise.convertors.DateTypeConvertor
 import com.example.spendwise.dao.BudgetDao
 import com.example.spendwise.dao.GoalDao
 import com.example.spendwise.dao.RecordDao
@@ -11,6 +14,7 @@ import com.example.spendwise.dao.UserAccountDao
 import com.example.spendwise.domain.*
 
 @Database(entities = [User::class, UserPassword::class, Record::class, Budget::class, Goal::class], version = 1, exportSchema = false)
+@TypeConverters(DateTypeConvertor::class)
 abstract class SpendWiseDatabase: RoomDatabase() {
 
     abstract val userAccountDao: UserAccountDao

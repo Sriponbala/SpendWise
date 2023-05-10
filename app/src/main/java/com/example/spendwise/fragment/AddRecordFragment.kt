@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -27,6 +28,9 @@ import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
 import java.util.*
 
 class AddRecordFragment : Fragment() {
@@ -120,9 +124,9 @@ class AddRecordFragment : Fragment() {
                         } else if(it.type == RecordType.EXPENSE.value) {
                             binding.toggleGroup.check(R.id.expenseButton)
                         }
-                        Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
-                        binding.amountEditText.setText(it.amount.toString())
-                        binding.dateEditText.setText(it.date).also { _ ->
+//                        Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
+                        binding.amountEditText.setText(Helper.formatDecimal(it.amount.toBigDecimal()))
+                        binding.dateEditText.setText(Helper.formatDate(it.date)).also { _ ->
                             Log.e("Test", "inside updating date edittext rec obs - date- ${it.date}")
                         }
                         binding.categoryEditText.setText(it.category)
@@ -169,7 +173,7 @@ class AddRecordFragment : Fragment() {
 //                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
                 type = RecordType.EXPENSE
             }
-            binding.categoryEditText.text.clear()
+            binding.categoryEditText.text?.clear()
         }
 
 
@@ -221,6 +225,42 @@ class AddRecordFragment : Fragment() {
         val category = AddRecordFragmentArgs.fromBundle(requireArguments()).category
         binding.categoryEditText.setText(category)
 
+        binding.amountEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+//                binding.amountTextInputLayoutRecord.error = null
+                if(recordViewModel.amountError.isNotEmpty()) {
+                    if(binding.amountEditText.text?.isEmpty() == true) {
+                        binding.amountTextInputLayoutRecord.error = "Amount should not be empty"
+                        recordViewModel.amountError = "Amount should not be empty"
+//            binding.amountEditText.error = "Amount should not be empty"
+                    } else if(Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
+//            binding.amountEditText.error = "Amount can not be zero"
+                        binding.amountTextInputLayoutRecord.error = "Amount can not be zero"
+                        recordViewModel.amountError = "Amount can not be zero"
+                    } else if (!Helper.validateAmount(binding.amountEditText.text.toString())) {
+//            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                        binding.amountTextInputLayoutRecord.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                        recordViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                    } else {
+                        binding.amountTextInputLayoutRecord.error = null
+                        recordViewModel.amountError = ""
+//            binding.amountEditText.error = null
+                    }
+                } else {
+                    binding.amountTextInputLayoutRecord.error = null
+                }
+            }
+        }
+        binding.categoryEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+                binding.categoryTextInputLayoutRecord.error = null
+            }
+        }
+        binding.dateEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+                binding.dateTextInputLayoutRecord.error = null
+            }
+        }
     }
 
     private fun getInputDate() {
@@ -232,7 +272,7 @@ class AddRecordFragment : Fragment() {
 
         val datePickerDialog = DatePickerDialog(this.requireContext(), {
                 _, selectedYear, monthOfYear, dayOfMonth ->
-            val date = "$dayOfMonth/${monthOfYear+1}/$selectedYear"
+            val date = Helper.formatDate(Helper.getDate("$dayOfMonth-${monthOfYear+1}-$selectedYear"))
             binding.dateEditText.setText(date)
         }, year, month, day)
         datePickerDialog.show()
@@ -259,7 +299,7 @@ class AddRecordFragment : Fragment() {
             Log.e("userId edit record", userId.toString())
             recordViewModel.updateRecord(userId,
                 binding.categoryEditText.text.toString(),
-                binding.amountEditText.text.toString().toFloat(),
+                binding.amountEditText.text.toString(),
                 type.value,
                 binding.dateEditText.text.toString(),
                 binding.noteEditText.text.toString(),
@@ -269,28 +309,41 @@ class AddRecordFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
-        if(binding.amountEditText.text.isEmpty()) {
-            binding.amountEditText.error = "Amount should not be empty"
+        if(binding.amountEditText.text?.isEmpty() == true) {
+            binding.amountTextInputLayoutRecord.error = "Amount should not be empty"
+            recordViewModel.amountError = "Amount should not be empty"
+//            binding.amountEditText.error = "Amount should not be empty"
+        } else if(Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
+//            binding.amountEditText.error = "Amount can not be zero"
+            binding.amountTextInputLayoutRecord.error = "Amount can not be zero"
+            recordViewModel.amountError = "Amount can not be zero"
+        } else if (!Helper.validateAmount(binding.amountEditText.text.toString())) {
+//            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+            binding.amountTextInputLayoutRecord.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+            recordViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
         } else {
-            binding.amountEditText.error = null
+            binding.amountTextInputLayoutRecord.error = null
+            recordViewModel.amountError = ""
+//            binding.amountEditText.error = null
         }
-        if(!Helper.validateAmount(binding.amountEditText.text.toString())) {
-            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+        if(binding.categoryEditText.text?.isEmpty() == true) {
+            binding.categoryTextInputLayoutRecord.error = "Category should not be empty"
+            binding.categoryTextInputLayoutRecord.helperText = null
+//            binding.categoryEditText.error = "Category should not be empty"
         } else {
-            binding.amountEditText.error = null
+            binding.categoryTextInputLayoutRecord.error = null
+//            binding.categoryEditText.error = null
         }
-        if(binding.categoryEditText.text.isEmpty()) {
-            binding.categoryEditText.error = "Category should not be empty"
+        if(binding.dateEditText.text?.isEmpty() == true) {
+            binding.dateTextInputLayoutRecord.error = "Date should not be empty"
+            binding.dateTextInputLayoutRecord.helperText = null
+//            binding.dateEditText.error = "Date should not be empty"
         } else {
-            binding.categoryEditText.error = null
-        }
-        if(binding.dateEditText.text.isEmpty()) {
-            binding.dateEditText.error = "Date should not be empty"
-        } else {
-            binding.dateEditText.error = null
+            binding.dateTextInputLayoutRecord.error = null
+//            binding.dateEditText.error = null
         }
 
-        return if(binding.amountEditText.text.isEmpty()) {
+        return if(binding.amountEditText.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
 //            binding.amountEditText.error = "Amount should not be empty"
 //            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
             false
@@ -298,11 +351,11 @@ class AddRecordFragment : Fragment() {
 //            binding.amountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
 //            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.categoryEditText.text.isEmpty()) {
+        } else if(binding.categoryEditText.text?.isEmpty() == true) {
 //            binding.categoryEditText.error = "Category should not be empty"
 //            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.dateEditText.text.isEmpty()) {
+        } else if(binding.dateEditText.text?.isEmpty() == true) {
 //            binding.dateEditText.error = "Date should not be empty"
 //            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
             false

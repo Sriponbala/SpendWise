@@ -57,9 +57,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="8dp"
                         android:layout_marginEnd="50dp"
-                        android:text="Income"
+                        android:text="@string/income_label"
                         app:layout_constraintEnd_toEndOf="@+id/currentMonthIncomeText"
                         app:layout_constraintStart_toStartOf="@+id/currentMonthIncomeText"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -69,9 +69,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="8dp"
                         android:layout_marginEnd="43dp"
-                        android:text="Expense"
+                        android:text="@string/expense_label"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
                         app:layout_constraintEnd_toEndOf="@+id/currentMonthExpenseText"
                         app:layout_constraintStart_toStartOf="@+id/currentMonthExpenseText"
@@ -82,7 +82,9 @@
                         style="@style/HeadingTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginEnd="20dp"
                         android:text="@string/netBalance"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeTv"
                         app:layout_constraintEnd_toEndOf="@+id/currentMonthTotalText"
@@ -91,13 +93,22 @@
 
                     <TextView
                         android:id="@+id/currentMonthIncomeText"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         style="@style/TextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:padding="4dp"
+                        android:gravity="center"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/incomeColour"
-                        android:textAlignment="center"
                         app:layout_constraintEnd_toStartOf="@id/currentMonthExpenseText"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -105,13 +116,22 @@
 
                     <TextView
                         android:id="@+id/currentMonthExpenseText"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         style="@style/TextStyle"
                         android:layout_width="0dp"
+                        android:padding="4dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/expenseColour"
-                        android:textAlignment="center"
+                        android:gravity="center"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeText"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/currentMonthTotalText"
@@ -119,14 +139,23 @@
                         app:layout_constraintTop_toBottomOf="@+id/currentMonthExpenseTv" />
 
                     <TextView
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         android:id="@+id/currentMonthTotalText"
                         style="@style/TextStyle"
                         android:layout_width="0dp"
+                        android:padding="4dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:text="0.00"
+                        android:layout_margin="8dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="8sp"
+                        android:autoSizeMaxTextSize="16sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/colorPrimary"
-                        android:textAlignment="center"
+                        android:gravity="center"
                         app:layout_constraintBaseline_toBaselineOf="@id/currentMonthIncomeText"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +201,7 @@
                         android:id="@+id/recordsOverviewTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="This Month Records overview"
+                        android:text="@string/current_month_records_overview_label"
                         android:layout_marginVertical="16dp"
                         android:layout_marginStart="16dp"
                         style="@style/HeadingTextStyle" />
@@ -180,13 +209,15 @@
                         android:id="@+id/recordsOverviewNoRecords"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No records found"
-                        style="@style/TextStyle"
+                        android:textAlignment="center"
+                        android:text="@string/no_records_found_info"
+                        android:textSize="14sp"
                         android:layout_gravity="center_horizontal" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recordsOverViewList"
                         android:splitMotionEvents="false"
+                        android:overScrollMode="never"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <!--<ListView
@@ -195,16 +226,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>-->
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/showRecords"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL RECORDS"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:text="@string/view_all_records_button"
+                        android:layout_marginBottom="8dp"
+                        android:letterSpacing="0"
+                        android:layout_marginStart="8dp"
                         android:textStyle="bold"
                         android:clickable="true"
                         android:focusable="true"
-                        android:padding="16dp"
-                        android:foreground="?attr/selectableItemBackground"
                         android:textColor="?attr/colorPrimary"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -223,27 +256,26 @@
                     <TextView
                         android:id="@+id/incomeTv"
                         android:layout_width="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginVertical="16dp"
                         android:layout_marginStart="16dp"
                         android:layout_height="wrap_content"
-                        android:text="This Month Income structure"
+                        android:text="@string/current_month_income_structure_label"
                         style="@style/HeadingTextStyle" />
                     <TextView
                         android:id="@+id/incomeAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="₹ 0.00"
+                        android:text="@string/zero_with_symbol"
                         android:layout_marginStart="16dp"
-                        android:inputType="numberDecimal"
-                        style="@style/TextStyle"
-                        android:layout_marginTop="16dp" />
+                        style="@style/AutoResizingStyle"
+                        android:layout_marginBottom="16dp" />
                     <TextView
                         android:id="@+id/noIncomeTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No income added"
-                        style="@style/TextStyle"
-                        android:layout_marginTop="16dp"
+                        android:text="@string/no_income_found_info"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
                         android:layout_gravity="center_horizontal" />
                     <!--<ImageView
                         android:id="@+id/incomeChart"
@@ -257,22 +289,22 @@
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/incomeChart"
                         android:visibility="gone"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_above="@+id/seekBar1"/>
+                        android:layout_height="200dp" />
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/showIncomeStats"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL INCOME STATS"
-                        android:padding="16dp"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:text="@string/view_all_income_stats_button"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="8dp"
+                        android:letterSpacing="0"
                         android:textStyle="bold"
-                        android:layout_marginTop="16dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
                         android:textColor="?attr/colorPrimary"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -293,25 +325,26 @@
                         android:id="@+id/expense"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginVertical="16dp"
                         android:layout_marginStart="16dp"
-                        android:text="This Month Expenses structure"
+                        android:text="@string/current_month_expenses_structure_label"
                         style="@style/HeadingTextStyle" />
                     <TextView
                         android:id="@+id/expenseAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="₹ 0.00"
+                        android:text="@string/zero_with_symbol"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        style="@style/TextStyle"/>
+                        android:layout_marginBottom="16dp"
+                        style="@style/AutoResizingStyle"
+                        />
                     <TextView
                         android:id="@+id/noExpenseTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No expenses added"
-                        android:layout_marginTop="16dp"
-                        style="@style/TextStyle"
+                        android:text="@string/no_expenses_found_info"
+                        android:textAlignment="center"
+                        android:textSize="14sp"
                         android:layout_gravity="center_horizontal"
                         />
                     <!--<ImageView
@@ -327,21 +360,22 @@
                         android:nestedScrollingEnabled="true"
                         android:id="@+id/expenseChart"
                         android:visibility="gone"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="200dp" />
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/showExpenseStats"
                         android:layout_width="wrap_content"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_height="wrap_content"
-                        android:text="VIEW ALL EXPENSE STATS"
-                        android:padding="16dp"
+                        android:text="@string/view_all_expense_stats_button"
+                        android:layout_marginBottom="8dp"
+                        android:letterSpacing="0"
+                        android:layout_marginStart="8dp"
                         android:textStyle="bold"
                         android:clickable="true"
                         android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:layout_marginTop="16dp"
                         android:textColor="?attr/colorPrimary"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -68,14 +68,21 @@
             app:popExitAnim="@anim/exit_slide_dowm" />
         <action
             android:id="@+id/action_homePageFragment_to_recordsFragment"
-            app:destination="@id/recordsFragment" />
+            app:destination="@id/recordsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homePageFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment"
-            app:popExitAnim="@anim/fade_out" />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homePageFragment_to_categoryFragment"
             app:destination="@id/categoryFragment"
+            app:enterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/categoryFragment"
             app:popUpToInclusive="true" />
 <!--
@@ -85,10 +92,28 @@
 -->
         <action
             android:id="@+id/action_homePageFragment_to_monthlyBudgetsFragment"
-            app:destination="@id/monthlyBudgetsFragment" />
+            app:destination="@id/monthlyBudgetsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homePageFragment_to_viewGoalFragment"
             app:destination="@id/viewGoalFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_homePageFragment_to_viewRecordFragment"
+            app:destination="@id/viewRecordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_homePageFragment_to_viewBudgetFragment"
+            app:destination="@id/viewBudgetFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
@@ -175,7 +200,10 @@
         <action
             android:id="@+id/action_statisticsFragment_to_recordsFragment"
             app:destination="@id/recordsFragment"
-            />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <!--<fragment
         android:id="@+id/expensesFragment"

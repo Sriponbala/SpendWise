@@ -11,7 +11,7 @@
         android:id="@+id/dialogTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter Saved Amount"
+        android:text="@string/enter_saved_amount"
         android:textColor="@color/textColor"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,20 +19,25 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/addSavedAmtTil"
-        android:layout_width="match_parent"
-        android:visibility="visible"
-        android:hint="Enter Saved Amount"
-        app:layout_constraintTop_toBottomOf="@id/dialogTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginVertical="16dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:visibility="visible"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialogTextView">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/savedAmtTileTInput"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:layout_height="wrap_content" />
+            android:maxLength="13"
+            android:maxLines="1"
+            android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

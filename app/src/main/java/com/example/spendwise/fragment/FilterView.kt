@@ -43,6 +43,13 @@ class FilterView(
         val monthPicker = dialogView.findViewById<NumberPicker>(R.id.month_picker)
         monthPicker.minValue = 1
         monthPicker.maxValue = 12
+        val monthNames = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        monthPicker.displayedValues = monthNames
+        monthPicker.wrapSelectorWheel = true
+        monthPicker.setFormatter { index ->
+            monthNames[index-1]
+        }
+
         monthPicker.value = Calendar.getInstance().get(Calendar.MONTH) + 1
 
         val yearPicker = dialogView.findViewById<NumberPicker>(R.id.year_picker)

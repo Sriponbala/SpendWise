@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Budget(
     val userId: Int,
     val budgetName: String,
-    val maxAmount: Float,
+    val maxAmount: String,
     val category: String,
     val period: String
 ) {

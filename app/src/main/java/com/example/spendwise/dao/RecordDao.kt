@@ -10,10 +10,10 @@ interface RecordDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertRecord(record: Record)
 
-    @Query("select * from Record where userId like:userId")
+    @Query("select * from Record where userId like:userId order by date desc")
     fun getAllRecords(userId: Int): LiveData<List<Record>>
 
-    @Query("select * from Record where userId like:userId")
+    @Query("select * from Record where userId like:userId order by date")
     fun getAllUserRecords(userId: Int): List<Record>
 
     @Query("update Record set category=:category, amount=:amount, type=:type, date=:date where recordId like :recordId")
@@ -24,6 +24,9 @@ interface RecordDao {
 
     @Delete
     fun delete(record: Record)
+
+    @Query("SELECT * FROM Record WHERE strftime('%m', date) = '4'")
+    fun getAprilRecords(): List<Record>
 
 
     /*@Query("DELETE from Record")

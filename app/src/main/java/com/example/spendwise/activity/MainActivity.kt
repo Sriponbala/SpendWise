@@ -74,6 +74,8 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
 //        NavigationUI.setupWithNavController(binding.navView, navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            Log.e("Coroutine", "destination - ${destination.label}")
+
             /*if(destination == navGraph.findNode(R.id.addRecordFragment)) {
                 binding.appBarAddRecord.visibility = View.GONE
                 supportActionBar?.hide()
@@ -105,9 +107,10 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
 
         /*// Set up the ActionBar with the NavController and AppBarConfiguration
         setupActionBarWithNavController(navController, appBarConfiguration)*/
-        val recordViewModelFactory = RecordViewModelFactory(application)
+
+       /* val recordViewModelFactory = RecordViewModelFactory(application)
         val recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
-        recordViewModel.fetchAllRecords(sharedPref.getInt("userId", 0))
+        recordViewModel.fetchAllRecords(sharedPref.getInt("userId", 0))*/
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -138,13 +141,13 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
                 recordViewModel.isTempDataSet = false
             }
 
-            (navController.currentDestination?.id == R.id.categoryFragment) -> {
+            /*(navController.currentDestination?.id == R.id.categoryFragment) -> {
                 Log.e("Search", "empty querytext from main activity")
                 val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
                     Log.e("Search", it.toString())
                 }
                 categoryViewModel.queryText = ""
-            }
+            }*/
         }
         /*if(navController.currentDestination?.id == R.id.addRecordFragment || navController.currentDestination?.id == R.id.addBudgetFragment) {
             Log.e("Edit", "main activity ${navController.currentDestination?.id == R.id.addRecordFragment}")
@@ -194,15 +197,7 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
             Log.e("Main", "current - home")
             navController.popBackStack(0, true)
             finish()
-        } else if(navController.currentDestination?.id == R.id.categoryFragment){
-            Log.e("Search", "empty querytext from main activity")
-            Log.e("Navigation", "current destination is categoryFragment")
-            val categoryViewModel = ViewModelProvider(this)[CategoryViewModel::class.java].also{
-                Log.e("Search", it.toString())
-            }
-            categoryViewModel.queryText = ""
-            super.onBackPressed()
-        }  else if(navController.currentDestination?.id == R.id.recordsFragment){
+        } else if(navController.currentDestination?.id == R.id.recordsFragment){
             Log.e("Search", "empty querytext from main activity")
             Log.e("Navigation", "current destination is categoryFragment")
 //            val recordViewModelFactory = RecordViewModelFactory(application)
@@ -212,6 +207,7 @@ class MainActivity : AppCompatActivity() { //, NavigationView.OnNavigationItemSe
 
             }
             recordViewModel.queryText = ""
+            recordViewModel.newQueryText = ""
             super.onBackPressed()
         } else {
             super.onBackPressed()

@@ -289,13 +289,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/scrollViewAddGoal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:nestedScrollingEnabled="true"
             android:padding="16dp">
 
@@ -304,7 +304,7 @@
                 android:id="@+id/tvGoalNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Goal Name"
+                android:text="@string/goal_name_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
                 app:layout_constraintTop_toTopOf="parent"
@@ -312,7 +312,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="*"
+                android:text="@string/asterisk"
                 android:textSize="16sp"
                 android:layout_marginStart="2dp"
                 app:layout_constraintStart_toEndOf="@id/tvGoalNameLabel"
@@ -325,8 +325,8 @@
                 android:id="@+id/tilGoalName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter Goal Name"
                 android:layout_marginTop="8dp"
+                app:errorEnabled="true"
                 app:helperTextTextColor="@color/progressIndicatorExceeded"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintTop_toBottomOf="@+id/tvGoalNameLabel"
@@ -348,16 +348,15 @@
                 android:id="@+id/tvGoalAmountLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Target Amount"
+                android:text="@string/target_amount_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/tilGoalName"
                 app:layout_constraintStart_toStartOf="parent" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="*"
+                android:text="@string/asterisk"
                 android:textSize="16sp"
                 android:layout_marginStart="2dp"
                 app:layout_constraintStart_toEndOf="@id/tvGoalAmountLabel"
@@ -370,8 +369,8 @@
                 android:id="@+id/tilGoalAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter Target Amount"
                 android:layout_marginTop="8dp"
+                app:errorEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintTop_toBottomOf="@+id/tvGoalAmountLabel"
                 app:layout_constraintStart_toStartOf="parent"
@@ -379,10 +378,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etGoalAmount"
+                    android:maxLength="13"
                     android:layout_width="match_parent"
-                    android:maxLength="10"
+                    android:drawableTint="@color/headingTextColor"
+                    android:drawableEnd="@drawable/baseline_currency_rupee_24"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -392,10 +393,9 @@
                 android:id="@+id/tvSavedGoalAmountLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Saved Amount"
+                android:text="@string/saved_amount_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/tilGoalAmount"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -404,8 +404,8 @@
                 android:id="@+id/tilSavedGoalAmount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Enter Saved Amount"
                 android:layout_marginTop="8dp"
+                app:errorEnabled="true"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintTop_toBottomOf="@+id/tvSavedGoalAmountLabel"
                 app:layout_constraintStart_toStartOf="parent"
@@ -414,9 +414,11 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSavedGoalAmount"
                     android:layout_width="match_parent"
-                    android:maxLength="10"
+                    android:maxLength="13"
+                    android:drawableTint="@color/headingTextColor"
+                    android:drawableEnd="@drawable/baseline_currency_rupee_24"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -425,10 +427,9 @@
                 android:id="@+id/tvGoalColorLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Goal Color"
+                android:text="@string/goal_color_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/tilSavedGoalAmount"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -459,8 +460,7 @@
                 android:id="@+id/tvGoalIconLabel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Goal Icon"
+                android:text="@string/goal_icon_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
                 app:layout_constraintHorizontal_weight="1"
@@ -473,7 +473,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintHorizontal_weight="1"
-                android:hint="Enter Goal Icon"
+                android:hint="@string/enter_goal_icon_spinner"
                 android:layout_marginTop="8dp"
                 android:textAlignment="viewStart"
                 app:layout_constraintStart_toEndOf="@id/tilGoalColor"
@@ -493,7 +493,7 @@
                 android:id="@+id/tvDesiredDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Desired Date"
+                android:text="@string/desired_date_of_goal_label"
                 style="@style/HeadingTextStyle"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:layout_marginTop="16dp"
@@ -505,8 +505,8 @@
                 android:id="@+id/tilDesiredDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Select Desired Date"
                 android:layout_marginTop="8dp"
+                app:hintTextColor="@color/primaryBlue"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:layout_constraintTop_toBottomOf="@+id/tvDesiredDateLabel"
                 app:layout_constraintStart_toStartOf="parent"
@@ -515,6 +515,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDesiredDate"
                     android:cursorVisible="false"
+                    android:drawableEnd="@drawable/date_icon"
+                    android:drawableTint="@color/headingTextColor"
                     android:clickable="true"
                     android:focusable="false"
                     android:layout_width="match_parent"
@@ -526,7 +528,7 @@
                 android:id="@+id/saveGoalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="save"
+                android:text="@string/save_button"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintTop_toBottomOf="@id/tilDesiredDate"
@@ -536,7 +538,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 
 </LinearLayout>

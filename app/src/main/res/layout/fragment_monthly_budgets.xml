@@ -35,6 +35,20 @@
         <include layout="@layout/filter_layout"
             android:id="@+id/budgetFragmentFilter"/>
 
+        <ScrollView
+            android:id="@+id/scrollViewEmptyDataMonthlyBudgets"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include
+                android:id="@+id/emptyMonthlyBudgets"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                layout="@layout/empty_data"
+                android:layout_gravity="center"/>
+        </ScrollView>
+
+<!--
         <TextView
             android:id="@+id/emptyBudgetsTextView"
             android:layout_width="match_parent"
@@ -45,6 +59,7 @@
             android:textSize="25sp"
             android:visibility="gone"
             />
+-->
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollViewMonthlyBudgets"
@@ -61,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:overScrollMode="never"
                     android:splitMotionEvents="false"
                     android:id="@+id/budgetsRecycler"
                     />

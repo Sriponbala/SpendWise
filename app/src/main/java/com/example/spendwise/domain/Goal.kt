@@ -8,11 +8,11 @@ import com.example.spendwise.enums.GoalStatus
 data class Goal(
     val userId: Int,
     val goalName: String,
-    val targetAmount: Float,
+    val targetAmount: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var goalId: Int = 0
-    var savedAmount: Float = 0f
+    var savedAmount: String = "0.00"
     var goalColor: Int = 0
     var goalIcon: Int = 0
     var desiredDate: String = ""

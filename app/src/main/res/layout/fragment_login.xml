@@ -26,7 +26,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/scrollViewLogin"
         android:layout_width="match_parent"
         android:background="@color/recordPage"
@@ -58,6 +58,7 @@
                 app:boxStrokeWidth="2dp"
                 android:hint="@string/enter_email"
                 app:endIconMode="custom"
+                app:errorEnabled="true"
                 app:helperTextTextColor="@color/error_colour"
                 app:endIconDrawable="@drawable/baseline_email_24"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -76,7 +77,9 @@
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="outline"
                 app:boxStrokeWidth="2dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:errorEnabled="true"
                 app:helperTextTextColor="@color/error_colour"
                 app:endIconMode="password_toggle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -102,24 +105,25 @@
                 android:layout_marginTop="25dp"
                 android:layout_gravity="center_horizontal"/>
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/SignUpTextView"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account? SIGN UP"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/navigate_to_sign_up_page_button"
+                android:letterSpacing="0"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
                 android:layout_marginBottom="40dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="16dp"
-                android:foreground="?attr/selectableItemBackground"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textColor="@color/linkColour"/>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </LinearLayout>
 

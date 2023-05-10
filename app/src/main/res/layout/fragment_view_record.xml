@@ -29,14 +29,136 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/viewRecordRootScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:padding="16dp"
             android:layout_height="match_parent">
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/record_type_label"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:id="@+id/viewRecordTypeEditText"
+                android:textSize="16sp"
+                android:textColor="@color/textColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/amount_label"/>
+            <include
+                android:id="@+id/viewAmountEditText"
+                layout="@layout/amount_text_view_component"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/textColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/category"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewCategoryEditText"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/textColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/date_label"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewDateEditText"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/textColor"/>
+
+            <!--<TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:paddingStart="16dp"
+                android:paddingVertical="8dp"
+                android:background="@color/behindScreen"
+                android:text="More Details"/>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/title_label"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewNoteEditText"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/textColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/description_label"/>
+            <TextView
+                android:id="@+id/viewEmptyDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_data_fill_in_value"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/textColor"/>
+            <TextView
+                android:id="@+id/descriptionTextField"
+                style="@style/TextStyle"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="viewStart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+<!--
+            <androidx.core.widget.NestedScrollView
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:background="@color/behindScreen"
+                android:id="@+id/descriptionScrollView"
+                android:layout_marginHorizontal="16dp"
+                android:layout_height="300dp">
+            </androidx.core.widget.NestedScrollView>
+-->
+
+
+            <!--<LinearLayout
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -252,7 +374,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/HeadingTextStyle"
-                android:text="Description    :"/>
+                android:text="Description"/>
             <androidx.core.widget.NestedScrollView
                 android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
@@ -267,7 +389,7 @@
                     style="@style/TextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-            </androidx.core.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>-->
 
         </LinearLayout>
 

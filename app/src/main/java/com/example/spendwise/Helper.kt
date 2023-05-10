@@ -4,22 +4,45 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.text.Editable
+import android.text.TextPaint
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
 object Helper {
 
+    private val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+
+    fun formatDate(date: Date): String {
+        return dateFormat.format(date)
+    }
+
+    fun checkAmountIsZeroOrNot(amount: String): Boolean {
+        var result = false
+        result = try {
+            BigDecimal(amount) == BigDecimal("0.00") || BigDecimal(amount) == BigDecimal("0.0") || BigDecimal(amount) == BigDecimal(0)
+        } catch (exception: Exception) {
+            false
+        }
+        return result
+    }
+
+    fun getDate(date: String): Date {
+        return dateFormat.parse(date) ?: Date()
+    }
+
     fun formatPercentage(percent: Int): String {
         return if(percent > 100) {
-            "+100"
+            "100+"
         } else {
             percent.toString()
         }
@@ -94,7 +117,7 @@ object Helper {
         } else if(!password.matches(".*[a-z].*".toRegex())) {
             "Should contain atleast 1 lowercase"
         } else if(!password.matches(".*[@#\$%^&*].*".toRegex())) {
-            "Should contain atleast 1 special character"
+            "Need atleast 1 special character from @#$%^&*"
         } else if(password.length < 6) {
             "Should contain atleast 6 characters"
         } else if(password.length > 15) {
@@ -112,6 +135,11 @@ object Helper {
     }
 
     fun formatNumberToIndianStyle(number: Float): String {
+        val format = DecimalFormat("#,##,##0.00", DecimalFormatSymbols(Locale("en", "IN")))
+        return format.format(number)
+    }
+
+    fun formatNumberToIndianStyle(number: BigDecimal): String {
         val format = DecimalFormat("#,##,##0.00", DecimalFormatSymbols(Locale("en", "IN")))
         return format.format(number)
     }
@@ -159,10 +187,38 @@ object Helper {
         return result
     }
 
+    fun formatDecimal(number: BigDecimal): String {
+        val decimalFormat = DecimalFormat("0.00")
+        return decimalFormat.format(number)
+    }
+
+    fun formatDecimalToThreePlaces(number: BigDecimal): String {
+        val decimalFormat = DecimalFormat("0.000")
+        return decimalFormat.format(number)
+    }
+
     fun validateGoalAmount(amount: String): Boolean {
-        val result = Pattern.matches("^\\d{1,10}\$", amount)
+        val result = Pattern.matches("^\\d{1,10}(\\.\\d{0,2})?\$", amount)
         Log.e("Amount", result.toString())
         return result
+    }
+
+    fun adjustFontSizeToTextView(textView: TextView, text: String) {
+        val textPaint = TextPaint()
+        textPaint.textSize = 16f // initial font size
+        textPaint.typeface = textView.typeface // set the same typeface as the TextView
+        Log.e("Coroutine", text)
+        var textWidth = textPaint.measureText(text)
+        val viewWidth = textView.width - textView.paddingLeft - textView.paddingRight
+
+// loop until the text fills the available space
+        while (textWidth > viewWidth) {
+            textPaint.textSize -= 1f // decrease the font size
+            textWidth = textPaint.measureText("Your text here")
+        }
+
+        textView.textSize = textPaint.textSize // set the final font size
+        textView.text = text
     }
 
 

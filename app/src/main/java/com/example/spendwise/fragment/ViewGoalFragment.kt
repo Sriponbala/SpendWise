@@ -7,9 +7,8 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.EditText
 import android.widget.TextView
-import androidx.core.text.isDigitsOnly
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +21,8 @@ import com.example.spendwise.enums.GoalStatus
 import com.example.spendwise.viewmodel.GoalViewModel
 import com.example.spendwise.viewmodelfactory.GoalViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import java.math.BigDecimal
 
 class ViewGoalFragment : Fragment() {
 
@@ -54,7 +55,7 @@ class ViewGoalFragment : Fragment() {
                 if(it.goalStatus == GoalStatus.ACTIVE.value) {
                     val editItem = menu.findItem(R.id.edit)
                     editItem.isVisible = true
-                } else if(it.goalStatus == GoalStatus.COMPLETED.value) {
+                } else if(it.goalStatus == GoalStatus.CLOSED.value) {
                     val editItem = menu.findItem(R.id.edit)
                     editItem.isVisible = false
                 }
@@ -108,17 +109,34 @@ class ViewGoalFragment : Fragment() {
                     backgroundTintList = ColorStateList.valueOf(resources.getColor(it.goalColor))
                     setColorFilter(resources.getColor(R.color.white))
                 }
-                binding.titleTextViewGoal.text = it.goalName
+                binding.titleTextViewGoal.text = it.goalName.ifEmpty { "-" }
                 binding.subTextViewDate.text = if(it.desiredDate == "") "No Target Date" else "Target Date ${it.desiredDate}"
-                val percent = ((it.savedAmount)/(it.targetAmount) * 100).toInt()
-                binding.percentageCircularProgress.text = "${Helper.formatPercentage(percent)} %"
+                val percent = ((it.savedAmount.toBigDecimal())/(it.targetAmount.toBigDecimal()) * BigDecimal(100)).toInt()
+                Log.e("Coroutine", """savedamt - ${it.savedAmount}
+                    |targetamt - ${it.targetAmount}
+                    |percent - $percent
+                """.trimMargin())
+                binding.percentageCircularProgress.text = "${Helper.formatPercentage(percent)}%"
                 binding.circularProgressIndicator.progress = percent
-                binding.targetAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.targetAmount)}"
-                binding.savedAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.savedAmount)}"
+                binding.goalStatusText.text = it.goalStatus
+                binding.targetAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.targetAmount.toBigDecimal())}"
+                binding.savedAmtTileT.text = "₹ ${Helper.formatNumberToIndianStyle(it.savedAmount.toBigDecimal())}"
                 if(it.goalStatus == GoalStatus.ACTIVE.value) {
-                    binding.addSavedAmtButton.visibility = View.VISIBLE
+                    val savedAmt = BigDecimal(it.savedAmount)
+                    val targetAmt = BigDecimal(it.targetAmount)
+                    if(savedAmt >= targetAmt) {
+                        goalViewModel.updateGoalStatus()
+                        binding.addSavedAmtButton.visibility = View.GONE
+                        binding.setGoalAsReachedBtn.visibility = View.GONE
+                        val editItem = goalViewModel.menu?.findItem(R.id.edit)
+                        editItem?.isVisible = false
+                    } else {
+                        binding.addSavedAmtButton.visibility = View.VISIBLE
+                        binding.setGoalAsReachedBtn.visibility = View.VISIBLE
+                    }
+//                    binding.addSavedAmtButton.visibility = View.VISIBLE
                     binding.setGoalAsReachedBtn.visibility = View.VISIBLE
-                } else if(it.goalStatus == GoalStatus.COMPLETED.value) {
+                } else if(it.goalStatus == GoalStatus.CLOSED.value) {
                     binding.addSavedAmtButton.visibility = View.GONE
                     binding.setGoalAsReachedBtn.visibility = View.GONE
                 }
@@ -130,7 +148,7 @@ class ViewGoalFragment : Fragment() {
         }
 
         binding.setGoalAsReachedBtn.setOnClickListener {
-            goalViewModel.updateGoalStatus(GoalStatus.COMPLETED.value)
+            goalViewModel.updateGoalStatus()
             binding.addSavedAmtButton.visibility = View.GONE
             binding.setGoalAsReachedBtn.visibility = View.GONE
 //            binding.percentageCircularProgress.text = "100 %"
@@ -146,6 +164,7 @@ class ViewGoalFragment : Fragment() {
     @SuppressLint("MissingInflatedId")
     private fun showAddSavedAmountDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.add_saved_amount_dialog, null)
+        val addSavedAmtTil = dialogView.findViewById<TextInputLayout>(R.id.addSavedAmtTil)
         val addSavedAmtEt = dialogView.findViewById<TextInputEditText>(R.id.savedAmtTileTInput)
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
@@ -155,6 +174,22 @@ class ViewGoalFragment : Fragment() {
 
         dialog.show()
 
+        addSavedAmtEt.addTextChangedListener {
+            if(it != null && it.isNotEmpty()) {
+                /*if(addSavedAmtEt.text?.isEmpty() == true) {
+                    addSavedAmtTil.error = "Target amount should not be empty"
+                } else if(Helper.checkAmountIsZeroOrNot(addSavedAmtEt.text.toString())) {
+                    addSavedAmtTil.error = "Target amount can not be zero"
+                } else if(!Helper.validateGoalAmount(addSavedAmtEt.text.toString())) {
+                    addSavedAmtTil.error = "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+                } else {
+                    addSavedAmtTil.error = null
+                }*/
+                addSavedAmtTil.error = null
+            } else {
+                addSavedAmtTil.error = null
+            }
+        }
         // Get a reference to the positive button
         val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 
@@ -162,24 +197,28 @@ class ViewGoalFragment : Fragment() {
         positiveButton.setOnClickListener {
             goalViewModel.goal.value?.let {
                 if (!addSavedAmtEt.text.isNullOrEmpty()) {
-                    if (!Helper.validateAmount(addSavedAmtEt.text.toString())) {
-                        addSavedAmtEt.error =
-                            "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"
+                    if(Helper.checkAmountIsZeroOrNot(addSavedAmtEt.text.toString())) {
+                        addSavedAmtTil.error = "Amount can not be zero"
+                    } else if (!Helper.validateGoalAmount(addSavedAmtEt.text.toString())) {
+                        addSavedAmtTil.error =
+                            "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"
                     } else {
-                        addSavedAmtEt.error = null
-                        val amt = addSavedAmtEt.text.toString().toFloat()
-                        val savedAmt = it.savedAmount + amt
+                        addSavedAmtTil.error = null
+                        val amt = addSavedAmtEt.text.toString().trim().toBigDecimal()
+                        val savedAmt = it.savedAmount.toBigDecimal() + amt
                         goalViewModel.updateGoal(
                             userId = it.userId,
                             goalName = it.goalName,
                             targetAmount = it.targetAmount,
-                            savedAmount = savedAmt,
+                            savedAmount = savedAmt.toString(),
                             goalColor = it.goalColor,
                             goalIcon = it.goalIcon,
                             desiredDate = it.desiredDate
                         )
                         dialog.dismiss() // dismiss dialog on success
                     }
+                } else  {
+                    addSavedAmtTil.error = "Amount should not be empty"
                 }
             }
         }

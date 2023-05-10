@@ -7,6 +7,7 @@
     style="@style/ScreenBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.GoalsFragment">
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -15,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:id="@+id/toolbar_goals"
@@ -23,9 +23,9 @@
             app:titleTextColor="@color/white"
             app:navigationIconTint="@color/white"
             android:layout_height="match_parent" />
-
     </com.google.android.material.appbar.AppBarLayout>
-    <TextView
+
+    <!--<TextView
         android:id="@+id/emptyGoalsTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +37,59 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"/>-->
+    <ScrollView
+        android:id="@+id/scrollViewEmptyDataGoals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+            <include
+                android:id="@+id/noData"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                layout="@layout/empty_layout_component"/>
+        </LinearLayout>
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:id="@+id/parentConstraint"
+            android:layout_height="match_parent"
+            >
+            <include
+                android:id="@+id/emptyGoals"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                layout="@layout/empty_data"
+                app:layout_constraintBottom_toTopOf="@id/blankViewNoGoals"
+                app:layout_constraintTop_toTopOf="@id/parentConstraint"
+                app:layout_constraintStart_toStartOf="@id/parentConstraint"
+                app:layout_constraintEnd_toEndOf="@id/parentConstraint"
+
+                android:layout_gravity="center"/>
+            <include
+                android:id="@+id/blankViewNoGoals"
+                app:layout_constraintTop_toBottomOf="@id/emptyGoals"
+                app:layout_constraintStart_toStartOf="@id/parentConstraint"
+                app:layout_constraintEnd_toEndOf="@id/parentConstraint"
+                app:layout_constraintBottom_toBottomOf="@id/parentConstraint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/blank_view_component"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        </LinearLayout>-->
+    </ScrollView>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/goalsScrollView"
         android:layout_width="match_parent"
@@ -46,13 +98,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/goalsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:splitMotionEvents="false"
+                android:overScrollMode="never"
                 android:background="@color/recordPage"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/app_bar_goals"

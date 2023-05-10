@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/constraintLayout"
+    android:layout_margin="8dp"
+    android:background="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:elevation="4dp"
+    app:cardUseCompatPadding="true"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutBudgetItem"
+        android:paddingTop="8dp"
+        android:background="@color/listItemCardColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/budgetNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/HeadingTextStyle"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxEms="10"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="@id/constraintLayoutBudgetItem"
+            app:layout_constraintTop_toTopOf="@id/constraintLayoutBudgetItem" />
+        <TextView
+            android:id="@+id/budgetCurrencySymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="@string/rupee_symbol"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            app:layout_constraintEnd_toStartOf="@id/budgetAmountText"
+            app:layout_constraintTop_toTopOf="@id/budgetNameText" />
+        <TextView
+            android:id="@+id/budgetAmountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxEms="10"
+            app:layout_constraintEnd_toEndOf="@id/constraintLayoutBudgetItem"
+            app:layout_constraintTop_toTopOf="@id/budgetNameText" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/budgetProgressBarRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            app:trackThickness="15dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:trackColor="@color/progressBarAtFirst"
+            app:layout_constraintTop_toBottomOf="@id/budgetNameText"
+            app:layout_constraintStart_toStartOf="@id/budgetNameText"
+            app:layout_constraintEnd_toEndOf="@id/budgetAmountText"/>
+        <TextView
+            android:id="@+id/spentCurrencySymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/textColor"
+            android:text="@string/rupee_symbol"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="@id/budgetNameText"
+            app:layout_constraintTop_toBottomOf="@id/budgetProgressBarRecycler" />
+        <TextView
+            android:id="@+id/spentAmountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:scrollHorizontally="true"
+            android:maxEms="10"
+            app:layout_constraintStart_toEndOf="@id/spentCurrencySymbol"
+            app:layout_constraintTop_toTopOf="@id/spentCurrencySymbol" />
+
+        <TextView
+            android:id="@+id/remainingCurrencySymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/rupee_symbol"
+            android:maxLines="1"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toStartOf="@id/remainingAmountText"
+            app:layout_constraintTop_toTopOf="@id/spentCurrencySymbol" />
+        <TextView
+            android:id="@+id/remainingAmountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxEms="10"
+            app:layout_constraintEnd_toEndOf="@id/budgetAmountText"
+            app:layout_constraintTop_toTopOf="@id/spentCurrencySymbol" />
+        <TextView
+            android:id="@+id/spentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/spent_recycler_item"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            app:layout_constraintBottom_toTopOf="@id/budgetDivider"
+            app:layout_constraintStart_toStartOf="@id/budgetNameText"
+            app:layout_constraintTop_toBottomOf="@id/spentCurrencySymbol" />
+        <TextView
+            android:id="@+id/remainsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/remains_recycler_item"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/textColor"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@id/budgetDivider"
+            app:layout_constraintEnd_toEndOf="@id/budgetAmountText"
+            app:layout_constraintTop_toTopOf="@id/spentText" />
+
+        <TextView
+            android:id="@+id/budgetPercentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/budgetProgressBarRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/budgetProgressBarRecycler"
+            app:layout_constraintTop_toTopOf="@+id/budgetProgressBarRecycler" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/budgetDivider"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

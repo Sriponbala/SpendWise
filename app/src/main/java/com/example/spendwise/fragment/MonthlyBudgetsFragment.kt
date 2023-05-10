@@ -1,6 +1,7 @@
 package com.example.spendwise.fragment
 
 import android.content.Context
+import android.content.res.Configuration
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.R
@@ -27,6 +29,7 @@ import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 import com.example.spendwise.viewmodelfactory.RestoreScrollPositionViewModelFactory
+import java.math.BigDecimal
 
 class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
 
@@ -110,7 +113,9 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    restoreScrollPositionViewModel.scrollPositionMonthlyBudgets = (binding.budgetsRecycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    restoreScrollPositionViewModel.scrollPositionMonthlyBudgets = (binding.budgetsRecycler.layoutManager as GridLayoutManager).findFirstVisibleItemPosition().also {
+                        Log.e("Coroutine", "scroll pos saved monthly first - ${it}")
+                    }
                 }
             }
         })
@@ -134,9 +139,9 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                 if(listOfBudgets.isNotEmpty()) {
                     Log.e("Test", "budgets in monthly budget obs $listOfBudgets")
                     binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.VISIBLE
-                    binding.emptyBudgetsTextView.visibility = View.GONE
+                    binding.scrollViewEmptyDataMonthlyBudgets.visibility = View.GONE
                     binding.budgetsRecycler.visibility = View.VISIBLE
-                    var adapterData = mutableListOf<Pair<Budget, Float>>()
+                    var adapterData = mutableListOf<Pair<Budget, BigDecimal>>()
                     binding.budgetFragmentFilter.apply {
                         spinner.visibility = View.GONE
                         recordTypeTv.apply {
@@ -163,19 +168,19 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                             }
                             if(listOfRecords.isEmpty()) {
                                 Log.e("Test", "records empty")
-                                val data = mutableListOf<Pair<Budget, Float>>()
+                                val data = mutableListOf<Pair<Budget, BigDecimal>>()
                                 listOfBudgets.forEach {
-                                    data.add(Pair(it, 0f))
+                                    data.add(Pair(it, BigDecimal(0)))
                                 }
                                 adapterData = data
                             } else {
                                 Log.e("Test", "records not empty")
-                                val data = mutableListOf<Pair<Budget, Float>>()
+                                val data = mutableListOf<Pair<Budget, BigDecimal>>()
                                 listOfBudgets.forEach { budget ->
-                                    var total = 0f
+                                    var total = BigDecimal(0)
                                     listOfRecords.forEach { record ->
                                         if(budget.category == record.category) {
-                                            total += record.amount
+                                            total += (record.amount).toBigDecimal()
                                         }
                                     }
                                     data.add(Pair(budget, total))
@@ -185,21 +190,25 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
                         } else {
                             Log.e("Test", "records - Null")
                             listOfBudgets.forEach {
-                                adapterData.add(Pair(it, 0f))
+                                adapterData.add(Pair(it, BigDecimal(0)))
                             }
                         }
 
                     })
                     setAdapter(adapterData)
                 } else {
-                    binding.emptyBudgetsTextView.visibility = View.VISIBLE
+                    binding.scrollViewEmptyDataMonthlyBudgets.visibility = View.VISIBLE
+                    binding.emptyMonthlyBudgets.emptyDataImage.setImageResource(R.drawable.schedule)
+                    binding.emptyMonthlyBudgets.emptyDataText.text = "No Monthly Budgets Found"
                     binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.GONE
                     setAdapter(emptyList())
 //                    binding.budgetsRecycler.visibility = View.GONE
                     Log.e("Test", "budgets empty")
                 }
             } else {
-                binding.emptyBudgetsTextView.visibility = View.VISIBLE
+                binding.scrollViewEmptyDataMonthlyBudgets.visibility = View.VISIBLE
+                binding.emptyMonthlyBudgets.emptyDataImage.setImageResource(R.drawable.schedule)
+                binding.emptyMonthlyBudgets.emptyDataText.text = "No Monthly Budgets Found"
                 binding.budgetFragmentFilter.filterLayoutLinear.visibility = View.GONE
                 setAdapter(emptyList())
 //                binding.budgetsRecycler.visibility = View.GONE
@@ -228,7 +237,7 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
         }
     }
 
-    private fun setAdapter(adapterData: List<Pair<Budget, Float>>) {
+    private fun setAdapter(adapterData: List<Pair<Budget, BigDecimal>>) {
         Log.e("Test", "adapter data in monthly budget setadapter $adapterData")
         val adapter = BudgetRecyclerViewAdapter(adapterData)
         adapter.setTheFragment(this)
@@ -238,8 +247,18 @@ class MonthlyBudgetsFragment : Fragment(), FilterViewDelegate {
             findNavController().navigate(action)
         }
         binding.budgetsRecycler.adapter = adapter
-        binding.budgetsRecycler.layoutManager = LinearLayoutManager(this.requireContext())
-        (binding.budgetsRecycler.layoutManager as LinearLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionMonthlyBudgets)
+        val spanCount = if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                resources.configuration.screenWidthDp >= 600) {
+            binding.budgetsRecycler.setBackgroundColor(resources.getColor(R.color.behindScreen))
+            2
+        } else {
+            binding.budgetsRecycler.setBackgroundColor(resources.getColor(R.color.recordPage))
+            1
+        }
+        binding.budgetsRecycler.layoutManager = GridLayoutManager(this.context, spanCount)//LinearLayoutManager(this.requireContext())
+        (binding.budgetsRecycler.layoutManager as GridLayoutManager).scrollToPosition(restoreScrollPositionViewModel.scrollPositionMonthlyBudgets).also {
+            Log.e("Coroutine", "scroll pos monthly on scroll to - ${restoreScrollPositionViewModel.scrollPositionMonthlyBudgets}")
+        }
     }
 
     override fun intimateSelectedDate(month: Int, year: Int) {
