@@ -110,4 +110,6 @@
     <color name="emptyDataColour">#767676</color>
 
     <color name="logoColor">@color/white</color>
+
+    <color name="filterLayoutBackground">#9FBCD1</color>
 </resources>

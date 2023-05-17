@@ -25,28 +25,6 @@
             app:navigationIcon="@drawable/back_arrow"
             app:navigationIconTint="@color/white"
             android:layout_height="match_parent"/>
-<!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/categorySearchView"
-                android:theme="@style/Theme.SpendWise.SearchViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/primaryBlue"
-                app:searchHintIcon="@null"
-                app:hideNavigationIcon="false"
-                app:closeIcon="@drawable/baseline_close_24"
-                app:queryHint="Search categories"
-                android:textColorHint="@color/white"
-                app:iconifiedByDefault="true"/>
-
-        </LinearLayout>
--->
 
     </com.google.android.material.appbar.AppBarLayout>
 

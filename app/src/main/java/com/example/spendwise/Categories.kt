@@ -16,17 +16,12 @@ object Categories {
         Category("Health", R.drawable.baseline_health_and_safety_24, RecordType.EXPENSE, R.color.health_color),
         Category("Education", R.drawable.baseline_school_24, RecordType.EXPENSE, R.color.education_color),
         Category("Household", R.drawable.baseline_house_24, RecordType.EXPENSE, R.color.household_color),
-//        Category("Other", R.drawable.baseline_density_medium_24, RecordType.EXPENSE, R.color.other_color),
 
         Category("Salary", R.drawable.baseline_money_24, RecordType.INCOME, R.color.salary_color),
         Category("Rental", R.drawable.baseline_car_rental_24, RecordType.INCOME, R.color.rental_color),
         Category("Sale", R.drawable.baseline_sell_24, RecordType.INCOME, R.color.sale_color),
         Category("Gifts", R.drawable.baseline_card_giftcard_24, RecordType.INCOME, R.color.gifts_color),
         Category("Coupons", R.drawable.baseline_discount_24, RecordType.INCOME, R.color.coupons_color),
-//        Category("Other", R.drawable.baseline_density_medium_24, RecordType.INCOME, R.color.other_color)
-    ).also {
-        for(i in it) {
-            println(i)
-        }
-    }
+    )
+
 }

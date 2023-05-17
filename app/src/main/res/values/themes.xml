@@ -2,28 +2,6 @@
     <!-- Base application theme. -->
     <style name="Theme.SpendWise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-
-        <!--<item name="colorSecondary">@color/on_tertiary_container</item>
-        <item name="colorSecondaryVariant">@color/tertiary</item>
-        <item name="colorOnSecondary">@color/colorPrimary</item>
-        &lt;!&ndash; Secondary brand color. &ndash;&gt;
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/tertiary_dark</item>
-        <item name="colorOnPrimary">@color/on_tertiary_container</item>-->
-
-        <!--<item name="colorSecondary">@color/colorPrimary</item>
-        <item name="colorSecondaryVariant">@color/tertiary</item>
-        <item name="colorOnSecondary">@color/on_tertiary_container</item>
-        &lt;!&ndash; Secondary brand color. &ndash;&gt;
-        <item name="colorPrimary">@color/tertiary</item>
-        <item name="colorPrimaryVariant">@color/tertiary_dark</item>
-        <item name="colorOnPrimary">@color/colorPrimary</item>-->
-
-        <!--<item name="colorSecondary">#ff8f1e</item>
-        <item name="colorSecondaryVariant">#f26f1a</item>
-        <item name="colorOnSecondary">#000000</item>-->
-        <!-- Secondary brand color. -->
-<!--        <item name="colorPrimary">@color/primaryBlue</item>-->
         <item name="colorPrimary">@color/primaryBlue</item>
         <item name="colorPrimaryVariant">@color/primaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -36,26 +14,12 @@
         <item name="android:navigationBarColor">@color/white</item>
 
         <!-- Customize your theme here. -->
-<!--        <item name="android:textColor">@color/black</item>-->
         <item name="itemRippleColor">@color/rippleLight</item>
         <item name="colorTertiary">@color/cardBehindScreenLight</item>
         <item name="colorTertiaryContainer">@color/white</item>
         <item name="colorOnTertiary">@color/white</item>
         <item name="colorOnTertiaryContainer">@color/black</item>
 
-
-        <!--<color name="pieChartCenter">@color/white</color>
-        <color name="screenBehindCardView">#F0F0F0</color>
-        <color name="cardViewColor">@color/white</color>-->
-
-        <!-- Tertiary brand colour. -->
-        <!--<item name="colorTertiary">@color/tertiary</item>
-        <item name="colorTertiaryContainer">@color/tertiary_container</item>
-        <item name="colorOnTertiary">@color/white</item>
-        <item name="colorOnTertiaryContainer">@color/on_tertiary_container</item>-->
-
-        <!-- Status bar color. -->
-        <!--<item name="android:statusBarColor">@color/tertiary_middle</item>-->
 
     </style>
 
@@ -77,18 +41,6 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom_sheet</item>
     </style>
 
-<!--
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/tertiary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/tertiary_container</item>
-        <item name="colorOnPrimaryContainer">@color/on_tertiary_container</item>
-        <item name="colorPrimaryVariant">@color/on_tertiary_container</item>
-
-        &lt;!&ndash; Status bar color. &ndash;&gt;
-        <item name="android:statusBarColor">?attr/colorOnTertiaryContainer</item>
-    </style>
--->
     <style name="SpinnerTextStyle">
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorSecondary">@color/black</item>
@@ -133,19 +85,9 @@
         <item name="android:textColorHint">#FFA0A0A0</item> <!-- Set hint text color to white -->
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorSecondary">@color/black</item>
-        <!-- Gets rid of the "underline" in the text -->
-        <!--        <item name="queryBackground">@color/white</item>-->
-        <!-- Gets rid of the search icon when the SearchView is expanded -->
-<!--        <item name="searchHintIcon">@null</item>-->
-        <!-- The hint text that appears when the user has not typed anything -->
-        <!--        <item name="queryHint">@string/search_hint</item>-->
-    </style>
-
-<!--
-    <style name="Theme.SpendWise.CursorStyle">
 
     </style>
--->
+
 
     <style name="Theme.SpendWise.SpinnerStyle" parent="Theme.SpendWise">
         <!--This line changes the color of text in Toolbar-->
@@ -153,6 +95,10 @@
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
         <item name="android:textColorSecondary">#515050</item>
         <item name="colorOnPrimary">@color/black</item>
+    </style>
+
+    <style name="Theme.SpendWise.ExtendedFab" parent="Theme.SpendWise">
+        <item name="colorPrimary">@android:color/transparent</item>
     </style>
 
 

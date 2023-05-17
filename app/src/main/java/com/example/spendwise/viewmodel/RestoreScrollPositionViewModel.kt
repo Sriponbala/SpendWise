@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
 class RestoreScrollPositionViewModel(application: Application): AndroidViewModel(application) {
 
@@ -14,9 +13,7 @@ class RestoreScrollPositionViewModel(application: Application): AndroidViewModel
     get() = _dashboardScrollPosition
 
     fun updateDashboardScrollPosition(position: Int) {
-        Log.e("Scroll", position.toString())
         _dashboardScrollPosition.value = position
-        Log.e("Scroll", _dashboardScrollPosition.value.toString())
     }
 
     private val _budgetScrollPosition = MutableLiveData<Int?>()
@@ -24,9 +21,7 @@ class RestoreScrollPositionViewModel(application: Application): AndroidViewModel
         get() = _budgetScrollPosition
 
     fun updateBudgetScrollPosition(position: Int) {
-        Log.e("Scroll", position.toString())
         _budgetScrollPosition.value = position
-        Log.e("Scroll", _budgetScrollPosition.value.toString())
     }
 
     private val _statsScrollPosition = MutableLiveData<Int?>()

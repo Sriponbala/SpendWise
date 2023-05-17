@@ -4,21 +4,14 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.spendwise.ColorsForSpinner
@@ -28,18 +21,11 @@ import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.adapter.ColorSpinnerAdapter
 import com.example.spendwise.adapter.GoalIconSpinnerAdapter
-import com.example.spendwise.databinding.FragmentAddBudgetBinding
 import com.example.spendwise.databinding.FragmentAddGoalBinding
 import com.example.spendwise.domain.ColorItem
 import com.example.spendwise.domain.IconItem
-import com.example.spendwise.enums.RecordType
-import com.example.spendwise.viewmodel.BudgetViewModel
-import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.GoalViewModel
-import com.example.spendwise.viewmodel.RecordViewModel
-import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.GoalViewModelFactory
-import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
 import java.util.*
 
 class AddGoalFragment : Fragment() {
@@ -48,36 +34,24 @@ class AddGoalFragment : Fragment() {
     private lateinit var goalViewModel: GoalViewModel
     private lateinit var args: AddGoalFragmentArgs
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = GoalViewModelFactory(requireActivity().application)
+        val factory = GoalViewModelFactory(requireActivity().application, resources)
         goalViewModel = ViewModelProvider(requireActivity(), factory)[GoalViewModel::class.java]
-        /*(activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.baseline_close_24)
-            title = if(args.isEditGoal) {
-                "Edit Goal"
-            } else "Add Goal"
-        }*/
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-      //  args = AddGoalFragmentArgs.fromBundle(requireArguments())
-
-        // Inflate the layout for this fragment
         binding = FragmentAddGoalBinding.inflate(inflater, container, false)
         args = AddGoalFragmentArgs.fromBundle(requireArguments())
         binding.toolbarAddGoal.apply {
             title = if(args.isEditGoal) {
-                "Edit Goal"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.edit), resources.getString(R.string.goal_label))
             } else {
-                "Add Goal"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.add), resources.getString(R.string.goal_label))
             }
             setNavigationOnClickListener {
                 requireActivity().onBackPressed()
@@ -100,22 +74,23 @@ class AddGoalFragment : Fragment() {
         createAndSetAdapter()
 
         if(args.isEditGoal && savedInstanceState == null) {
-            goalViewModel.goal.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
+            goalViewModel.goal.observe(viewLifecycleOwner) {
+                if (it != null) {
                     binding.etGoalName.setText(it.goalName)
-//                    val normalValue = "%.0f".format(scientificValue)
                     binding.etGoalAmount.setText(Helper.formatDecimal(it.targetAmount.toBigDecimal()))
                     binding.etSavedGoalAmount.setText(Helper.formatDecimal(it.savedAmount.toBigDecimal()))
-                    val selectedIcon = IconsForSpinner.goalIcons.find { icon -> icon.goalIcon == it.goalIcon }
+                    val selectedIcon =
+                        IconsForSpinner.goalIcons.find { icon -> icon.goalIcon == it.goalIcon }
                     val iconIndex = IconsForSpinner.goalIcons.indexOf(selectedIcon)
                     binding.tilGoalColor.setSelection(iconIndex)
 
-                    val selectedColor = ColorsForSpinner.colorsList.find { color -> color.color == it.goalColor}
+                    val selectedColor =
+                        ColorsForSpinner.colorsList.find { color -> color.color == it.goalColor }
                     val indexColor = ColorsForSpinner.colorsList.indexOf(selectedColor)
                     binding.tilGoalColor.setSelection(indexColor)
                     binding.etDesiredDate.setText(it.desiredDate)
                 }
-            })
+            }
         }
 
         binding.saveGoalButton.setOnClickListener {
@@ -151,21 +126,32 @@ class AddGoalFragment : Fragment() {
 
         binding.etGoalName.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
-                binding.tilGoalName.error = null
+                if(goalViewModel.goalNameError.isNotEmpty()) {
+                    if(Helper.validateName(binding.etGoalName.text.toString())){
+                        binding.tilGoalName.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.goal_name))
+                        goalViewModel.goalNameError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.goal_name))
+                    } else {
+                        binding.tilGoalName.error = null
+                        goalViewModel.goalNameError = ""
+                    }
+                } else {
+                    binding.tilGoalName.error = null
+                }
+//                binding.tilGoalName.error = null
             }
         }
         binding.etGoalAmount.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
                 if(goalViewModel.targetAmountError.isNotEmpty()) {
                     if(binding.etGoalAmount.text?.isEmpty() == true) {
-                        binding.tilGoalAmount.error = "Target amount should not be empty"
-                        goalViewModel.targetAmountError = "Target amount should not be empty"
+                        binding.tilGoalAmount.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+                        goalViewModel.targetAmountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
                     } else if(Helper.checkAmountIsZeroOrNot(binding.etGoalAmount.text.toString())) {
-                        binding.tilGoalAmount.error = "Target amount can not be zero"
-                        goalViewModel.targetAmountError = "Target amount can not be zero"
+                        binding.tilGoalAmount.error = resources.getString(R.string.amount_can_not_be_zero)
+                        goalViewModel.targetAmountError = resources.getString(R.string.amount_can_not_be_zero)
                     } else if(!Helper.validateGoalAmount(binding.etGoalAmount.text.toString())) {
-                        binding.tilGoalAmount.error = "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
-                        goalViewModel.targetAmountError = "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+                        binding.tilGoalAmount.error = resources.getString(R.string.amount_format_message)
+                        goalViewModel.targetAmountError = resources.getString(R.string.amount_format_message)
                     } else {
                         binding.tilGoalAmount.error = null
                         goalViewModel.targetAmountError = ""
@@ -180,8 +166,8 @@ class AddGoalFragment : Fragment() {
             if(it != null && it.toString().isNotEmpty()) {
                 if(goalViewModel.savedAmountError.isNotEmpty()) {
                     if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateGoalAmount(binding.etSavedGoalAmount.text.toString())) {
-                        binding.tilSavedGoalAmount.error = "Can be empty / have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
-                        goalViewModel.savedAmountError = "Can be empty / have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+                        binding.tilSavedGoalAmount.error = resources.getString(R.string.saved_amount_format_message)
+                        goalViewModel.savedAmountError = resources.getString(R.string.saved_amount_format_message)
                     } else {
                         binding.tilSavedGoalAmount.error = null
                         goalViewModel.savedAmountError = ""
@@ -195,14 +181,13 @@ class AddGoalFragment : Fragment() {
 
     private fun addGoal() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-            Log.e("userId add record", userId.toString())
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
             goalViewModel.insertGoal(
                 userId = userId,
                 goalName = binding.etGoalName.text.toString(),
                 targetAmount = binding.etGoalAmount.text.toString(),
                 savedAmount = if(binding.etSavedGoalAmount.text.toString() == "") {
-                    "0.00"
+                    resources.getString(R.string.zero)
                 } else { binding.etSavedGoalAmount.text.toString() },
                 goalColor = goalViewModel.goalColor,
                 goalIcon = goalViewModel.goalIcon,
@@ -214,14 +199,13 @@ class AddGoalFragment : Fragment() {
 
     private fun updateGoal() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-            Log.e("userId edit goal", userId.toString())
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
             goalViewModel.updateGoal(
                 userId = userId,
                 goalName = binding.etGoalName.text.toString(),
                 targetAmount = binding.etGoalAmount.text.toString(),
                 savedAmount = if(binding.etSavedGoalAmount.text.toString() == "") {
-                    "0.00"
+                    resources.getString(R.string.zero)
                 } else { binding.etSavedGoalAmount.text.toString() },
                 goalColor = goalViewModel.goalColor,
                 goalIcon = goalViewModel.goalIcon,
@@ -233,57 +217,42 @@ class AddGoalFragment : Fragment() {
 
     private fun validateAllFields(): Boolean {
         if(binding.etGoalName.text?.isEmpty() == true) {
-            binding.tilGoalName.error = "Goal name should not be empty"
+            binding.tilGoalName.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.goal_name))
+        }  else if(Helper.validateName(binding.etGoalName.text.toString())){
+            binding.tilGoalName.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.goal_name))
+            goalViewModel.goalNameError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.goal_name))
         } else {
             binding.tilGoalName.error = null
         }
         if(binding.etGoalAmount.text?.isEmpty() == true) {
-            binding.tilGoalAmount.error = "Target amount should not be empty"
-            goalViewModel.targetAmountError = "Target amount should not be empty"
+            binding.tilGoalAmount.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+            goalViewModel.targetAmountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
         } else if(Helper.checkAmountIsZeroOrNot(binding.etGoalAmount.text.toString())) {
-            binding.tilGoalAmount.error = "Target amount can not be zero"
-            goalViewModel.targetAmountError = "Target amount can not be zero"
+            binding.tilGoalAmount.error = resources.getString(R.string.amount_can_not_be_zero)
+            goalViewModel.targetAmountError = resources.getString(R.string.amount_can_not_be_zero)
         } else if(!Helper.validateGoalAmount(binding.etGoalAmount.text.toString())) {
-            binding.tilGoalAmount.error = "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
-            goalViewModel.targetAmountError = "Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Target amount should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+            binding.tilGoalAmount.error = resources.getString(R.string.amount_format_message)
+            goalViewModel.targetAmountError = resources.getString(R.string.amount_format_message)
         } else {
             binding.tilGoalAmount.error = null
             goalViewModel.targetAmountError = ""
         }
         if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateGoalAmount(binding.etSavedGoalAmount.text.toString())) {
-            binding.tilSavedGoalAmount.error = "Can be empty / have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
-            goalViewModel.savedAmountError = "Can be empty / have 1 to 10 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//should have 1 to 5 digits before decimal and 0 to 2 digits after decimal"
+            binding.tilSavedGoalAmount.error = resources.getString(R.string.saved_amount_format_message)
+            goalViewModel.savedAmountError = resources.getString(R.string.saved_amount_format_message)
         } else {
             binding.tilSavedGoalAmount.error = null
             goalViewModel.savedAmountError = ""
         }
 
-        return if(binding.etGoalName.text?.isEmpty() == true) {
-//            binding.etGoalName.error = "Goal name should not be empty"
-            /*Toast.makeText(
-                this.requireContext(),
-                "Goal name should not be empty",
-                Toast.LENGTH_SHORT
-            ).show()*/
+        return if(binding.etGoalName.text?.isEmpty() == true || Helper.validateName(binding.etGoalName.text.toString())) {
             false
         }
         else if(binding.etGoalAmount.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.etGoalAmount.text.toString())) {
-//            binding.etGoalAmount.error = "Target amount should not be empty"
-            /*Toast.makeText(
-                this.requireContext(),
-                "Target amount should not be empty",
-                Toast.LENGTH_SHORT
-            ).show()*/
             false
         } else if(!Helper.validateGoalAmount(binding.etGoalAmount.text.toString())) {
-//            binding.etGoalAmount.error = "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-//            Toast.makeText(this.requireContext(), "Target amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateGoalAmount(binding.etSavedGoalAmount.text.toString())) {
-//            binding.etSavedGoalAmount.error = "Saved amount can be empty or should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-//            Toast.makeText(this.requireContext(), "Saved amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
-            false
-        } else true
+        } else !(binding.etSavedGoalAmount.text.toString() != "" && !Helper.validateGoalAmount(binding.etSavedGoalAmount.text.toString()))
     }
 
     private fun getInputDate() {

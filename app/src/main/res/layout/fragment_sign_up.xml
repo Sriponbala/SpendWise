@@ -50,13 +50,6 @@
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="@color/colorPrimary"
                 android:src="@mipmap/ic_launcher_foreground" />
-            <!--<ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"/>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email_textInputLayout"

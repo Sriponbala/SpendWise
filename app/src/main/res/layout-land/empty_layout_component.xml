@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parentConstraint"
+    style="@style/ScreenBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/emptyGoals"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        layout="@layout/empty_data"
+        app:layout_constraintTop_toTopOf="@id/parentConstraint"
+        app:layout_constraintStart_toStartOf="@id/parentConstraint"
+        app:layout_constraintEnd_toEndOf="@id/parentConstraint"
+        android:layout_gravity="center"/>
+
+    <include
+        android:id="@+id/blankViewNoGoals"
+        layout="@layout/blank_view_component"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/parentConstraint"
+        app:layout_constraintStart_toStartOf="@id/parentConstraint"
+        app:layout_constraintTop_toBottomOf="@id/emptyGoals" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

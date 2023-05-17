@@ -1,14 +1,12 @@
 package com.example.spendwise.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.spendwise.database.SpendWiseDatabase
 import com.example.spendwise.domain.Budget
-import com.example.spendwise.domain.Record
 import com.example.spendwise.repository.BudgetRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +33,7 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
     val budgetCategoryAlreadyExists = MutableLiveData<Boolean>()
 
     var amountError: String = ""
+    var budgetNameError = ""
 
     fun checkIfCategoryAlreadyExists(userId: Int, category: String, period: String) {
         viewModelScope.launch {
@@ -62,7 +61,6 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
             var allBudgetsFetched: List<Budget>? = null
             val job = launch {
                 allBudgetsFetched = repository.fetchBudgetsOfThePeriod(userId, period)
-                Log.e("Budget", allBudgetsFetched.toString())
             }
             job.join()
             withContext(Dispatchers.Main) {
@@ -71,7 +69,6 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    // onItemClick of adapter
     fun setSelectedBudgetItem(budgetItem: Pair<Budget, BigDecimal>) {
         _budget.value = budgetItem.first
         _budgetItem.value = budgetItem
@@ -83,28 +80,19 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             val job = launch {
                 _budget.value?.let {
-                    Log.e("Test", "deleting budget in viewmodel before repo call")
                     repository.deleteBudget(it)
                 }
                 period.value?.let {
-                    Log.e("Test", "in deleting budget in viewmodel before  fetch budgets call")
                     fetchBudgetsOfThePeriod(userId, it)
                 }
             }
             job.join()
             withContext(Dispatchers.Main) {
-                /*if(filterByCategory) {
-                    fetchAllRecords(user)
-                    fetchRecords()
-                }*/
-                Log.e("Test", "in main thread deleting budget in viewmodel before updating budget value ")
                 _budget.value = null
                 _budgetItem.value = null
             }
         }
     }
-
-//    val isBudgetUpdated = MutableLiveData<Boolean>()
 
     fun updateBudget(userId: Int, budgetName: String, budgetAmount: String, period: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -121,35 +109,20 @@ class BudgetViewModel(application: Application): AndroidViewModel(application) {
             job.join()
             withContext(Dispatchers.Main) {
                 _budgetItem.value?.let {
-                    Log.e("ViewBudget", "${it.toString()} - budget item before updating budget 1 in viewmodel")
-                    Log.e("Budget", "updated budget " + updatedBudget.toString())
                     if(updatedBudget != null) {
-                        Log.e("ViewBudget", "${it.toString()} - budget item before updating budget 2 in viewmodel")
                         _budgetItem.value = Pair(updatedBudget!!, it.second)
                     }
                 }
                 isBudgetUpdated = true
-                _budget.value = updatedBudget.also {
-                    Log.e("ViewBudget", "${it.toString()} - budget while updating budget in viewmodel inside also")
-                }
-                /*_budgetItem.value?.let {
-                    Log.e("Budget", "updated budget " + updatedBudget.toString())
-                    if(updatedBudget != null) {
-                        _budgetItem.value = Pair(updatedBudget!!, it.second)
-                    }
-                }*/
+                _budget.value = updatedBudget
             }
         }
     }
 
-
     var isBudgetUpdated = false
     fun updateBudgetItemRecordsAmount(amount: BigDecimal) {
-        Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel" )
         _budget.value?.let {
-            Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel inside let 1" )
             _budgetItem.value = Pair(it, amount)
-            Log.e("ViewBudget", "update budgetitem $amount in budget viewmodel inside let 2" )
         }
     }
 

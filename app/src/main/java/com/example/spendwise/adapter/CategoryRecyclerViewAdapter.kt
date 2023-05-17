@@ -6,14 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.R
 import com.example.spendwise.domain.Category
-import com.example.spendwise.fragment.AddRecordFragmentDirections
-import com.example.spendwise.fragment.CategoryFragment
-import com.example.spendwise.fragment.CategoryFragmentArgs
-import com.example.spendwise.fragment.CategoryFragmentDirections
 import com.google.android.material.divider.MaterialDivider
 
 class CategoryRecyclerViewAdapter(private var categories: List<Category>): RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
@@ -23,11 +18,6 @@ class CategoryRecyclerViewAdapter(private var categories: List<Category>): Recyc
         val categoryImage: ImageView = itemView.findViewById(R.id.categoryImage)
         val categoryTextView: TextView = itemView.findViewById(R.id.categoryTextView)
         val divider: MaterialDivider = itemView.findViewById(R.id.categoryItemDivider)
-    }
-
-    fun filterList(filteredList: List<Category>) {
-        categories = filteredList
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

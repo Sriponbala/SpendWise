@@ -1,7 +1,6 @@
 package com.example.spendwise.dao
 
 import androidx.room.*
-import com.example.spendwise.domain.Budget
 import com.example.spendwise.domain.Goal
 
 @Dao

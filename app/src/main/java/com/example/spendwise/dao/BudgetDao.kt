@@ -2,8 +2,6 @@ package com.example.spendwise.dao
 
 import androidx.room.*
 import com.example.spendwise.domain.Budget
-import com.example.spendwise.domain.Category
-import com.example.spendwise.enums.Period
 
 @Dao
 interface BudgetDao {
@@ -22,4 +20,5 @@ interface BudgetDao {
 
     @Query("select exists(select * from Budget where category like :category and period like :period and userId like :userId)")
     fun checkIfCategoryExists(userId: Int, category: String, period: String): Boolean
+
 }

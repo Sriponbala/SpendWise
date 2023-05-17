@@ -1,7 +1,6 @@
 package com.example.spendwise.adapter
 
 import android.content.res.Configuration
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.domain.Budget
-import com.example.spendwise.fragment.BudgetFragment
-import com.example.spendwise.fragment.ConfigurationFragment
 import com.google.android.material.divider.MaterialDivider
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.math.BigDecimal
@@ -37,19 +34,12 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, BigDecima
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = (LayoutInflater.from(parent.context)).inflate(R.layout.budget_recycler_item, parent, false)
-        /*if(fragment is BudgetFragment) {
-            Log.e("BudgetAdapter", (fragment is BudgetFragment).toString())
-            view.isClickable = false
-            view.isFocusable = false
-            view.background = null
-        }*/
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = budgets.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.e("Budget", budgets.toString())
         val res = holder.itemView.resources
         if(position == budgets.lastIndex || res.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             holder.divider.visibility = View.GONE
@@ -61,7 +51,6 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, BigDecima
         holder.budgetAmount.text = Helper.formatNumberToIndianStyle(item.first.maxAmount.toBigDecimal())//.toString()
         val percentage = (((item.second)/(item.first.maxAmount).toBigDecimal()) * BigDecimal(100)).toInt()
         holder.progressBar.progress = percentage
-//        holder.progressBar.trackCornerRadius
         if(percentage in 70..99) {
             holder.progressBar.apply {
                 setIndicatorColor(res.getColor(R.color.progressIndicatorDanger))
@@ -72,30 +61,28 @@ class BudgetRecyclerViewAdapter(private val budgets: List<Pair<Budget, BigDecima
                 setIndicatorColor(res.getColor(R.color.progressIndicatorLeisure))
                 trackColor = resources.getColor(R.color.progressBarLeisure)
             }
-//            holder.progressBar.setIndicatorColor(res.getColor(R.color.colorPrimary))
         } else if(percentage >= 100) {
             holder.progressBar.apply {
                 setIndicatorColor(res.getColor(R.color.progressIndicatorExceeded))
             }
-//            holder.progressBar.setIndicatorColor(res.getColor(R.color.health_color))
         }
 
+        val percentageSymbol = res.getString(R.string.percentage_symbol)
+
         if(percentage >= 100) {
-            holder.budgetPercentText.text = "${Helper.formatPercentage(percentage)}%"
+            val formattedPercentage = Helper.formatPercentage(percentage)
+            holder.budgetPercentText.text = res.getString(R.string.percent_format, formattedPercentage, percentageSymbol)
             holder.budgetPercentText.setTextColor(res.getColor(R.color.white))
             holder.remainingAmount.setTextColor(res.getColor(R.color.progressIndicatorExceeded))
             holder.remainingAmount.text = Helper.formatNumberToIndianStyle(item.second.minus((item.first.maxAmount).toBigDecimal()))
             holder.remainsText.setTextColor(res.getColor(R.color.progressIndicatorExceeded))
-            holder.remainsText.text = "Overspent"
+            holder.remainsText.text = res.getString(R.string.overspent_label)
             holder.remainingAmountCurrency.setTextColor(res.getColor(R.color.progressIndicatorExceeded))
         } else {
-            holder.budgetPercentText.text = "$percentage% "
+            holder.budgetPercentText.text = res.getString(R.string.percent_format, percentage, percentageSymbol)
             holder.budgetPercentText.setTextColor(res.getColor(R.color.black))
-//            holder.remainingAmount.setTextColor(res.getColor(R.color.black))
             holder.remainingAmount.text = Helper.formatNumberToIndianStyle(((item.first.maxAmount).toBigDecimal()).minus(item.second))
-//            holder.remainsText.setTextColor(res.getColor(R.color.black))
-            holder.remainsText.text = "Remains"
-//            holder.remainingAmountCurrency.setTextColor(res.getColor(R.color.black))
+            holder.remainsText.text = res.getString(R.string.remains_recycler_item)
         }
         holder.spentAmount.text = Helper.formatNumberToIndianStyle(item.second)
         holder.itemView.setOnClickListener {

@@ -2,17 +2,13 @@ package com.example.spendwise.fragment
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -20,23 +16,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddRecordBinding
-import androidx.lifecycle.Observer
-import com.example.spendwise.Categories
 import com.example.spendwise.Helper
-import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
 import java.util.*
 
 class AddRecordFragment : Fragment() {
 
     private lateinit var binding: FragmentAddRecordBinding
-//    private lateinit var userViewModel: UserViewModel
     private lateinit var recordViewModel: RecordViewModel
     private val categoryViewModel: CategoryViewModel by activityViewModels()
     private lateinit var type: RecordType
@@ -44,11 +33,6 @@ class AddRecordFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*val userViewModelFactory = UserViewModelFactory((activity as MainActivity).application)
-        userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
-        Log.e("UserViewModel AddRecord", userViewModel.toString())
-
-        Log.e("User AddRecord", userViewModel.user.value?.userId.toString())*/
         val recordViewModelFactory = RecordViewModelFactory((activity as MainActivity).application)
         recordViewModel = ViewModelProvider(requireActivity(), recordViewModelFactory)[RecordViewModel::class.java]
         setHasOptionsMenu(true)
@@ -62,34 +46,14 @@ class AddRecordFragment : Fragment() {
         args = AddRecordFragmentArgs.fromBundle(requireArguments())
         binding.toolbarAddRecord.apply {
             title = if(args.isEditRecord) {
-                "Edit Record"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.edit), args.recordType)
             } else {
-                "Add Record"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.add), args.recordType)
             }
         }
-        /*(activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.baseline_close_24)
-            title = if(args.isEditRecord) {
-                "Edit record"
-            } else "Add record"
-        }*/
         binding.toolbarAddRecord.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-
-//        Helper.validateAmountField(binding.amountEditText)
-
-
-
-//        Helper.setupEditTextValidation(binding.amountEditText)
-
-
-
-        /*userViewModel.user.value?.userId?.let {
-            Log.e("UserId AddRecord", it.toString())
-            recordViewModel.userId = it
-        }*/
         return binding.root
     }
 
@@ -98,84 +62,34 @@ class AddRecordFragment : Fragment() {
 
         if(args.isEditRecord && savedInstanceState == null) {
             if(recordViewModel.isTempDataSet) {
-                Log.e("Test", "inside recordViewModel.isTempDataSet - ${recordViewModel.isTempDataSet}")
-                recordViewModel.tempData.observe(viewLifecycleOwner, Observer {
-                    Log.e("Edit", "isTempData true, inside temp data observe")
-                    if(it != null) {
-                        Log.e("Edit", "temp data not null ${it.toString()}")
-                        binding.amountEditText.setText(it["Amount"])
-                        binding.dateEditText.setText(it["Date"]).also { _ ->
-                            Log.e("Test", "inside updating date edittext tempdata - date- ${it["Date"]}")
-                        }
-                        binding.noteEditText.setText(it["Title"])
-                        binding.descriptionTextField.setText(it["Description"])
+                recordViewModel.tempData.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        binding.amountEditText.setText(it[resources.getString(R.string.amount_label)])
+                        binding.dateEditText.setText(it[resources.getString(R.string.date_label)])
+                        binding.noteEditText.setText(it[resources.getString(R.string.title_label)])
+                        binding.descriptionTextField.setText(it[resources.getString(R.string.description_label)])
                         recordViewModel.tempData.value = null
                     }
-                })
+                }
             } else {
-                Log.e("Edit", "isTempData false")
-                recordViewModel.record.observe(viewLifecycleOwner, Observer {
-                    Log.e("Test", "inside record observe in add Rec: rec - $it")
-                    if(it != null) {
-                        Log.e("Test", "inside record observe in add Rec, rec not null : rec - $it")
-                        Log.e("Edit", "record data not null")
-                        if(it.type == RecordType.INCOME.value) {
-                            binding.toggleGroup.check(R.id.incomeButton)
-                        } else if(it.type == RecordType.EXPENSE.value) {
-                            binding.toggleGroup.check(R.id.expenseButton)
+                recordViewModel.record.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        if (it.type == RecordType.INCOME.value) {
+                            binding.toolbarAddRecord.title = resources.getString(R.string.two_strings_concate, resources.getString(R.string.edit), resources.getString(R.string.income_label))
+                        } else if (it.type == RecordType.EXPENSE.value) {
+                            binding.toolbarAddRecord.title = resources.getString(R.string.two_strings_concate, resources.getString(R.string.edit), resources.getString(R.string.expense_label))
                         }
-//                        Log.e("Amount", Helper.retrieveValueFromScientificNotation(it.amount))
                         binding.amountEditText.setText(Helper.formatDecimal(it.amount.toBigDecimal()))
-                        binding.dateEditText.setText(Helper.formatDate(it.date)).also { _ ->
-                            Log.e("Test", "inside updating date edittext rec obs - date- ${it.date}")
-                        }
+                        binding.dateEditText.setText(Helper.formatDate(it.date))
                         binding.categoryEditText.setText(it.category)
                         binding.noteEditText.setText(it.note)
                         binding.descriptionTextField.setText(it.description)
                     }
-                })
+                }
             }
 
         }
-
-        binding.toggleGroup.check(R.id.incomeButton)
-        binding.incomeButton.setTextColor(resources.getColor(R.color.white))
-        binding.expenseButton.setTextColor(resources.getColor(R.color.gray))
-        binding.incomeButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-        binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-        type = RecordType.INCOME
-
-        binding.toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if(checkedId == R.id.incomeButton && isChecked) {
-                binding.incomeButton.setTextColor(resources.getColor(R.color.white))
-                binding.expenseButton.setTextColor(resources.getColor(R.color.gray))
-                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-//                binding.incomeButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.checkedToggleButtonStrokeColor))
-//                binding.expenseButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.uncheckedToggleButtonStrokeColor))
-
-//                binding.incomeButton.setTextColor(resources.getColor(R.color.checkedToggleButtonTextColour))
-//                binding.expenseButton.setTextColor(resources.getColor(R.color.uncheckedToggleButtonTextColour))
-//                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-//                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-                type = RecordType.INCOME
-            } else if(checkedId == R.id.expenseButton && isChecked) {
-                binding.incomeButton.setTextColor(resources.getColor(R.color.gray))
-                binding.expenseButton.setTextColor(resources.getColor(R.color.white))
-                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-//                binding.incomeButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.uncheckedToggleButtonStrokeColor))
-//                binding.expenseButton.strokeColor = ColorStateList.valueOf(resources.getColor(R.color.checkedToggleButtonStrokeColor))
-
-//                binding.incomeButton.setTextColor(resources.getColor(R.color.uncheckedToggleButtonTextColour))
-//                binding.expenseButton.setTextColor(resources.getColor(R.color.checkedToggleButtonTextColour))
-//                binding.incomeButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-//                binding.expenseButton.setBackgroundColor(resources.getColor(R.color.uncheckedToggleButtonColour))
-                type = RecordType.EXPENSE
-            }
-            binding.categoryEditText.text?.clear()
-        }
-
+        type = if(args.recordType == RecordType.INCOME.value) RecordType.INCOME else RecordType.EXPENSE
 
         binding.dateEditText.setOnClickListener {
             hideInputMethod(it as EditText)
@@ -188,35 +102,21 @@ class AddRecordFragment : Fragment() {
                 updateRecord()
             } else addRecord()
         }
-        categoryViewModel.category.observe(viewLifecycleOwner, Observer { category ->
-            Log.e("Test", "inside category observe: cat - $category")
-            Log.e("Edit", "inside category observe")
-            if(category != null) {
-                Log.e("Test", "inside category observe: cat not null - $category")
-                Log.e("Edit", "category not null")
+        categoryViewModel.category.observe(viewLifecycleOwner) { category ->
+            if (category != null) {
                 categoryViewModel.queryText = ""
                 binding.categoryEditText.setText(category.title)
-                if(args.isEditRecord) {
-                    Log.e("Record", "${args.isEditRecord} - edit - $category")
-                    if(category.recordType == RecordType.INCOME) {
-                        binding.toggleGroup.check(R.id.incomeButton)
-                        binding.categoryEditText.setText(category.title)
-                    } else{
-                        binding.toggleGroup.check(R.id.expenseButton)
-                        binding.categoryEditText.setText(category.title)
-                    }
+                if (args.isEditRecord) {
+                    binding.categoryEditText.setText(category.title)
                 }
                 categoryViewModel.category.value = null
             }
-        })
+        }
 
         binding.categoryEditText.setOnClickListener {
-            Log.e("Test", "categoryEdittext.setOnClickListener true")
-            Log.e("Edit", "category edit text onclick")
             if(args.isEditRecord) {
-                Log.e("Test", "categoryEdittext.setOnClickListener and isEditRecord true")
                 recordViewModel.isTempDataSet = true
-                recordViewModel.tempData.value = mapOf("Amount" to binding.amountEditText.text.toString(), "Date" to binding.dateEditText.text.toString(), "Title" to binding.noteEditText.text.toString(), "Description" to binding.descriptionTextField.text.toString())
+                recordViewModel.tempData.value = mapOf(resources.getString(R.string.amount_label) to binding.amountEditText.text.toString(), resources.getString(R.string.date_label) to binding.dateEditText.text.toString(), resources.getString(R.string.title_label) to binding.noteEditText.text.toString(), resources.getString(R.string.description_label) to binding.descriptionTextField.text.toString())
             }
             val action = AddRecordFragmentDirections.actionAddRecordFragmentToCategoryFragment(type.value, R.id.addRecordFragment)
             findNavController().navigate(action)
@@ -227,24 +127,19 @@ class AddRecordFragment : Fragment() {
 
         binding.amountEditText.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
-//                binding.amountTextInputLayoutRecord.error = null
                 if(recordViewModel.amountError.isNotEmpty()) {
                     if(binding.amountEditText.text?.isEmpty() == true) {
-                        binding.amountTextInputLayoutRecord.error = "Amount should not be empty"
-                        recordViewModel.amountError = "Amount should not be empty"
-//            binding.amountEditText.error = "Amount should not be empty"
+                        binding.amountTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+                        recordViewModel.amountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
                     } else if(Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Amount can not be zero"
-                        binding.amountTextInputLayoutRecord.error = "Amount can not be zero"
-                        recordViewModel.amountError = "Amount can not be zero"
+                        binding.amountTextInputLayoutRecord.error = resources.getString(R.string.amount_can_not_be_zero)
+                        recordViewModel.amountError = resources.getString(R.string.amount_can_not_be_zero)
                     } else if (!Helper.validateAmount(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-                        binding.amountTextInputLayoutRecord.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-                        recordViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                        binding.amountTextInputLayoutRecord.error = resources.getString(R.string.amount_format_message)
+                        recordViewModel.amountError = resources.getString(R.string.amount_format_message)
                     } else {
                         binding.amountTextInputLayoutRecord.error = null
                         recordViewModel.amountError = ""
-//            binding.amountEditText.error = null
                     }
                 } else {
                     binding.amountTextInputLayoutRecord.error = null
@@ -259,6 +154,21 @@ class AddRecordFragment : Fragment() {
         binding.dateEditText.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
                 binding.dateTextInputLayoutRecord.error = null
+            }
+        }
+        binding.noteEditText.addTextChangedListener {
+            if(it != null && it.toString().isNotEmpty()) {
+                if(recordViewModel.titleError.isNotEmpty()) {
+                    if(Helper.validateName(binding.noteEditText.text.toString())){
+                        binding.noteTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.title_label))
+                        recordViewModel.titleError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.title_label))
+                    } else {
+                        binding.noteTextInputLayoutRecord.error = null
+                        recordViewModel.titleError = ""
+                    }
+                } else {
+                    binding.noteTextInputLayoutRecord.error = null
+                }
             }
         }
     }
@@ -280,8 +190,7 @@ class AddRecordFragment : Fragment() {
 
     private fun addRecord() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-           Log.e("userId add record", userId.toString())
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
             recordViewModel.insertRecord(userId,
                 binding.categoryEditText.text.toString(),
             binding.amountEditText.text.toString(),
@@ -295,8 +204,7 @@ class AddRecordFragment : Fragment() {
 
     private fun updateRecord() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-            Log.e("userId edit record", userId.toString())
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
             recordViewModel.updateRecord(userId,
                 binding.categoryEditText.text.toString(),
                 binding.amountEditText.text.toString(),
@@ -309,57 +217,49 @@ class AddRecordFragment : Fragment() {
     }
 
     private fun validateAllFields(): Boolean {
+        if(binding.noteEditText.text?.isEmpty() == true) {
+            binding.noteTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.title_label))
+        } else if(Helper.validateName(binding.noteEditText.text.toString())){
+            binding.noteTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.title_label))
+            recordViewModel.titleError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.title_label))
+        } else {
+            binding.noteTextInputLayoutRecord.error = null
+        }
         if(binding.amountEditText.text?.isEmpty() == true) {
-            binding.amountTextInputLayoutRecord.error = "Amount should not be empty"
-            recordViewModel.amountError = "Amount should not be empty"
-//            binding.amountEditText.error = "Amount should not be empty"
+            binding.amountTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+            recordViewModel.amountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
         } else if(Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Amount can not be zero"
-            binding.amountTextInputLayoutRecord.error = "Amount can not be zero"
-            recordViewModel.amountError = "Amount can not be zero"
+            binding.amountTextInputLayoutRecord.error = resources.getString(R.string.amount_can_not_be_zero)
+            recordViewModel.amountError = resources.getString(R.string.amount_can_not_be_zero)
         } else if (!Helper.validateAmount(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-            binding.amountTextInputLayoutRecord.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-            recordViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+            binding.amountTextInputLayoutRecord.error = resources.getString(R.string.amount_format_message)
+            recordViewModel.amountError = resources.getString(R.string.amount_format_message)
         } else {
             binding.amountTextInputLayoutRecord.error = null
             recordViewModel.amountError = ""
-//            binding.amountEditText.error = null
         }
         if(binding.categoryEditText.text?.isEmpty() == true) {
-            binding.categoryTextInputLayoutRecord.error = "Category should not be empty"
+            binding.categoryTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.category))
             binding.categoryTextInputLayoutRecord.helperText = null
-//            binding.categoryEditText.error = "Category should not be empty"
         } else {
             binding.categoryTextInputLayoutRecord.error = null
-//            binding.categoryEditText.error = null
         }
         if(binding.dateEditText.text?.isEmpty() == true) {
-            binding.dateTextInputLayoutRecord.error = "Date should not be empty"
+            binding.dateTextInputLayoutRecord.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.date_label))
             binding.dateTextInputLayoutRecord.helperText = null
-//            binding.dateEditText.error = "Date should not be empty"
         } else {
             binding.dateTextInputLayoutRecord.error = null
-//            binding.dateEditText.error = null
         }
 
-        return if(binding.amountEditText.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Amount should not be empty"
-//            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
+        return if(binding.noteEditText.text?.isEmpty() == true || Helper.validateName(binding.noteEditText.text.toString())) {
+            false
+        } else if(binding.amountEditText.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.amountEditText.text.toString())) {
             false
         } else if(!Helper.validateAmount(binding.amountEditText.text.toString())) {
-//            binding.amountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-//            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.categoryEditText.text?.isEmpty() == true) {
-//            binding.categoryEditText.error = "Category should not be empty"
-//            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
-        } else if(binding.dateEditText.text?.isEmpty() == true) {
-//            binding.dateEditText.error = "Date should not be empty"
-//            Toast.makeText(this.requireContext(), "Date should not be empty", Toast.LENGTH_SHORT).show()
-            false
-        } else true
+        } else binding.dateEditText.text?.isEmpty() != true
     }
 
     private fun hideInputMethod(view: EditText) {
@@ -370,9 +270,5 @@ class AddRecordFragment : Fragment() {
     private fun moveToPreviousPage() {
         this.findNavController().popBackStack()
     }
-
-  /*  private fun setCheckedButtonColor(checkedButton: Button) {
-        checkedButton.setTextColor(resources.getColor(R.color.white))
-    }*/
 
 }

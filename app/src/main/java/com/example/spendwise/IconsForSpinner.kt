@@ -4,7 +4,7 @@ import com.example.spendwise.domain.IconItem
 
 object IconsForSpinner {
 
-    val goalIcons = mutableListOf<IconItem>(
+    val goalIcons = mutableListOf(
         IconItem(R.drawable.baseline_house_24),
         IconItem(R.drawable.baseline_card_giftcard_24),
         IconItem(R.drawable.baseline_pets_24),

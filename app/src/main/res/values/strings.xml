@@ -10,6 +10,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="dashboard">Dashboard</string>
+    <string name="records">Records</string>
     <string name="budgets">Budgets</string>
     <string name="goals">Goals</string>
     <string name="openingDoubleQuotes">\u201C</string>
@@ -31,6 +32,7 @@
     <string name="save_button">save</string>
     <string name="goal_name_label">Goal Name</string>
     <string name="target_amount_label">Target Amount</string>
+    <string name="target_date_label">Target Date</string>
     <string name="saved_amount_label">Saved Amount</string>
     <string name="goal_color_label">Goal Color</string>
     <string name="goal_icon_label">Goal Icon</string>
@@ -57,6 +59,8 @@
     <string name="view_all_expense_stats_button">VIEW ALL EXPENSE STATS</string>
     <string name="navigate_to_sign_up_page_button">Don\'t have an account? SIGN UP</string>
     <string name="zero">0.00</string>
+    <string name="zero_three_decimal">0.000</string>
+    <string name="zero_one_decimal">0.0</string>
     <string name="records_label">Records</string>
     <string name="no_data_value">--</string>
     <string name="navigate_to_login_page_button">Already have an account? LOGIN</string>
@@ -76,9 +80,81 @@
     <string name="budget_within_limit_info">Spending Within Limit</string>
     <string name="budget_reached_threshold_info">Spending About To Exceed</string>
     <string name="budget_exceeded_info">Budget Exceeded</string>
+    <string name="add_income_label">Add Income</string>
+    <string name="add_expense_label">Add Expense</string>
+    <string name="percent_format">%1$s%2$s</string>
+    <string name="overspent_label">Overspent</string>
+    <string name="no_target_date_label">No Target Date</string>
+    <string name="amount_format">₹ %1$s</string>
+    <string name="budget_label">Budget</string>
+    <string name="budget_name">Budget name</string>
+    <string name="goal_name">Goal name</string>
+    <string name="already_exists">already exists</string>
+    <string name="select_a_category">Select A Category</string>
+    <string name="categories_label">Categories</string>
+    <string name="no_goals_found">No Goals Found\nClick (+) To Add Goal</string>
+    <string name="goals_label">Goals</string>
+    <string name="stats_label">Stats</string>
+    <string name="no_stats_info">No Stats Found</string>
+    <string name="no_records_found">No Records Found</string>
+    <string name="no_monthly_budgets_info">No Monthly Budgets Found</string>
+    <string name="user_label">User</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+
+    <string name="enter_valid_email_message">Please enter valid email</string>
+    <string name="upperCase">Should contain atleast 1 uppercase</string>
+    <string name="lowerCase">Should contain atleast 1 lowercase</string>
+    <string name="specialCharacter">Need atleast 1 special character from @#$%^&amp;*</string>
+    <string name="passwordCharactersCountMin">Should contain atleast 6 characters</string>
+    <string name="passwordCharactersCountMax">Should contain maximum 15 characters only</string>
+    <string name="confirmPasswordNotCorrect">Password does not match</string>
+    <string name="no_network">Check your network connectivity</string>
+    <string name="app_usage_feedback">App Usage Feedback</string>
+    <string name="emailFeedbackErrorMessage">Issues with providing feedback. We will check and update soon.</string>
+    <string name="loginEmailMessage">Invalid email id, user does not exist</string>
+    <string name="incorrectPassword">Incorrect password</string>
+    <string name="should_not_be_empty_message">%1$s should not be empty</string>
+    <string name="amount_format_message">Should have 1 to 10 digits before decimal, 0 to 2 digits after decimal</string>
+    <string name="saved_amount_format_message">Can be empty / have 1 to 10 digits before decimal, 0 to 2 digits after decimal</string>
+    <string name="amount_can_not_be_zero">Amount can not be zero</string>
+    <string name="three_strings_concate">%1$s %2$s %3$s</string>
+    <string name="two_strings_concate">%1$s %2$s</string>
+    <string name="list">List</string>
+    <string name="exceededPercent">100+</string>
+
+
+    <string name="loginStatus">LoginStatus</string>
+    <string name="status">status</string>
+    <string name="userId">userId</string>
+
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="ok_button">Ok</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="log_out_button">Log Out</string>
+    <string name="close_button">Close</string>
+
     <string-array name="recordTypes">
         <item>All</item>
         <item>Income</item>
         <item>Expense</item>
     </string-array>
+
+    <string-array name="monthsList">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
 </resources>

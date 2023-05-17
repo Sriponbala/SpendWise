@@ -3,7 +3,6 @@ package com.example.spendwise.fragment
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
@@ -33,9 +31,7 @@ class GoalsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-/*        navigationListener = parentFragment?.parentFragment as HomePageFragment
-        navigationListener.changeVisibilityOfFab(true)*/
-        val factory = GoalViewModelFactory(requireActivity().application)
+        val factory = GoalViewModelFactory(requireActivity().application, resources)
         goalViewModel = ViewModelProvider(requireActivity(), factory)[GoalViewModel::class.java]
         val restoreFactory = RestoreScrollPositionViewModelFactory(requireActivity().application)
         restoreScrollPositionViewModel = ViewModelProvider(this, restoreFactory)[RestoreScrollPositionViewModel::class.java]
@@ -44,15 +40,9 @@ class GoalsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        /*(activity as MainActivity).supportActionBar?.apply {
-            title = "Goals"
-            setDisplayHomeAsUpEnabled(false)
-        }*/
         binding = FragmentGoalsBinding.inflate(inflater, container, false)
         navigationListener = parentFragment?.parentFragment as HomePageFragment
-        val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-        Log.e("Goal", userId.toString())
+        val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
         goalViewModel.fetchAllGoals(userId)
         return binding.root
     }
@@ -77,7 +67,7 @@ class GoalsFragment : Fragment() {
                 } else {
                     binding.scrollViewEmptyDataGoals.visibility = View.VISIBLE
                     binding.noData.emptyGoals.emptyDataImage.setImageResource(R.drawable.goal)
-                    binding.noData.emptyGoals.emptyDataText.text = "No Goals Found\nClick (+) To Add Goal"
+                    binding.noData.emptyGoals.emptyDataText.text = resources.getString(R.string.no_goals_found)
                     binding.goalsRecyclerView.visibility = View.GONE
                 }
             }
@@ -87,7 +77,6 @@ class GoalsFragment : Fragment() {
     private fun setAdapter(goals: List<Goal>) {
         val adapter = GoalAdapter(goals)
         adapter.onItemClick = {
-            Log.e("Goal", it.toString())
             goalViewModel.setSelectedGoalItem(it)
             navigationListener.onActionReceived(destination = ViewGoalFragment())
         }
@@ -108,22 +97,7 @@ class GoalsFragment : Fragment() {
         super.onResume()
         val actionBar = (activity as? MainActivity)?.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
-        actionBar?.title = "Goals"
+        actionBar?.title = resources.getString(R.string.goals_label)
     }
-
-/*
-    override fun onPause() {
-        restoreScrollPositionViewModel.dashboardScrollPosition.observe(viewLifecycleOwner, Observer {
-            Log.e("Scroll", it.toString() + "observe")
-            if (it != null) {
-                binding.scrollViewGoals.scrollTo(0, it)
-            }
-        })
-        super.onPause()
-        Log.e("Scroll", "onPause")
-        restoreScrollPositionViewModel.updateDashboardScrollPosition(binding.scrollViewGoals.scrollY)
-    }
-*/
-
 
 }

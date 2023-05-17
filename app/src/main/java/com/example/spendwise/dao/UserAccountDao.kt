@@ -1,7 +1,5 @@
 package com.example.spendwise.dao
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.spendwise.domain.User
 import com.example.spendwise.domain.UserPassword
@@ -34,14 +32,9 @@ interface UserAccountDao {
     fun getUser(userId: Int): User?
 
     @Query("select exists(select email from User where email = :email)")
-    fun checkIfUserExists(email: String): Boolean //LiveData<Boolean>
+    fun checkIfUserExists(email: String): Boolean
 
     @Query("select exists(select password from UserPassword where userId = :userId and password = :password)")
-    fun verifyPassword(userId: Int, password: String): Boolean // LiveData<Boolean>
+    fun verifyPassword(userId: Int, password: String): Boolean
 
- /*   @Query("DELETE from User")
-    fun deleteAllRecords()
-
-    @Query("DELETE from UserPassword")
-    fun deleteAllUserPasswordsRecords()*/
 }

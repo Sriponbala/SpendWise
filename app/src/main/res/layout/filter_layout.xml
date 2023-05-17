@@ -4,21 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:id="@+id/filter_layout_linear"
-    android:background="#e3f3ff"
+    android:background="@color/filterLayoutBackground"
     android:layout_height="wrap_content">
-    <!--<ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="13dp"
-        android:src="@drawable/filter"
-        app:tint="#515050"
-        android:layout_margin="4dp"/>-->
-<!--
-    <View
-        android:layout_width="1dp"
-        android:background="#515050"
-        android:layout_height="match_parent"/>
--->
+
     <TextView
         android:id="@+id/monthAndYearTv"
         android:layout_width="0dp"
@@ -36,12 +24,6 @@
         android:layout_margin="4dp"
         app:drawableTint="#515050"
         app:drawableEndCompat="@drawable/arrow_drop_down" />
-<!--
-    <View
-        android:layout_width="1dp"
-        android:background="#515050"
-        android:layout_height="match_parent"/>
--->
     <Spinner
         android:theme="@style/Theme.SpendWise.SpinnerStyle"
         android:id="@+id/spinner"

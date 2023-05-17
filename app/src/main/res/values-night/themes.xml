@@ -2,31 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.SpendWise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <!--<item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        &lt;!&ndash; Secondary brand color. &ndash;&gt;
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-         Tertiary brand colour.
-        <item name="colorTertiary">@color/tertiary_dark</item>
-        <item name="colorTertiaryContainer">@color/tertiary_container_dark</item>
-        <item name="colorOnTertiary">@color/on_tertiary_dark</item>
-        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_dark</item>-->
 
-        <!-- Dark mode primary color -->
-        <!--<item name="colorPrimary">#1E90FF</item>
-        <item name="colorPrimaryVariant">#206ad9</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-
-        &lt;!&ndash; Dark mode secondary color &ndash;&gt;
-        <item name="colorSecondary">#1E90FF</item>
-        <item name="colorSecondaryVariant">#206ad9</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-
-        &lt;!&ndash; Dark mode status bar color &ndash;&gt;
-        <item name="android:statusBarColor">#206ad9</item>-->
 
         <item name="colorPrimary">@color/primaryBlue</item>
         <item name="colorPrimaryVariant">@color/primaryVariant</item>
@@ -40,15 +16,12 @@
         <item name="android:navigationBarColor">@color/recordPage</item>
 
         <!-- Customize your theme here. -->
-<!--        <item name="android:textColor">@color/white</item>-->
         <item name="itemRippleColor">@color/rippleDark</item>
         <item name="colorTertiary">@color/cardBehindScreenDark</item>
         <item name="colorTertiaryContainer">@color/pieChartCenter</item>
         <item name="colorOnTertiary">@color/black</item>
         <item name="colorOnTertiaryContainer">@color/white</item>
-        <!--<color name="pieChartCenter">@color/black</color>
-        <color name="screenBehindCardView">#202020</color>
-        <color name="cardViewColor">@color/black</color>-->
+
 
     </style>
 
@@ -70,16 +43,7 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom_sheet</item>
     </style>
 
-    <!--<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/tertiary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/tertiary_container</item>
-        <item name="colorOnPrimaryContainer">@color/on_tertiary_container</item>
-        <item name="colorPrimaryVariant">@color/on_tertiary_container</item>
 
-        &lt;!&ndash; Status bar color. &ndash;&gt;
-        <item name="android:statusBarColor">?attr/colorOnTertiaryContainer</item>
-    </style>-->
     <style name="SpinnerTextStyle">
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorSecondary">@color/black</item>

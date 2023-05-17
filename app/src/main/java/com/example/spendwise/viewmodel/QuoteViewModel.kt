@@ -14,9 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class QuoteViewModel : ViewModel() {
 
     private val _quote = MutableLiveData<Quote?>()
-    val quote: LiveData<Quote?> = _quote.also {
-        Log.e("Quote", it.value.toString())
-    }
+    val quote: LiveData<Quote?> = _quote
 
     fun getRandomQuote() {
         viewModelScope.launch {
@@ -36,14 +34,13 @@ class QuoteViewModel : ViewModel() {
                         val randomQuote = quotes.random()
                         _quote.value = randomQuote
                     } else {
-                        _quote.value = null//"No expense-related quotes available"
+                        _quote.value = null
                     }
                 } else {
-                    _quote.value = null//"Error occurred while fetching quote"
+                    _quote.value = null
                 }
             } catch (e: Exception) {
-                Log.e("Quote", e.toString())
-                _quote.value = null//"Error occurred while fetching quote"
+                _quote.value = null
             }
         }
     }

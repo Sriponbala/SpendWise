@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recordCardView"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardUseCompatPadding="true"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="4dp"
-    android:elevation="4dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-
-</androidx.cardview.widget.CardView>
--->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,93 +23,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearRecord1"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toStartOf="@id/linearRecord2"
-        app:layout_constraintStart_toEndOf="@id/categoryLogo"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/noteTextView"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textAlignment="viewStart"
-            android:maxLines="1"
-            android:textSize="14sp"
-            />
-        <TextView
-            android:id="@+id/categoryTextView"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:textAlignment="viewStart"
-            android:textSize="14sp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearRecord2"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="1.5"
-        android:layout_marginEnd="16dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/linearRecord1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/amountTextView"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_gravity="end"
-            android:textAlignment="viewEnd"
-            android:textSize="14sp"
-            android:textStyle="bold"
-             />
-
-        <TextView
-            android:id="@+id/dateTextView"
-            style="@style/TextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:layout_gravity="end"
-            android:maxLines="1"
-            android:textSize="14sp"
-            />
-    </LinearLayout>
-<!--
-
     <TextView
-        android:id="@+id/amountTextView"
+        android:id="@+id/noteTextView"
         style="@style/TextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
         android:ellipsize="end"
+        android:textAlignment="viewStart"
         android:maxLines="1"
-        android:textAlignment="viewEnd"
-        android:text="$ 99,999.99"
-        app:layout_constraintStart_toEndOf="@id/linearRecord"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="poiuytrewqasdfghjkmnbvcxzawertyuiojhgfdszbnmjsertyui"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/categoryLogo"
+        app:layout_constraintEnd_toStartOf="@id/dateTextView"
+        />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -135,14 +47,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        android:layout_gravity="end"
         android:maxLines="1"
-        android:text="Apr 5"
-        android:textSize="16sp"
+        android:text="May 26"
         android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/amountTextView"
-        tools:layout_editor_absoluteY="35dp" />
--->
+        app:layout_constraintStart_toEndOf="@id/noteTextView"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/categoryTextView"
+        style="@style/TextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Entertainmentpoiuytrewqasdfghjklcxzxcvbnmuytre"
+        android:textAlignment="viewStart"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toEndOf="@id/categoryLogo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/amountTextView"
+        />
+
+    <TextView
+        android:id="@+id/amountTextView"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_gravity="end"
+        android:textAlignment="viewEnd"
+        android:text="50000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toEndOf="@id/categoryTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/dividerRecordItem"

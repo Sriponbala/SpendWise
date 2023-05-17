@@ -8,11 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentLoginBinding
@@ -30,14 +28,12 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val userViewModelFactory = UserViewModelFactory((activity as MainActivity).application)
         userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
-//        Log.e("UserViewModel  Login", userViewModel.toString())
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         ((activity) as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
@@ -49,12 +45,9 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).apply {
-            val sharedPref = this.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE)
+            val sharedPref = this.getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE)
             editor = sharedPref.edit()
         }
-
-        //emailFocusListener()
-        //passwordFocusListener()
 
         binding.loginButton.setOnClickListener{
             login()
@@ -64,132 +57,69 @@ class LoginFragment : Fragment() {
             it.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
 
-        userViewModel.isUserFetchedFinally.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
-                if(it) {
-                    editor.apply{
-                        Log.e("UserId", "login before entering in editor " + userViewModel.user?.userId.toString())
-                        putInt("userId", userViewModel.user?.userId!!)
-                        putString("status", LogInStatus.LOGGED_IN.name)
+        userViewModel.isUserFetchedFinally.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it) {
+                    editor.apply {
+                        Log.e(
+                            "UserId",
+                            "login before entering in editor " + userViewModel.user?.userId.toString()
+                        )
+                        putInt(resources.getString(R.string.userId), userViewModel.user?.userId!!)
+                        putString(resources.getString(R.string.status), LogInStatus.LOGGED_IN.name)
                         apply()
                     }
                     moveToNextFragment()
                 }
                 userViewModel.isUserFetchedFinally.value = null
             }
-        })
-    }
-
-    private fun emailFocusListener() {
-        binding.emailTextInputEditText.setOnFocusChangeListener { _, focused ->
-            if(!focused) {
-                binding.emailTextInputLayout.helperText = validEmail()
-            }
         }
-    }
-
-    private fun validEmail(): String? {
-        val email = binding.emailTextInputEditText.text.toString()
-        return Helper.validateEmail(email)
-    }
-
-    private fun passwordFocusListener() {
-        binding.passwordTextInputEditText.setOnFocusChangeListener { _, focused ->
-            if(!focused) {
-                binding.passwordTextInputLayout.helperText = validPasswordText()
-            }
-        }
-    }
-
-    private fun validPasswordText(): String? {
-        val password = binding.passwordTextInputEditText.text.toString()
-        return Helper.validatePasswordText(password)
     }
 
     private fun login() {
-      //  val isEmailValid = validEmail() == null
-      //  val isPasswordValid = validPasswordText() == null
-        /*if (isEmailValid && isPasswordValid) {
-            val email = binding.emailTextInputEditText.text.toString()
-            userViewModel.checkIfUserExists(email)
-            userViewModel.isEmailExists.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
-                    if(it) {
-                        loginUser()
-                    } else {
-                        binding.emailTextInputLayout.helperText = "Invalid email id"
-                    }
-                    userViewModel.isEmailExists.value = null
-                }
-            })
-        } else {
-            binding.emailTextInputLayout.helperText = validEmail()
-            binding.passwordTextInputLayout.helperText = validPasswordText()
-        }*/
         val email = binding.emailTextInputEditText.text.toString()
         userViewModel.checkIfUserExists(email)
-        userViewModel.isEmailExists.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
-                if(it) {
+        userViewModel.isEmailExists.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it) {
                     loginUser()
                 } else {
-                    binding.emailTextInputLayout.helperText = "Invalid email id, user does not exist"
+                    binding.emailTextInputLayout.helperText = resources.getString(R.string.loginEmailMessage)
                 }
                 userViewModel.isEmailExists.value = null
             }
-        })
+        }
     }
 
     private fun loginUser() {
         binding.emailTextInputLayout.helperText = null
         userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
-        userViewModel.isUserFetched.observe(viewLifecycleOwner, Observer {
-            Log.e("UserID","isFetched - " + it?.toString())
-            if(it != null) {
-                if(it) {
-                    Log.e("UserID", "before verify password ${userViewModel.user.toString()}")
+        userViewModel.isUserFetched.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it) {
                     userViewModel.verifyPassword(binding.passwordTextInputEditText.text.toString())
-                    userViewModel.isCorrectPassword.observe(viewLifecycleOwner, Observer { password ->
-                        Log.e("Password", password.toString())
-                        Log.e("isCorrect0", it.toString())
-                        if(password != null) {
-                            Log.e("Password", password.toString())
-                            Log.e("isCorrect1", password.toString())
-                            if(password) {
-                                Log.e("Password", password.toString())
-                                Log.e("isCorrect2", password.toString())
+                    userViewModel.isCorrectPassword.observe(
+                        viewLifecycleOwner
+                    ) { password ->
+                        if (password != null) {
+                            if (password) {
                                 userViewModel.isUserFetchedFinally.value = true
-                                /*editor.apply {
-                                    Log.e("isCorrect3", it.toString())
-                                    Log.e("Login", userViewModel.user.value!!.userId.toString())
-                                    Log.e("isCorrect4", it.toString())
-                                    Log.e("Login userId", userViewModel.user.value!!.userId.toString())
-                                    Log.e("isCorrect5", it.toString())
-                                    Log.e("UserId moveNext", userViewModel.user.value!!.userId.toString())
-                                   // userViewModel.fetchUser(binding.emailTextInputEditText.text.toString())
-                                   // putInt("userId", userViewModel.user.value!!.userId)
-                                    putString("status", LogInStatus.LOGGED_IN.name)
-                                    apply()
-                                }*/
-                                Log.e("UserID", "login() "+ userViewModel.user?.userId.toString())
-                                //moveToNextFragment()
                             } else {
-                                /* editor.apply {
-                                     putInt("userId", 0)
-                                 }*/
-                                binding.passwordTextInputLayout.helperText = "Incorrect password"
+                                binding.passwordTextInputLayout.helperText =
+                                    resources.getString(R.string.incorrectPassword)
                             }
                             userViewModel.isCorrectPassword.value = null
                         }
-                    })
+                    }
                 }
                 userViewModel.isUserFetched.value = null
                 userViewModel.isLoggedIn.value = null
             }
-        })
+        }
     }
 
     private fun moveToNextFragment() {
         findNavController().navigate(R.id.action_loginFragment_to_homePageFragment)
     }
+
 }

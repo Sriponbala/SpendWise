@@ -1,16 +1,13 @@
 package com.example.spendwise.fragment
 
-import androidx.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,7 +15,6 @@ import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentAddBudgetBinding
-import com.example.spendwise.domain.Budget
 import com.example.spendwise.enums.Period
 import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.BudgetViewModel
@@ -26,7 +22,6 @@ import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodelfactory.BudgetViewModelFactory
 import com.example.spendwise.viewmodelfactory.RecordViewModelFactory
-import java.util.*
 
 
 class AddBudgetFragment : Fragment() {
@@ -50,22 +45,11 @@ class AddBudgetFragment : Fragment() {
     ): View? {
         binding = FragmentAddBudgetBinding.inflate(inflater, container, false)
         args = AddBudgetFragmentArgs.fromBundle(requireArguments())
-        /*setHasOptionsMenu(true)
-        binding.toolbarAddBudgets.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }*/
-        /*(activity as MainActivity).supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.baseline_close_24)
-            title = if(args.isEditBudget) {
-                "Edit Budget"
-            } else "Add Budget"
-        }*/
         binding.toolbarAddBudget.apply {
             title = if(args.isEditBudget) {
-                "Edit Budget"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.edit), resources.getString(R.string.budget_label))
             } else {
-                "Add Budget"
+                resources.getString(R.string.two_strings_concate, resources.getString(R.string.add), resources.getString(R.string.budget_label))
             }
             setNavigationOnClickListener {
                 requireActivity().onBackPressed()
@@ -79,24 +63,21 @@ class AddBudgetFragment : Fragment() {
 
         if(args.isEditBudget && savedInstanceState == null) {
             if(recordViewModel.isTempDataSet) {
-                recordViewModel.tempData.observe(viewLifecycleOwner, Observer {
-                    Log.e("Edit", "isTempData true, inside temp data observe")
-                    if(it != null) {
-                        Log.e("Edit", "temp data not null ${it.toString()}")
-                        binding.budgetNameEditText.setText(it["BudgetName"])
-                        binding.budgetAmountEditText.setText(it["Amount"])
+                recordViewModel.tempData.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        binding.budgetNameEditText.setText(it[resources.getString(R.string.budget_name_label)])
+                        binding.budgetAmountEditText.setText(it[resources.getString(R.string.amount_label)])
                         recordViewModel.tempData.value = null
                     }
-                })
+                }
             } else {
-                budgetViewModel.budget.observe(viewLifecycleOwner, Observer {
-                    if(it != null) {
+                budgetViewModel.budget.observe(viewLifecycleOwner) {
+                    if (it != null) {
                         binding.budgetNameEditText.setText(it.budgetName)
                         binding.budgetAmountEditText.setText(Helper.formatDecimal(it.maxAmount.toBigDecimal()))
-//                        binding.budgetPeriodEditText.setText(it.period)
                         binding.budgetCategoryEditText.setText(it.category)
                     }
-                })
+                }
             }
         }
 
@@ -107,29 +88,37 @@ class AddBudgetFragment : Fragment() {
             } else addBudget()
         }
 
-        categoryViewModel.category.observe(viewLifecycleOwner, Observer { category ->
-            if(category != null) {
+        categoryViewModel.category.observe(viewLifecycleOwner) { category ->
+            if (category != null) {
                 categoryViewModel.queryText = ""
                 binding.budgetCategoryEditText.setText(category.title)
                 categoryViewModel.category.value = null
             }
-        })
+        }
 
         binding.budgetCategoryEditText.setOnClickListener {
             if(args.isEditBudget) {
                 recordViewModel.isTempDataSet = true
-                recordViewModel.tempData.value = mapOf("BudgetName" to binding.budgetNameEditText.text.toString(), "Amount" to binding.budgetAmountEditText.text.toString())
+                recordViewModel.tempData.value = mapOf(resources.getString(R.string.budget_name_label) to binding.budgetNameEditText.text.toString(), resources.getString(R.string.amount_label) to binding.budgetAmountEditText.text.toString())
             }
             val action = AddBudgetFragmentDirections.actionAddBudgetFragmentToCategoryFragment(RecordType.EXPENSE.value, R.id.addBudgetFragment)
             findNavController().navigate(action)
         }
 
-        /*val category = AddRecordFragmentArgs.fromBundle(requireArguments()).category
-        binding.categoryEditText.setText(category)*/
-
         binding.budgetNameEditText.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
-                binding.budgetNameTextInputLayout.error = null
+                if(budgetViewModel.budgetNameError.isNotEmpty()) {
+                    if(Helper.validateName(binding.budgetNameEditText.text.toString())){
+                        binding.budgetNameTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.budget_name))
+                        budgetViewModel.budgetNameError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.budget_name))
+                    } else {
+                        binding.budgetCategoryTextInputLayout.error = null
+                        budgetViewModel.budgetNameError = ""
+                    }
+                } else {
+                    binding.budgetNameTextInputLayout.error = null
+                }
+//                binding.budgetNameTextInputLayout.error = null
             }
         }
         binding.budgetCategoryEditText.addTextChangedListener {
@@ -139,17 +128,16 @@ class AddBudgetFragment : Fragment() {
         }
         binding.budgetAmountEditText.addTextChangedListener {
             if(it != null && it.toString().isNotEmpty()) {
-//                binding.budgetAmountTextInputLayout.error = null
                 if(budgetViewModel.amountError.isNotEmpty()) {
                     if(binding.budgetAmountEditText.text?.isEmpty() == true) {
-                        binding.budgetAmountTextInputLayout.error = "Amount should not be empty"
-                        budgetViewModel.amountError = "Amount should not be empty"
+                        binding.budgetAmountTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+                        budgetViewModel.amountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
                     } else if(Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
-                        binding.budgetAmountTextInputLayout.error = "Amount can not be zero"
-                        budgetViewModel.amountError = "Amount can not be zero"
+                        binding.budgetAmountTextInputLayout.error = resources.getString(R.string.amount_can_not_be_zero)
+                        budgetViewModel.amountError = resources.getString(R.string.amount_can_not_be_zero)
                     } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
-                        binding.budgetAmountTextInputLayout.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-                        budgetViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+                        binding.budgetAmountTextInputLayout.error = resources.getString(R.string.amount_format_message)
+                        budgetViewModel.amountError = resources.getString(R.string.amount_format_message)
                     } else {
                         binding.budgetAmountTextInputLayout.error = null
                         budgetViewModel.amountError = ""
@@ -163,19 +151,21 @@ class AddBudgetFragment : Fragment() {
 
     private fun addBudget() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-            Log.e("userId add record", userId.toString())
-            budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)//binding.budgetPeriodEditText.text.toString())
-            budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
-                    if(it) {
-                        Toast.makeText(this.context, "Category ${binding.budgetCategoryEditText.text.toString().toLowerCase()} already exists", Toast.LENGTH_LONG).show()
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt("userId", 0)
+            budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)
+            budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    if (it) {
+                        Toast.makeText(
+                            this.context,
+                            resources.getString(R.string.three_strings_concate, resources.getString(R.string.category), binding.budgetCategoryEditText.text.toString().lowercase(), resources.getString(R.string.already_exists)),
+                            Toast.LENGTH_LONG
+                        ).show()
                     } else {
                         budgetViewModel.insertBudget(
                             userId = userId,
                             budgetName = binding.budgetNameEditText.text.toString(),
                             maxAmount = binding.budgetAmountEditText.text.toString(),
-//                            period = binding.budgetPeriodEditText.text.toString(),
                             period = Period.MONTH.value,
                             category = binding.budgetCategoryEditText.text.toString()
                         )
@@ -183,107 +173,83 @@ class AddBudgetFragment : Fragment() {
                     }
                     budgetViewModel.budgetCategoryAlreadyExists.value = null
                 }
-            })
+            }
         }
     }
 
     private fun updateBudget() {
         if(validateAllFields()) {
-            val userId = (activity as MainActivity).getSharedPreferences("LoginStatus", Context.MODE_PRIVATE).getInt("userId", 0)
-            Log.e("userId edit record", userId.toString())
+            val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt("userId", 0)
             if(binding.budgetCategoryEditText.text.toString() == budgetViewModel.budget.value?.category) {
                 budgetViewModel.updateBudget(
                     userId = userId,
                     budgetName = binding.budgetNameEditText.text.toString(),
                     budgetAmount = binding.budgetAmountEditText.text.toString(),
-                    period = Period.MONTH.value,//binding.budgetPeriodEditText.text.toString(),
+                    period = Period.MONTH.value,
                     category = binding.budgetCategoryEditText.text.toString())
-                /* userId,
-                 binding.budgetNameEditText.text.toString(),
-                 binding.budgetAmountEditText.text.toString().toFloat(),
-                 binding.budgetPeriodEditText.text.toString(),
-                 binding.budgetCategoryEditText.text.toString())*/
                 moveToPreviousPage()
             } else {
-                budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)//binding.budgetPeriodEditText.text.toString())
-                budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner, Observer {
-                    if(it != null) {
-                        if(it) {
-                            Toast.makeText(this.context, "Category ${binding.budgetCategoryEditText.text.toString().toLowerCase()} already exists", Toast.LENGTH_LONG).show()
+                budgetViewModel.checkIfCategoryAlreadyExists(userId, binding.budgetCategoryEditText.text.toString(), Period.MONTH.value)
+                budgetViewModel.budgetCategoryAlreadyExists.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        if (it) {
+                            Toast.makeText(
+                                this.context,
+                                resources.getString(R.string.three_strings_concate, resources.getString(R.string.category), binding.budgetCategoryEditText.text.toString().lowercase(), resources.getString(R.string.already_exists)),
+                                Toast.LENGTH_LONG
+                            ).show()
                         } else {
                             budgetViewModel.updateBudget(
                                 userId = userId,
                                 budgetName = binding.budgetNameEditText.text.toString(),
                                 budgetAmount = binding.budgetAmountEditText.text.toString(),
-                                period = Period.MONTH.value, //binding.budgetPeriodEditText.text.toString(),
-                                category = binding.budgetCategoryEditText.text.toString())
-                            /* userId,
-                             binding.budgetNameEditText.text.toString(),
-                             binding.budgetAmountEditText.text.toString().toFloat(),
-                             binding.budgetPeriodEditText.text.toString(),
-                             binding.budgetCategoryEditText.text.toString())*/
+                                period = Period.MONTH.value,
+                                category = binding.budgetCategoryEditText.text.toString()
+                            )
                             moveToPreviousPage()
                         }
                         budgetViewModel.budgetCategoryAlreadyExists.value = null
                     }
-                })
+                }
             }
-            /*budgetViewModel.updateBudget(
-                userId = userId,
-                budgetName = binding.budgetNameEditText.text.toString(),
-                budgetAmount = binding.budgetAmountEditText.text.toString().toFloat(),
-                period = binding.budgetPeriodEditText.text.toString(),
-                category = binding.budgetCategoryEditText.text.toString())
-               *//* userId,
-                binding.budgetNameEditText.text.toString(),
-                binding.budgetAmountEditText.text.toString().toFloat(),
-                binding.budgetPeriodEditText.text.toString(),
-                binding.budgetCategoryEditText.text.toString())*//*
-            moveToPreviousPage()*/
         }
     }
 
     private fun validateAllFields(): Boolean {
         if(binding.budgetNameEditText.text?.isEmpty() == true) {
-            binding.budgetNameTextInputLayout.error = "Budget name should not be empty"
+            binding.budgetNameTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.budget_name))
+        }  else if(Helper.validateName(binding.budgetNameEditText.text.toString())){
+            binding.budgetNameTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.budget_name))
+            budgetViewModel.budgetNameError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.budget_name))
         } else {
             binding.budgetNameTextInputLayout.error = null
         }
         if(binding.budgetAmountEditText.text?.isEmpty() == true) {
-            binding.budgetAmountTextInputLayout.error = "Amount should not be empty"
-            budgetViewModel.amountError = "Amount should not be empty"
+            binding.budgetAmountTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
+            budgetViewModel.amountError = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.amount_label))
         } else if(Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
-//            binding.amountEditText.error = "Amount can not be zero"
-            binding.budgetAmountTextInputLayout.error = "Amount can not be zero"
-            budgetViewModel.amountError = "Amount can not be zero"
+            binding.budgetAmountTextInputLayout.error = resources.getString(R.string.amount_can_not_be_zero)
+            budgetViewModel.amountError = resources.getString(R.string.amount_can_not_be_zero)
         } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
-            binding.budgetAmountTextInputLayout.error = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-            budgetViewModel.amountError = "Should have 1 to 5 digits before decimal, 0 to 2 digits after decimal & decimal not mandatory"//"Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
+            binding.budgetAmountTextInputLayout.error = resources.getString(R.string.amount_format_message)
+            budgetViewModel.amountError = resources.getString(R.string.amount_format_message)
         } else {
             binding.budgetAmountTextInputLayout.error = null
             budgetViewModel.amountError = ""
         }
         if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
-            binding.budgetCategoryTextInputLayout.error = "Category should not be empty"
+            binding.budgetCategoryTextInputLayout.error = resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.category))
         } else {
             binding.budgetCategoryTextInputLayout.error = null
         }
 
-        return if(binding.budgetNameEditText.text?.isEmpty() == true || Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
-//            binding.budgetNameEditText.error = "Budget name should not be empty"
-//            Toast.makeText(this.requireContext(), "Budget name should not be empty", Toast.LENGTH_SHORT).show()
+        return if(binding.budgetNameEditText.text?.isEmpty() == true || Helper.validateName(binding.budgetNameEditText.text.toString()) || Helper.checkAmountIsZeroOrNot(binding.budgetAmountEditText.text.toString())) {
             false
         } else if(binding.budgetAmountEditText.text?.isEmpty() == true) {
-//            binding.budgetAmountEditText.error = "Amount should not be empty"
-//            Toast.makeText(this.requireContext(), "Amount should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else if(!Helper.validateAmount(binding.budgetAmountEditText.text.toString())) {
-//            binding.budgetAmountEditText.error = "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal"
-//            Toast.makeText(this.requireContext(), "Amount should have min 1 digit before decimal, can have max 5 digits before decimal and max 2 digits after decimal", Toast.LENGTH_SHORT).show()
             false
         } else if(binding.budgetCategoryEditText.text?.isEmpty() == true) {
-//            binding.budgetCategoryEditText.error = "Category should not be empty"
-//            Toast.makeText(this.requireContext(), "Category should not be empty", Toast.LENGTH_SHORT).show()
             false
         } else {
             binding.budgetAmountEditText.error = null

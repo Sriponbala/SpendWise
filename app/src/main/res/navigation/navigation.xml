@@ -178,9 +178,8 @@
             android:id="@+id/action_recordsFragment_to_viewRecordFragment"
             app:destination="@id/viewRecordFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popExitAnim="@anim/to_right"
-            app:popEnterAnim="@anim/from_left" />
+            app:exitAnim="@anim/fade_out"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_recordsFragment_to_addRecordFragment"
             app:destination="@id/addRecordFragment"
@@ -201,8 +200,6 @@
             android:id="@+id/action_statisticsFragment_to_recordsFragment"
             app:destination="@id/recordsFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <!--<fragment
@@ -250,6 +247,10 @@
             android:name="isEditRecord"
             app:argType="boolean"
             android:defaultValue="false" />
+        <argument
+            android:name="recordType"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 
     <fragment

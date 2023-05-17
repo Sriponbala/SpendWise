@@ -3,11 +3,9 @@ package com.example.spendwise.fragment
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -18,7 +16,6 @@ import com.example.spendwise.databinding.FragmentSignUpBinding
 import com.example.spendwise.enums.LogInStatus
 import com.example.spendwise.viewmodel.UserViewModel
 import com.example.spendwise.viewmodelfactory.UserViewModelFactory
-import kotlin.text.Typography.registered
 
 class SignUpFragment : Fragment() {
 
@@ -36,7 +33,6 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
         ((activity) as MainActivity).supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
@@ -48,7 +44,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).apply {
-            val sharedPref = this.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE)
+            val sharedPref = this.getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE)
             editor = sharedPref.edit()
         }
 
@@ -63,11 +59,13 @@ class SignUpFragment : Fragment() {
             it.findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
         }
 
+/*
         binding.confirmPasswordTextInputEditText.addTextChangedListener {
             if(it != null) {
-                binding.confirmPasswordTextInputLayout.error = Helper.validateConfirmPassword(binding.passwordTextInputEditText.text.toString(),binding.confirmPasswordTextInputEditText.text.toString())
+                binding.confirmPasswordTextInputLayout.helperText = Helper.validateConfirmPassword(binding.passwordTextInputEditText.text.toString(),binding.confirmPasswordTextInputEditText.text.toString())
             }
         }
+*/
 
     }
 
@@ -118,59 +116,41 @@ class SignUpFragment : Fragment() {
         if(isEmailValid && isPasswordValid && isConfirmPasswordValid) {
             val email = binding.emailTextInputEditText.text.toString()
             userViewModel.checkIfUserExists(email)
-            userViewModel.isEmailExists.observe(viewLifecycleOwner, Observer {
-                if(it != null) {
-                    if(it) {
-                        binding.emailTextInputLayout.helperText = "User already exists"
+            userViewModel.isEmailExists.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    if (it) {
+                        binding.emailTextInputLayout.helperText = resources.getString(
+                            R.string.two_strings_concate,
+                            resources.getString(R.string.user_label),
+                            resources.getString(R.string.already_exists)
+                        )
                     } else {
                         registerNewUser()
                     }
                     userViewModel.isEmailExists.value = null
                 }
-            })
+            }
         } else {
             binding.emailTextInputLayout.helperText = validEmail()
             binding.passwordTextInputLayout.helperText = validPasswordText()
             binding.confirmPasswordTextInputLayout.helperText = validConfirmPassword()
         }
-      /*  val isEmailValid = validEmail() == null
-        val isPasswordValid = validPasswordText() == null
-        val isConfirmPasswordValid = validConfirmPassword() == null
-        if(isEmailValid && isPasswordValid && isConfirmPasswordValid) {
-            val email = binding.emailTextInputEditText.text.toString()
-            val password = binding.passwordTextInputEditText.text.toString()
-            userViewModel.checkIfUserExists(email).observe(viewLifecycleOwner, Observer {
-                if(!it) {
-                    userViewModel.createUserAccount(email)
-                    this.password = password
-                    this.email = email
-                    moveToNextFragment()
-                } else {
-                    binding.emailTextInputLayout.helperText = "User already exists"
-                }
-            })
-        } else {
-            binding.emailTextInputLayout.helperText = validEmail()
-            binding.passwordTextInputLayout.helperText = validPasswordText()
-            binding.confirmPasswordTextInputLayout.helperText = validConfirmPassword()
-        }*/
     }
 
     private fun registerNewUser() {
         userViewModel.createUserAccount(binding.emailTextInputEditText.text.toString())
-        userViewModel.isNewUserInserted.observe(viewLifecycleOwner, Observer {
-            if( it != null) {
-                userViewModel.insertPassword(binding.passwordTextInputEditText.text.toString(), binding.emailTextInputEditText.text.toString())
+        userViewModel.isNewUserInserted.observe(viewLifecycleOwner) {
+            if (it != null) {
+                userViewModel.insertPassword(binding.passwordTextInputEditText.text.toString())
                 editor.apply {
-                    Log.e("UserId", userViewModel.user?.userId.toString())
-                    putInt("userId", userViewModel.user!!.userId)
-                    putString("status", LogInStatus.LOGGED_IN.name)
+                    putInt(resources.getString(R.string.userId), userViewModel.user!!.userId)
+                    putString(resources.getString(R.string.status), LogInStatus.LOGGED_IN.name)
                     apply()
                 }
                 moveToNextFragment()
                 userViewModel.isNewUserInserted.value = null
             }
-        })
+        }
     }
 
     private fun moveToNextFragment() {
@@ -178,6 +158,16 @@ class SignUpFragment : Fragment() {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
 
 //1	1	A@asbvw  1	abi@nkdk.com	1
 // Bala@123 2	uma@gmail.com	2

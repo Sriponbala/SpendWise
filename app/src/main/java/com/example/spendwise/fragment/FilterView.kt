@@ -3,7 +3,7 @@ package com.example.spendwise.fragment
 import android.app.AlertDialog
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
@@ -16,25 +16,21 @@ import com.example.spendwise.databinding.FilterLayoutBinding
 import com.example.spendwise.enums.Month
 import com.example.spendwise.interfaces.FilterViewDelegate
 import com.example.spendwise.viewmodel.RecordViewModel
-import kotlinx.coroutines.NonDisposableHandle.parent
 import java.util.*
 
 class FilterView(
     private val recordViewModel: RecordViewModel,
     private var binding: FilterLayoutBinding?,
-    private var delegateImpl: FilterViewDelegate?
+    private var delegateImpl: FilterViewDelegate?,
+    private val resources: Resources
 ): AdapterView.OnItemSelectedListener {
 
     fun setMonthYearValue() {
-        val month = recordViewModel.month.value.also {
-            Log.e("Landscape", "filterview - month - $it")
-        }
-        val year = recordViewModel.year.value.also {
-            Log.e("Landscape", "filterview - year - $it")
-        }
+        val month = recordViewModel.month.value
+        val year = recordViewModel.year.value
         if(month != null && year != null) {
             val monthName = Month.values()[month-1].value
-            binding?.monthAndYearTv?.text = "$monthName $year"
+            binding?.monthAndYearTv?.text = resources.getString(R.string.two_strings_concate, monthName, year) //"$monthName $year"
         }
     }
 
@@ -43,7 +39,7 @@ class FilterView(
         val monthPicker = dialogView.findViewById<NumberPicker>(R.id.month_picker)
         monthPicker.minValue = 1
         monthPicker.maxValue = 12
-        val monthNames = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        val monthNames = context.resources.getStringArray(R.array.monthsList) //arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
         monthPicker.displayedValues = monthNames
         monthPicker.wrapSelectorWheel = true
         monthPicker.setFormatter { index ->
@@ -59,15 +55,13 @@ class FilterView(
 
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
+            .setPositiveButton(context.resources.getString(R.string.ok_button)) { _, _ ->
                 val month = monthPicker.value
                 val year = yearPicker.value
-                /*val monthName = Month.values()[month-1].value
-                binding?.monthAndYearTv?.text = "$monthName $year"*/
                 delegateImpl?.intimateSelectedDate(month, year)
                 setMonthYearValue()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(context.resources.getString(R.string.cancel_button), null)
             .create()
 
         dialog.show()
@@ -79,7 +73,7 @@ class FilterView(
             binding?.spinner?.adapter = adapter
         }
 
-        binding?.spinner?.onItemSelectedListener = this //filterView//this
+        binding?.spinner?.onItemSelectedListener = this
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

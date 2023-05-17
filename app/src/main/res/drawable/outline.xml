@@ -3,6 +3,6 @@
     <solid android:color="@color/recordPage"/> <!-- Set the solid color of the TextView -->
      <!-- Set the corner radius of the TextView -->
     <stroke
-        android:color="#bce1ff"
+        android:color="@color/filterLayoutBackground"
         android:width="1dp" /> <!-- Set the outline width of the TextView -->
 </shape>

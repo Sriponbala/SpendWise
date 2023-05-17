@@ -1,13 +1,14 @@
 package com.example.spendwise.viewmodel
 
 import android.app.Application
-import android.util.Log
+import android.content.res.Resources
 import android.view.Menu
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.spendwise.Helper
+import com.example.spendwise.R
 import com.example.spendwise.database.SpendWiseDatabase
 import com.example.spendwise.domain.Goal
 import com.example.spendwise.enums.GoalStatus
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class GoalViewModel(application: Application): AndroidViewModel(application) {
+class GoalViewModel(application: Application, private val resources: Resources): AndroidViewModel(application) {
 
     var menu: Menu? = null
 
@@ -33,8 +34,10 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
 
     var savedAmountError = ""
     var targetAmountError = ""
+    var goalNameError = ""
 
-    fun insertGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = "0.00", goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
+    fun insertGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = resources.getString(
+        R.string.zero), goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "") {
         viewModelScope.launch {
                 val goal = Goal(userId, goalName.trim(), Helper.formatDecimalToThreePlaces(BigDecimal(targetAmount.trim()))).apply {
                     this.savedAmount = Helper.formatDecimalToThreePlaces(BigDecimal(savedAmount.trim()))
@@ -47,12 +50,11 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    // onItemClick of adapter
     fun setSelectedGoalItem(goal: Goal) {
         _goal.value = goal
     }
 
-    fun deleteGoal(userId: Int) {
+    fun deleteGoal() {
         viewModelScope.launch {
             val job = launch {
                 _goal.value?.let {
@@ -66,7 +68,8 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun updateGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = "0.00", goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "", goalStatus: String = GoalStatus.ACTIVE.value) {
+    fun updateGoal(userId: Int, goalName: String, targetAmount: String, savedAmount: String = resources.getString(
+        R.string.zero), goalColor: Int = 0, goalIcon: Int = 0, desiredDate: String = "", goalStatus: String = GoalStatus.ACTIVE.value) {
         viewModelScope.launch(Dispatchers.IO) {
             var updatedGoal: Goal? = null
             val job = launch {
@@ -85,9 +88,7 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
             }
             job.join()
             withContext(Dispatchers.Main) {
-                _goal.value = updatedGoal.also {
-                    Log.e("Goal","updated goal " + updatedGoal.toString())
-                }
+                _goal.value = updatedGoal
             }
         }
     }
@@ -100,7 +101,6 @@ class GoalViewModel(application: Application): AndroidViewModel(application) {
             var allGoalsFetched: List<Goal>? = null
             val job = viewModelScope.launch {
                 allGoalsFetched = repository.fetchGoals(userId)
-                Log.e("Goal", allGoalsFetched.toString())
             }
             job.join()
             withContext(Dispatchers.Main) {

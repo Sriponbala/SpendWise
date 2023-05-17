@@ -1,86 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ViewGoalFragment">
-
-    <ImageView
-        android:id="@+id/goalIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/rounded_background"
-        android:padding="6dp"
-        android:src="@drawable/piggy_bank"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/goalNameTextView"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="1"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:text="New Home ijnidijnbhhcncunihiijeij ieijfiininvivnjchcudnu dh nu udni "
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/desiredDateTextView"
-        app:layout_constraintBottom_toTopOf="@id/desiredDateTextView"
-        app:layout_constraintStart_toEndOf="@id/goalIcon"
-        app:layout_constraintTop_toTopOf="@id/goalIcon" />
-
-    <TextView
-        android:id="@+id/goalLabelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginEnd="64dp"
-        android:ellipsize="end"
-        android:maxEms="7"
-        android:maxLines="1"
-        android:text="Goal"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/goalNameTextView" />
-
-    <TextView
-        android:id="@+id/targetAmountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="396dp"
-        android:layout_marginEnd="12dp"
-        android:ellipsize="end"
-        android:maxEms="10"
-        android:maxLines="1"
-        android:text="5,00,00,00,00,00,00,000"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/desiredDateTextView" />
-
-    <TextView
-        android:id="@+id/desiredDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:text=" Target date 26/11/2023"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/goalIcon"
-        app:layout_constraintStart_toStartOf="@id/goalNameTextView"
-        app:layout_constraintTop_toBottomOf="@id/goalNameTextView" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -171,19 +89,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!--
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:layout_gravity="center"
-                    app:trackThickness="8dp"
-                    app:trackCornerRadius="10dp"
-                    app:indicatorSize="150dp"
-                    app:indicatorColor="@color/linkColour"
-                    android:progress="90"
-                    app:trackColor="@color/progressBarAtFirst" />
-            -->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -243,21 +148,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 style="@style/TextStyle"/>
-            <!--
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:enabled="false"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/targetAmtTileT"
-                            android:layout_width="match_parent"
-                            style="@style/TextStyle"
-                            android:layout_height="wrap_content"
-                            android:text="$ 5000000" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-            -->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -271,20 +161,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 style="@style/TextStyle"/>
-            <!--
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:enabled="false"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/savedAmtTileT"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/TextStyle"
-                            android:text="$ 5000000" />
-                    </com.google.android.material.textfield.TextInputLayout>
-            -->
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addSavedAmtButton"

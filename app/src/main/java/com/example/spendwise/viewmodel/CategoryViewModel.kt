@@ -12,6 +12,4 @@ class CategoryViewModel: ViewModel() {
 
     val filteredCategoryList = MutableLiveData<List<Category>>()
 
-    val searchedList = MutableLiveData<List<Category>>()
-
 }

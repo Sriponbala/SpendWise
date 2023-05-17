@@ -9,33 +9,6 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-<!--
-        <TextView
-            android:id="@+id/viewBudgetNameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:text="BudgetName???????????????"
-            android:layout_marginTop="16dp"
-            android:maxLines="1"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
--->
-        <!--<TextView
-            android:id="@+id/viewBudgetCurrencySymbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/rupee_symbol"
-            android:textColor="@color/textColor"
-            android:maxLines="1"
-            app:layout_constraintEnd_toStartOf="@id/viewBudgetAmountText"
-            app:layout_constraintTop_toTopOf="@id/viewBudgetNameText" />-->
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/viewBudgetProgressBarRecycler"
@@ -59,6 +32,10 @@
                 android:background="@drawable/budget_within_limit"
                 android:padding="16dp"
                 android:visibility="gone"
+                android:drawableStart="@drawable/good"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/progressIndicatorLeisure"
+                android:gravity="center"
                 android:text="@string/budget_within_limit_info"
                 android:textColor="@color/progressIndicatorLeisure"
                 app:layout_constraintEnd_toEndOf="@id/viewBudgetProgressBarRecycler"
@@ -71,6 +48,10 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/budget_threshold_shape"
             android:padding="16dp"
+            android:drawableStart="@drawable/nearing"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/progressIndicatorDanger"
+            android:gravity="center"
             android:visibility="gone"
             android:text="@string/budget_reached_threshold_info"
             android:textColor="@color/progressIndicatorDanger"
@@ -84,6 +65,10 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/budget_exceeded_shape"
             android:padding="16dp"
+            android:drawableStart="@drawable/exceeded"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/progressIndicatorExceeded"
+            android:gravity="center"
             android:text="@string/budget_exceeded_info"
             android:visibility="gone"
             android:textColor="@color/progressIndicatorExceeded"
@@ -203,33 +188,6 @@
             app:layout_constraintEnd_toStartOf="@id/viewBudgetProgressBarRecycler"
             app:layout_constraintTop_toBottomOf="@id/viewRemainsText" />
 
-
-        <!--<TextView
-            android:id="@+id/spentCurrencySymbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="@string/rupee_symbol"
-            android:maxLines="1"
-            android:textColor="@color/textColor"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintTop_toBottomOf="@id/spentText" />-->
-
-
-        <!--
-                <TextView
-                    android:id="@+id/remainingCurrencySymbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:text="@string/rupee_symbol"
-                    android:maxLines="1"
-                    app:layout_constraintStart_toEndOf="@id/viewSpentAmountText"
-                    app:layout_constraintEnd_toStartOf="@id/viewRemainingAmountText"
-                    app:layout_constraintTop_toTopOf="@id/spentCurrencySymbol" />
-        -->
-
         <TextView
             android:id="@+id/viewBudgetPercentTextView"
             android:layout_width="wrap_content"
@@ -243,6 +201,5 @@
             app:layout_constraintTop_toTopOf="@+id/viewBudgetProgressBarRecycler" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>

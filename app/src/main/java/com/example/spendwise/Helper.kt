@@ -1,16 +1,7 @@
 package com.example.spendwise
 
-import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
-import android.text.Editable
-import android.text.TextPaint
-import android.text.TextWatcher
-import android.util.Log
+import android.content.res.Resources
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.widget.EditText
-import android.widget.TextView
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -20,16 +11,23 @@ import java.util.regex.Pattern
 
 object Helper {
 
+    private lateinit var resources: Resources //= Resources.getSystem()
     private val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
 
+    fun setResources(resources: Resources) {
+        this.resources = resources
+    }
     fun formatDate(date: Date): String {
         return dateFormat.format(date)
     }
 
+    fun validateName(name: String): Boolean {
+        return name.trim().isEmpty()
+    }
+
     fun checkAmountIsZeroOrNot(amount: String): Boolean {
-        var result = false
-        result = try {
-            BigDecimal(amount) == BigDecimal("0.00") || BigDecimal(amount) == BigDecimal("0.0") || BigDecimal(amount) == BigDecimal(0)
+        val result: Boolean = try {
+            BigDecimal(amount) == BigDecimal(resources.getString(R.string.zero)) || BigDecimal(amount) == BigDecimal(resources.getString(R.string.zero_one_decimal)) || BigDecimal(amount) == BigDecimal(0)
         } catch (exception: Exception) {
             false
         }
@@ -42,95 +40,43 @@ object Helper {
 
     fun formatPercentage(percent: Int): String {
         return if(percent > 100) {
-            "100+"
+            resources.getString(R.string.exceededPercent)
         } else {
             percent.toString()
         }
-    }
-
-    fun retrieveValueFromScientificNotation(scientificValue: Float): String {
-        val format = DecimalFormat("0", DecimalFormatSymbols(Locale.getDefault()))
-        return format.format(scientificValue)
-    }
-
-    fun validateAmountField(amountEditText: EditText) {
-        amountEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Do nothing
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Do nothing
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val input = s.toString()
-                Log.e("Validate", input +" - input")
-
-                // Check if the input starts with a dot, then add a "0" before the dot
-                if (input.startsWith(".")) {
-                    amountEditText.setText("0$input")
-                    amountEditText.setSelection(2)
-                }
-
-                // Remove all non-digit and non-dot characters
-                val cleanInput = input.replace("[^\\d.]".toRegex(), "")
-
-                // Check if the input contains more than one dot, then remove all dots after the first dot
-                val dotIndex = cleanInput.indexOf(".")
-                if (dotIndex >= 0 && cleanInput.indexOf(".", dotIndex + 1) > 0) {
-                    amountEditText.setText(cleanInput.replace(".", ""))
-                    amountEditText.setSelection(dotIndex + 1)
-                }
-
-                // Check if the input contains more than two digits after the dot, then remove all digits after the second digit
-                if (dotIndex >= 0 && cleanInput.length - dotIndex > 3) {
-                    amountEditText.setText(cleanInput.substring(0, dotIndex + 3))
-                    amountEditText.setSelection(dotIndex + 3)
-                }
-
-                // Check if the input contains more than 10 digits in total, then remove all digits after the tenth digit
-                if (cleanInput.length > 10) {
-                    amountEditText.setText(cleanInput.substring(0, 10))
-                    amountEditText.setSelection(10)
-                }
-            }
-        })
-
     }
 
     fun validateEmail(email: String): String? {
         return if(Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             null
         } else if(email.isEmpty()) {
-            "Email should not be empty!"
+            resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.email_label))
         } else {
-            "Please enter valid email!" //(Eg:sample@abc.com)|Required format: example@abcd.com
+            resources.getString(R.string.enter_valid_email_message)
         }
     }
 
     fun validatePasswordText(password: String): String? {
         return if(password.isEmpty()) {
-            "Password should not be empty!"
+            resources.getString(R.string.should_not_be_empty_message, resources.getString(R.string.password_label))
         } else if(!password.matches(".*[A-Z].*".toRegex())) {
-            "Should contain atleast 1 uppercase"
+            resources.getString(R.string.upperCase)
         } else if(!password.matches(".*[a-z].*".toRegex())) {
-            "Should contain atleast 1 lowercase"
+            resources.getString(R.string.lowerCase)
         } else if(!password.matches(".*[@#\$%^&*].*".toRegex())) {
-            "Need atleast 1 special character from @#$%^&*"
+            resources.getString(R.string.specialCharacter)
         } else if(password.length < 6) {
-            "Should contain atleast 6 characters"
+            resources.getString(R.string.passwordCharactersCountMin)
         } else if(password.length > 15) {
-            "Should contain maximum 15 characters only"
+            resources.getString(R.string.passwordCharactersCountMax)
         } else null
     }
 
     fun validateConfirmPassword(password: String, confirmPassword: String): String? {
-        Log.e("SignupFragment", "confirm - ${password == confirmPassword}")
         return if(password == confirmPassword) {
             null
         } else {
-            "Password not matching!"
+            resources.getString(R.string.confirmPasswordNotCorrect)
         }
     }
 
@@ -144,299 +90,22 @@ object Helper {
         return format.format(number)
     }
 
-    fun formatNumberToIndianStyleWithoutDecimal(number: Float): String {
-        val format = DecimalFormat("#,##,##0", DecimalFormatSymbols(Locale("en", "IN")))
-        return format.format(number)
-    }
-    fun setupEditTextValidation(editText: EditText) {
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No action needed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // No action needed
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                editText.removeTextChangedListener(this)
-
-                val input = editText.text.toString()
-
-                val cleanedInput = input.replace(Regex("[^\\d.]"), "")
-
-                val parts = cleanedInput.split(".")
-                val digitsBeforeDecimal = if (parts.isNotEmpty()) parts[0].length else 0
-                val digitsAfterDecimal = if (parts.size > 1) parts[1].length else 0
-
-                if (digitsBeforeDecimal > 5 || digitsBeforeDecimal < 1 || digitsAfterDecimal > 2) {
-                    editText.error = """Invalid input
-                        |Min 1 and Max 5 digits before decimal, Max 2 digits after decimal
-                    """.trimMargin()
-                } else {
-                    editText.error = null
-                }
-                editText.addTextChangedListener(this)
-            }
-        })
-    }
-
     fun validateAmount(amount: String): Boolean {
-        val result = Pattern.matches("^\\d{1,5}(\\.\\d{0,2})?\$", amount)
-        Log.e("Amount", result.toString())
-        return result
+        return Pattern.matches("^\\d{1,10}(\\.\\d{0,2})?\$", amount)
     }
 
     fun formatDecimal(number: BigDecimal): String {
-        val decimalFormat = DecimalFormat("0.00")
+        val decimalFormat = DecimalFormat(resources.getString(R.string.zero))
         return decimalFormat.format(number)
     }
 
     fun formatDecimalToThreePlaces(number: BigDecimal): String {
-        val decimalFormat = DecimalFormat("0.000")
+        val decimalFormat = DecimalFormat(resources.getString(R.string.zero_three_decimal))
         return decimalFormat.format(number)
     }
 
     fun validateGoalAmount(amount: String): Boolean {
-        val result = Pattern.matches("^\\d{1,10}(\\.\\d{0,2})?\$", amount)
-        Log.e("Amount", result.toString())
-        return result
+        return Pattern.matches("^\\d{1,10}(\\.\\d{0,2})?\$", amount)
     }
-
-    fun adjustFontSizeToTextView(textView: TextView, text: String) {
-        val textPaint = TextPaint()
-        textPaint.textSize = 16f // initial font size
-        textPaint.typeface = textView.typeface // set the same typeface as the TextView
-        Log.e("Coroutine", text)
-        var textWidth = textPaint.measureText(text)
-        val viewWidth = textView.width - textView.paddingLeft - textView.paddingRight
-
-// loop until the text fills the available space
-        while (textWidth > viewWidth) {
-            textPaint.textSize -= 1f // decrease the font size
-            textWidth = textPaint.measureText("Your text here")
-        }
-
-        textView.textSize = textPaint.textSize // set the final font size
-        textView.text = text
-    }
-
-
-/*    fun <E : Enum<E>> showMenu(title: String, enumArray: Array<E>) {
-        var sno = 1
-        println("-------------${title.uppercase()}-------------")
-        for (element in enumArray) {
-            println("${sno++}. $element")
-        }
-    }
-
-    fun <E : Enum<E>> getUserChoice(enumArray: Array<E>): E {
-        val option = readOption("one", enumArray.size)
-        return enumArray[option - 1]
-    }
-
-    fun confirm(index: Int): Boolean {
-        while (true) {
-            println("Confirm: ")
-            for (option in Confirmation.values()) {
-                println("${option.ordinal + 1}. ${option.list[index]}")
-            }
-            val option = readOption("one", Confirmation.values().size)
-            return when (Confirmation.values()[option - 1]) {
-                Confirmation.CONTINUE -> true
-                Confirmation.GO_BACK -> false
-            }
-        }
-    }
-
-    private fun checkValidRecord(option: Int, size: Int): Boolean {
-        return option in 1..size
-    }
-
-    fun generateOTP(): String {
-        return Random.nextInt(100000, 1000000).toString()
-    }
-
-    fun verifyOtp(currentOtp: String, generatedOtp: String): Boolean {
-        return currentOtp == generatedOtp
-    }
-
-    private fun confirmPassword(confirmPassword: String, password: String): Boolean {
-        return confirmPassword == password
-    }
-
-    private fun validateMobileNumber(number: String): Boolean { // 10-digit Phone number
-        return Pattern.matches("^\\d{10}$", number)
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        return Pattern.matches("^[a-z0-9_!#$.-]{3,30}+@[a-z]{3,20}+.[a-z]{2,3}+\$", email)
-    }
-
-    private fun validatePasswordPattern(password: String): Boolean {
-        return Pattern.matches("^[a-zA-Z0-9!#@$%^&*_+`~]{4,8}+$", password)
-    }
-
-    private fun validatePincode(pincode: String): Boolean {
-        return Pattern.matches("^[1-9][0-9]{2}\\s?[0-9]{3}$", pincode)
-    }
-
-    private fun validateAddressFields(fieldValue: String): Boolean {
-        return Pattern.matches("^[a-zA-Z1-9][a-zA-Z0-9-.\\s]{0,30}$", fieldValue)
-    }
-
-    fun generateOrderedDate(): LocalDate {
-        return LocalDate.of(2022, 11, 18).plusDays(Random.nextLong(91))
-    }
-
-    private fun readString(field: String, message: String): String {
-        println(message)
-        var input = readLine()
-        while ((input == null) || (input == "") || input.isBlank()) {
-            println("${field.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }} should not be empty! Re-enter $field:")
-            input = readLine()
-        }
-        return input
-    }
-
-    private fun readInt(): Int {
-        var input = readLine()
-        while (input == null || input.toIntOrNull() == null) {
-            println("Option must contain integers only! Re-enter option:")
-            input = readLine()
-        }
-        return input.toIntOrNull()!!
-    }
-
-    fun readName() = readString("name", "Enter name:")
-
-    fun readMobileNumber(): String {
-        while (true) {
-            val mobile = readString(
-                "mobile", """Enter mobile number:
-                |[Should contain 10 digits] 
-            """.trimMargin()
-            )
-            if (validateMobileNumber(mobile)) {
-                return mobile
-            }
-        }
-    }
-
-    fun readEmail(): String {
-        while (true) {
-            val email = readString(
-                "email", """Enter email:
-                |[Format: localpart@example.com] 
-            """.trimMargin()
-            )
-            if (validateEmail(email)) {
-                return email
-            }
-        }
-    }
-
-    fun readPassword(): String {
-        while (true) {
-            val password = readString(
-                "password", """Enter password:
-                |[Password can contain any of the following : a-zA-Z0-9!#@${'$'}%^&*_+`~]
-                |[It should contain 4 to 8 characters]""".trimMargin()
-            )
-            if (validatePasswordPattern(password)) {
-                return password
-            }
-        }
-    }
-
-    fun readConfirmPassword(password: String): String {
-        while (true) {
-            val confirmPassword = readString("confirm password", "Enter confirm password")
-            if (confirmPassword(confirmPassword, password)) {
-                return confirmPassword
-            }
-        }
-    }
-
-    fun readOTP() = readString("OTP", "Enter OTP:")
-
-    fun readAddressField(field: String): String {
-        while (true) {
-            val addressField = readString(field, "Enter $field:")
-            if (validateAddressFields(addressField)) {
-                return addressField
-            }
-        }
-    }
-
-    fun readPincode(): String {
-        while (true) {
-            val pincode = readString(
-                "pin-code", """Enter pin-code: 
-                |[Should not be empty,
-                |Should start with number > 0,
-                |must contain 6 digits,
-                |[Format: 600062 OR 600 062]
-            """.trimMargin()
-            )
-            if (validatePincode(pincode)) {
-                return pincode
-            }
-        }
-    }
-
-    fun readOption(field: String, size: Int): Int {
-        var option: Int
-        while (true) {
-            println("Select $field:")
-            option = readInt()
-            if (checkValidRecord(option, size)) {
-                return option
-            } else {
-                println("Invalid option! Try again!")
-            }
-        }
-    }
-
-    fun readProductName() = readString("product name", "Enter product name:")
-
-    fun getQuantity(skuId: String, cartActivities: CartActivitiesContract): Int {
-        return getQuantity(skuId, cartActivities = cartActivities, checkOutActivities = null)
-    }
-
-    fun getQuantity(skuId: String, checkOutActivities: CheckOutActivitiesContract): Int {
-        return getQuantity(skuId, cartActivities = null, checkOutActivities = checkOutActivities)
-    }
-
-    private fun getQuantity(
-        skuId: String,
-        cartActivities: CartActivitiesContract?,
-        checkOutActivities: CheckOutActivitiesContract?
-    ): Int {
-        val quantity: Int
-        while (true) {
-            println("Enter the quantity required: ")
-            val input = readInt()
-            if (input in 1..4) {
-                val availableQuantity = checkOutActivities?.getAvailableQuantityOfProduct(skuId)
-                    ?: cartActivities?.getAvailableQuantityOfProduct(skuId)
-                if (availableQuantity != null) {
-                    if (availableQuantity >= input) {
-                        quantity = input
-                        break
-                    } else {
-                        println("Only $availableQuantity items available!")
-                    }
-                }
-            } else {
-                if (input < 1) {
-                    println("You should select atleast 1 item!")
-                } else {
-                    println("You can select a maximum of 4 items!")
-                }
-            }
-        }
-        return quantity
-    }*/
 
 }

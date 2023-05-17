@@ -1,6 +1,5 @@
 package com.example.spendwise.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,46 +21,34 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.settings_recycler_item, parent, false)
-        return ViewHolder(view).also {
-            Log.e("Adapter", "ViewModel "+ it.toString())
-        }
+        return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = SettingsOption.values().size.also {
-        Log.e("Adapter", "size "+ it.toString())
-    }
+    override fun getItemCount(): Int = SettingsOption.values().size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(SettingsOption.values()[position]) {
             SettingsOption.INCOME -> {
-                Log.e("Adapter", "ViewModel income $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.baseline_money_24)
-//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.INCOME.text
             }
             SettingsOption.EXPENSE -> {
-                Log.e("Adapter", "ViewModel expense $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.expenses)
-//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.EXPENSE.text
             }
             SettingsOption.FEEDBACK -> {
-                Log.e("Adapter", "ViewModel feedback $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.baseline_feedback_24)
-//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.FEEDBACK.text
             }
             SettingsOption.CALL_SUPPORT -> {
-                Log.e("Adapter", "ViewModel call support $position")
                 holder.iconImageView.apply {
                     setImageResource(R.drawable.phone)
-//                    setColorFilter(resources.getColor(R.color.black))
                 }
                 holder.iconTitle.text = SettingsOption.CALL_SUPPORT.text
             }

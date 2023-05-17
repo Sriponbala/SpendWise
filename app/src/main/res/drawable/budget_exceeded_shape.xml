@@ -6,8 +6,8 @@
         android:color="@color/progressIndicatorExceeded"
         android:width="1dp" /> <!-- Set the outline width of the TextView -->
     <corners
-        android:topRightRadius="8dp"
-        android:topLeftRadius="8dp"
-        android:bottomRightRadius="8dp"
-        android:bottomLeftRadius="8dp"/>
+        android:topRightRadius="4dp"
+        android:topLeftRadius="4dp"
+        android:bottomRightRadius="4dp"
+        android:bottomLeftRadius="4dp"/>
 </shape>

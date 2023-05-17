@@ -1,34 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.HomePageFragment">
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/homePageFragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/purple_500"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
--->
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -39,75 +9,82 @@
     style="@style/ScreenBackground"
     tools:context=".fragment.HomePageFragment">
 
-   <!-- <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/homePageFragmentContainer"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:navGraph="@navigation/navigation_bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintVertical_weight="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        >-->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homePageFragmentContainer"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:navGraph="@navigation/navigation_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp">
+        android:layout_height="match_parent">
 
     </androidx.fragment.app.FragmentContainerView>
 
-    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>-->
-
-    <!--<FrameLayout
-     android:elevation="16dp"
-     android:id="@+id/bottomSheetContainer"
-     android:layout_width="match_parent"
+ <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+     android:id="@+id/add_income_fab_home"
+     android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     app:behavior_hideable="true"
+     android:layout_gravity="clip_horizontal"
+     android:layout_marginHorizontal="16dp"
+     android:text="@string/add_income_label"
+     android:visibility="gone"
+     android:translationY="-16dp"
+     app:icon="@drawable/save_money"
+     app:layout_anchor="@id/add_expense_fab_home"
+     app:layout_anchorGravity="top|end" />
+
+ <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+     android:id="@+id/add_expense_fab_home"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_gravity="clip_horizontal"
+     android:text="@string/add_expense_label"
+     android:visibility="gone"
+     android:layout_marginHorizontal="16dp"
+     android:translationY="-16dp"
+     app:icon="@drawable/expenses"
+     app:layout_anchor="@id/fabHomePage"
+     app:layout_anchorGravity="top|end"
+     app:layout_constraintBottom_toTopOf="@+id/fabHomePage"
+     app:layout_constraintEnd_toEndOf="parent" />
+
+ <com.google.android.material.floatingactionbutton.FloatingActionButton
+     android:id="@+id/fabHomePage"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_gravity="clip_horizontal"
+     android:translationY="-16dp"
+     android:layout_marginHorizontal="16dp"
+     android:src="@drawable/baseline_add_24"
+     app:layout_anchor="@id/bottomNavigationView"
+     app:layout_anchorGravity="top|end"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent" />
+
+ <com.google.android.material.bottomnavigation.BottomNavigationView
+     android:id="@+id/bottomNavigationView"
+     android:layout_width="match_parent"
+     android:layout_height="55dp"
+     android:layout_marginTop="16dp"
      android:layout_gravity="bottom"
-     android:background="@drawable/bottom_sheet_bg"
-     android:backgroundTint="@color/tertiary_container"
-     />-->
+     app:itemRippleColor="?attr/itemRippleColor"
+     app:labelVisibilityMode="labeled"
+     app:menu="@menu/bottom_nav_menu" >
+  <View
+      android:id="@+id/back_screen_home_bottom_nav"
+      android:visibility="gone"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#69000000"
+      android:clickable="true"
+      />
+ </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:background="#D2704147"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"/>-->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:labelVisibilityMode="labeled"
-        app:itemRippleColor="?attr/itemRippleColor"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabHomePage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_add_24"
-        app:layout_anchor="@id/bottomNavigationView"
-        app:layout_anchorGravity="top|end"
-        android:layout_gravity="clip_horizontal"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="80dp"
-        />
+ <View
+     android:id="@+id/back_screen_home"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:background="#69000000"
+     android:clickable="true"
+     />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

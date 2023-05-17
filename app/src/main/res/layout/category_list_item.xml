@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    android:elevation="4dp"
-    app:cardCornerRadius="15dp"
-    android:layout_margin="10dp"
-    android:padding="10dp"
-    android:id="@+id/categoryCardView"
-    android:layout_height="wrap_content"
-    android:focusable="true">
-</androidx.cardview.widget.CardView>-->
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/categoryLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
