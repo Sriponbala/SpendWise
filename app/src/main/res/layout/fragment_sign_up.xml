@@ -132,21 +132,33 @@
                 android:focusable="true"
                 android:text="@string/sign_up" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/LoginTextView"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="35dp"
-                android:layout_marginBottom="40dp"
-                android:clickable="true"
-                android:fontFamily="sans-serif-medium"
-                android:focusable="true"
-                android:text="@string/navigate_to_login_page_button"
-                android:letterSpacing="0"
-                android:textColor="@color/linkColour"
-                android:textSize="14sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingTop="16dp"
+                android:layout_weight="1"
+                >
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/LoginTextView"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginBottom="25dp"
+                    android:clickable="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:focusable="true"
+                    android:text="@string/navigate_to_login_page_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:letterSpacing="0"
+                    android:textColor="@color/linkColour"
+                    android:textSize="14sp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
     </ScrollView>

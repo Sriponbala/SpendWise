@@ -28,6 +28,7 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
         val savedAmount: TextView = itemView.findViewById(R.id.savedGoalAmtTv)
         val progressBar: LinearProgressIndicator = itemView.findViewById(R.id.goalProgressLinear)
         val divider: MaterialDivider = itemView.findViewById(R.id.dividerGoalItem)
+        val goalStatus: TextView = itemView.findViewById(R.id.goalStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -49,6 +50,7 @@ class GoalAdapter(private val goals: List<Goal>): RecyclerView.Adapter<GoalAdapt
         holder.desiredDate.text = if(item.desiredDate == "") res.getString(R.string.no_target_date_label) else item.desiredDate
         holder.targetAmount.text = res.getString(R.string.amount_format, Helper.formatNumberToIndianStyle(item.targetAmount.toBigDecimal()))
         holder.savedAmount.text = res.getString(R.string.amount_format, Helper.formatNumberToIndianStyle(item.savedAmount.toBigDecimal()))
+        holder.goalStatus.text = res.getString(R.string.two_strings_concate, item.goalStatus, res.getString(R.string.goal_label))
         holder.goalIcon.apply{
             setImageResource(item.goalIcon)
             backgroundTintList = ColorStateList.valueOf(res.getColor(item.goalColor))

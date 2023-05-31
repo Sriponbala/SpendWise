@@ -22,6 +22,7 @@
 
     <color name="colorSecondary">#FEEAE6</color>
     <color name="colorPrimary">#1E90FF</color>
+    <color name="viewRecord">#fff2df</color>
     <color name="gray">#93918f</color>
 
     <color name="error_colour">@android:color/holo_red_light</color>
@@ -95,4 +96,6 @@
     <color name="logoColor">@color/white</color>
 
     <color name="filterLayoutBackground">#e3f3ff</color>
+    <color name="recordPageBackground">
+        #EEF2FA</color>
 </resources>

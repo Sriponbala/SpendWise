@@ -16,6 +16,7 @@ import com.example.spendwise.domain.Category
 import com.example.spendwise.domain.Record
 import com.example.spendwise.enums.Month
 import com.example.spendwise.enums.RecordType
+import com.example.spendwise.fragment.ViewBudgetFragment
 import com.google.android.material.divider.MaterialDivider
 import java.util.*
 
@@ -46,6 +47,7 @@ class RecordRecyclerViewAdapter(private val records: List<Record>, private val c
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val resources = holder.itemView.context.resources
+
         if(records.lastIndex == position || resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             holder.divider.visibility = View.GONE
         } else {

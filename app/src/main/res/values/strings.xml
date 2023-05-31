@@ -96,6 +96,7 @@
     <string name="goals_label">Goals</string>
     <string name="stats_label">Stats</string>
     <string name="no_stats_info">No Stats Found</string>
+    <string name="no_description_info">No Description Found</string>
     <string name="no_records_found">No Records Found</string>
     <string name="no_monthly_budgets_info">No Monthly Budgets Found</string>
     <string name="user_label">User</string>
@@ -156,5 +157,22 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
+
+    <string name="food">Food</string>
+    <string name="shopping">Shopping</string>
+    <string name="transport">Transport</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="pets">Pets</string>
+    <string name="tourism">Tourism</string>
+    <string name="health">Health</string>
+    <string name="education">Education</string>
+    <string name="household">Household</string>
+
+    <string name="salary">Salary</string>
+    <string name="rental">Rental</string>
+    <string name="sale">Sale</string>
+    <string name="gifts">Gifts</string>
+    <string name="coupons">Coupons</string>
 
 </resources>

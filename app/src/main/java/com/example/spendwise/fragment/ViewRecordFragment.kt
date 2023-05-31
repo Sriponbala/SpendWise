@@ -3,6 +3,7 @@ package com.example.spendwise.fragment
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -15,6 +16,7 @@ import com.example.spendwise.Helper
 import com.example.spendwise.R
 import com.example.spendwise.activity.MainActivity
 import com.example.spendwise.databinding.FragmentViewRecordBinding
+import com.example.spendwise.enums.RecordType
 import com.example.spendwise.viewmodel.CategoryViewModel
 import com.example.spendwise.viewmodel.RecordViewModel
 import com.example.spendwise.viewmodel.RestoreScrollPositionViewModel
@@ -93,16 +95,29 @@ class ViewRecordFragment : Fragment() {
                 categoryViewModel.category.value = Categories.categoryList.find { category ->
                     it.category == category.title
                 }
-                binding.viewAmountEditText.amountTvInComponent.text =
+                categoryViewModel.category.value?.let { category ->
+                    binding.categoryImageview.setImageResource(category.logo)
+                    val colorStateList = ColorStateList.valueOf(resources.getColor(category.bgColor))
+                    binding.categoryImageview.backgroundTintList = colorStateList
+                }
+
+                binding.viewAmountEditText.text =
                     Helper.formatNumberToIndianStyle(it.amount.toBigDecimal())
                 binding.viewCategoryEditText.text = it.category
                 binding.viewDateEditText.text = Helper.formatDate(it.date)
                 binding.viewNoteEditText.text = it.note
+                val imageResource = if(it.type == RecordType.EXPENSE.value) R.drawable.expenses else R.drawable.expense
+                binding.recordTypeImageView.setImageResource(imageResource)
                 if (it.description.isEmpty()) {
-                    binding.viewEmptyDescription.visibility = View.VISIBLE
+                    binding.viewEmptyDescription.root.visibility = View.VISIBLE
+                    binding.viewEmptyDescription.emptyDataImage.layoutParams.width = 120
+                    binding.viewEmptyDescription.emptyDataImage.layoutParams.height = 120
+                    binding.viewEmptyDescription.emptyDataText.textSize = 16f
+                    binding.viewEmptyDescription.emptyDataText.text = resources.getString(R.string.no_description_info)
+                    binding.viewEmptyDescription.emptyDataImage.setImageResource(R.drawable.description)
                     binding.descriptionTextField.visibility = View.GONE
                 } else {
-                    binding.viewEmptyDescription.visibility = View.GONE
+                    binding.viewEmptyDescription.root.visibility = View.GONE
                     binding.descriptionTextField.visibility = View.VISIBLE
                     binding.descriptionTextField.text = it.description
                 }

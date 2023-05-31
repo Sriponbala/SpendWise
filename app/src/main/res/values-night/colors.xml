@@ -112,4 +112,5 @@
     <color name="logoColor">@color/white</color>
 
     <color name="filterLayoutBackground">#9FBCD1</color>
+    <color name="recordPageBackground">#28292B</color>
 </resources>

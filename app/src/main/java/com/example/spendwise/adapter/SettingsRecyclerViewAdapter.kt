@@ -30,7 +30,7 @@ class SettingsRecyclerViewAdapter: RecyclerView.Adapter<SettingsRecyclerViewAdap
         when(SettingsOption.values()[position]) {
             SettingsOption.INCOME -> {
                 holder.iconImageView.apply {
-                    setImageResource(R.drawable.baseline_money_24)
+                    setImageResource(R.drawable.expense)
                 }
                 holder.iconTitle.text = SettingsOption.INCOME.text
             }

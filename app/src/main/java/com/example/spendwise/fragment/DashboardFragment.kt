@@ -47,9 +47,11 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val recordViewModelFactory = RecordViewModelFactory(requireActivity().application)
-        recordViewModel = ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
+        recordViewModel =
+            ViewModelProvider(this, recordViewModelFactory)[RecordViewModel::class.java]
         val factory = RestoreScrollPositionViewModelFactory(requireActivity().application)
-        restoreScrollPositionViewModel = ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
+        restoreScrollPositionViewModel =
+            ViewModelProvider(this, factory)[RestoreScrollPositionViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -68,7 +70,7 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             quoteViewModel.getRandomQuote()
         }
 
@@ -80,7 +82,11 @@ class DashboardFragment : Fragment() {
                     }
                     """.trimMargin()
                 binding.quoteLayout.quote.text = quoteText
-                binding.quoteLayout.quoteAuthor.text = resources.getString(R.string.two_strings_concate, resources.getString(R.string.empty_data_fill_in_value), it.author)
+                binding.quoteLayout.quoteAuthor.text = resources.getString(
+                    R.string.two_strings_concate,
+                    resources.getString(R.string.empty_data_fill_in_value),
+                    it.author
+                )
                 binding.quoteLayout.quoteAuthor.visibility = View.VISIBLE
             } else {
                 binding.quoteLayout.quote.text = resources.getString(R.string.no_network)
@@ -100,7 +106,10 @@ class DashboardFragment : Fragment() {
             navigationListener.onActionReceived(StatisticsFragment(), RecordType.EXPENSE)
         }
 
-        val userId = (activity as MainActivity).getSharedPreferences(resources.getString(R.string.loginStatus), Context.MODE_PRIVATE).getInt(resources.getString(R.string.userId), 0)
+        val userId = (activity as MainActivity).getSharedPreferences(
+            resources.getString(R.string.loginStatus),
+            Context.MODE_PRIVATE
+        ).getInt(resources.getString(R.string.userId), 0)
         recordViewModel.fetchAllRecords(userId)
 
         val month = Calendar.getInstance().get(Calendar.MONTH) + 1
@@ -122,8 +131,10 @@ class DashboardFragment : Fragment() {
         recordViewModel.filteredRecords.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isEmpty()) {
-                    binding.currentMonthIncomeText.text = resources.getString(R.string.no_data_value)
-                    binding.currentMonthExpenseText.text = resources.getString(R.string.no_data_value)
+                    binding.currentMonthIncomeText.text =
+                        resources.getString(R.string.no_data_value)
+                    binding.currentMonthExpenseText.text =
+                        resources.getString(R.string.no_data_value)
                     binding.currentMonthTotalText.text = resources.getString(R.string.no_data_value)
                     binding.incomeAmount.visibility = View.GONE
                     binding.expenseAmount.visibility = View.GONE
@@ -224,10 +235,14 @@ class DashboardFragment : Fragment() {
                 val amt = Helper.formatNumberToIndianStyle(it)
                 if (amt == resources.getString(R.string.zero)) {
                     binding.incomeAmount.visibility = View.GONE
-                    binding.currentMonthIncomeText.text = resources.getString(R.string.no_data_value)
+                    binding.currentMonthIncomeText.text =
+                        resources.getString(R.string.no_data_value)
                 } else {
                     binding.incomeAmount.visibility = View.VISIBLE
-                    binding.incomeAmount.text = resources.getString(R.string.amount_format, amt) //"${resources.getString(R.string.rupee_symbol)} $amt"
+                    binding.incomeAmount.text = resources.getString(
+                        R.string.amount_format,
+                        amt
+                    ) //"${resources.getString(R.string.rupee_symbol)} $amt"
                     binding.currentMonthIncomeText.text = amt
                 }
 
@@ -238,11 +253,12 @@ class DashboardFragment : Fragment() {
                 val amt = Helper.formatNumberToIndianStyle(it)
                 if (amt == resources.getString(R.string.zero)) {
                     binding.expenseAmount.visibility = View.GONE
-                    binding.currentMonthExpenseText.text = resources.getString(R.string.no_data_value)
+                    binding.currentMonthExpenseText.text =
+                        resources.getString(R.string.no_data_value)
                 } else {
                     binding.expenseAmount.visibility = View.VISIBLE
                     binding.expenseAmount.text = resources.getString(R.string.amount_format, amt)
-                       // "${resources.getString(R.string.rupee_symbol)} $amt"
+                    // "${resources.getString(R.string.rupee_symbol)} $amt"
                     binding.currentMonthExpenseText.text = amt
                 }
             }
@@ -255,37 +271,68 @@ class DashboardFragment : Fragment() {
         }
 
         binding.currentMonthTotalText.setOnClickListener {
-            if(it != null && binding.currentMonthTotalText.text.toString().isNotEmpty()) {
-                if(binding.currentMonthTotalText.text.toString() == resources.getString(R.string.no_data_value)) {
-                    showDialog(resources.getString(R.string.netBalance), binding.currentMonthTotalText.text.toString())
+            if (it != null && binding.currentMonthTotalText.text.toString().isNotEmpty()) {
+                if (binding.currentMonthTotalText.text.toString() == resources.getString(R.string.no_data_value)) {
+                    showDialog(
+                        resources.getString(R.string.netBalance),
+                        binding.currentMonthTotalText.text.toString()
+                    )
                 } else {
-                    showDialog(resources.getString(R.string.netBalance), resources.getString(R.string.amount_format, binding.currentMonthTotalText.text))
+                    showDialog(
+                        resources.getString(R.string.netBalance),
+                        resources.getString(
+                            R.string.amount_format,
+                            binding.currentMonthTotalText.text
+                        )
+                    )
                 }
             }
         }
 
         binding.currentMonthExpenseText.setOnClickListener {
-            if(it != null && binding.currentMonthExpenseText.text.toString().isNotEmpty()) {
-                if(binding.currentMonthExpenseText.text.toString() == resources.getString(R.string.no_data_value)) {
-                    showDialog(resources.getString(R.string.expense_label), binding.currentMonthExpenseText.text.toString())
+            if (it != null && binding.currentMonthExpenseText.text.toString().isNotEmpty()) {
+                if (binding.currentMonthExpenseText.text.toString() == resources.getString(R.string.no_data_value)) {
+                    showDialog(
+                        resources.getString(R.string.expense_label),
+                        binding.currentMonthExpenseText.text.toString()
+                    )
                 } else {
-                    showDialog(resources.getString(R.string.expense_label), resources.getString(R.string.amount_format, binding.currentMonthExpenseText.text))
+                    showDialog(
+                        resources.getString(R.string.expense_label),
+                        resources.getString(
+                            R.string.amount_format,
+                            binding.currentMonthExpenseText.text
+                        )
+                    )
                 }
             }
         }
 
         binding.currentMonthIncomeText.setOnClickListener {
-            if(it != null && binding.currentMonthIncomeText.text.toString().isNotEmpty()) {
-                if(binding.currentMonthIncomeText.text.toString() == resources.getString(R.string.no_data_value)) {
-                    showDialog(resources.getString(R.string.income_label), binding.currentMonthIncomeText.text.toString())
+            if (it != null && binding.currentMonthIncomeText.text.toString().isNotEmpty()) {
+                if (binding.currentMonthIncomeText.text.toString() == resources.getString(R.string.no_data_value)) {
+                    showDialog(
+                        resources.getString(R.string.income_label),
+                        binding.currentMonthIncomeText.text.toString()
+                    )
                 } else {
-                    showDialog(resources.getString(R.string.income_label), resources.getString(R.string.amount_format, binding.currentMonthIncomeText.text))
+                    showDialog(
+                        resources.getString(R.string.income_label),
+                        resources.getString(
+                            R.string.amount_format,
+                            binding.currentMonthIncomeText.text
+                        )
+                    )
                 }
             }
         }
     }
 
-    private fun drawPieChart(recordType: RecordType, list: List<Pair<Category, BigDecimal>>, pieChart: PieChart) {
+    private fun drawPieChart(
+        recordType: RecordType,
+        list: List<Pair<Category, BigDecimal>>,
+        pieChart: PieChart
+    ) {
         try {
             var total = BigDecimal(0)
             val data = ArrayList<PieEntry>()
@@ -304,7 +351,12 @@ class DashboardFragment : Fragment() {
             pieChart.setDrawEntryLabels(false)
             pieChart.isHighlightPerTapEnabled = false
             pieChart.centerText = recordType.value.trimMargin()
-            val centerOfChartColor = view?.let { MaterialColors.getColor(it, com.google.android.material.R.attr.colorTertiaryContainer) }
+            val centerOfChartColor = view?.let {
+                MaterialColors.getColor(
+                    it,
+                    com.google.android.material.R.attr.colorTertiaryContainer
+                )
+            }
             if (centerOfChartColor != null) {
                 pieChart.setHoleColor(centerOfChartColor)
             }
@@ -334,5 +386,6 @@ class DashboardFragment : Fragment() {
             .create()
         dialog.show()
     }
+
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -88,6 +89,9 @@ class ViewBudgetFragment : Fragment() {
                         viewLifecycleOwner
                     ) { listOfRecords ->
                         if (listOfRecords != null) {
+                            Log.e("List tag", listOfRecords.toString())
+                            val categorizedList = listOfRecords.filter { r -> r.category == binding.includedViewBudgetComponent.viewBudgetCategoryText.text.toString() }
+                            Log.e("List tag", categorizedList.toString())
                             if (listOfRecords.isEmpty()) {
                                 budgetViewModel.updateBudgetItemRecordsAmount(BigDecimal(0))
                             } else {
@@ -97,6 +101,7 @@ class ViewBudgetFragment : Fragment() {
                                         total += (record.amount).toBigDecimal()
                                     }
                                 }
+                                Log.e("Total", total.toString())
                                 budgetViewModel.updateBudgetItemRecordsAmount(total)
                             }
                         } else {
@@ -274,5 +279,6 @@ class ViewBudgetFragment : Fragment() {
         val action = ViewBudgetFragmentDirections.actionViewBudgetFragmentToAddBudgetFragment(isEditBudget = true)
         findNavController().navigate(action)
     }
+
 
 }

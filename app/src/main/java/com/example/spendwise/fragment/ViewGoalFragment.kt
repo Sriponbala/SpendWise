@@ -221,4 +221,5 @@ class ViewGoalFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+
 }

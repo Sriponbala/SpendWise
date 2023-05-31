@@ -76,7 +76,8 @@
             android:textAlignment="viewEnd"
             android:textColor="@color/textColor"
             android:textSize="14sp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintStart_toEndOf="@id/desiredDateTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/desiredDateTextView" />
@@ -86,7 +87,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxEms="7"
             android:maxLines="1"
             android:textColor="@color/textColor"
             android:textSize="14sp"
@@ -134,13 +134,27 @@
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="098721234567087654321234567895432123456789009876543212345678987654309876543212345678"
             android:textColor="@color/incomeColour"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/dividerGoalItem"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/goalStatus"
             app:layout_constraintStart_toEndOf="@id/savedLabelTextView"
             app:layout_constraintTop_toBottomOf="@id/goalProgressLinear" />
+
+        <TextView
+            android:id="@+id/goalStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Goal"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/goalProgressLinear"/>
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/dividerGoalItem"

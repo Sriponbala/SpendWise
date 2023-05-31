@@ -285,5 +285,4 @@ class HomePageFragment : Fragment(), NavigationListener {
         }
     }
 
-
 }
